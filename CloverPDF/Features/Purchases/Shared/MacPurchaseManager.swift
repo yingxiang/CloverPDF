@@ -1,0 +1,1 @@
+../../../../../common/MacAppKit/Purchases/MacPurchaseManager.swift

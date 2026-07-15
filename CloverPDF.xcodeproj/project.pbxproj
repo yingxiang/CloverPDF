@@ -1,0 +1,774 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		040EE374ECAF343EF92A69CD /* FilePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8FF0A975C9564B13C6E1E9 /* FilePanel.swift */; };
+		0E4B834EE0023A046D1C4494 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F97EB4E3ADB141F93117B008 /* Security.framework */; };
+		331D0F90609C19E51F9079E7 /* TaskQueueActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BAB9ADB230001A3C3FE057 /* TaskQueueActor.swift */; };
+		3935FED057AAF9EE8FCDBF0B /* ConvertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C5F8C948AA6C22B5429729 /* ConvertView.swift */; };
+		3E90A4BC86E7EA9F8A279A1D /* CloverPDFError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB460089CA0D42C1D06541D /* CloverPDFError.swift */; };
+		428183CE564116D88896F12C /* MacPaywallPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D1631C8404C625B6E032DF /* MacPaywallPresenter.swift */; };
+		5051029B3B0A74DCF3E95F2A /* JSONTaskRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBE95973D61FEFC1A206D56 /* JSONTaskRepository.swift */; };
+		5E7BA823B918843343834DDA /* PDFSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9161BD45D89161C2E54353 /* PDFSource.swift */; };
+		68B8923237ED237D7B35BAD1 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 06F41A5B35A7C4C04410F7F8 /* InfoPlist.xcstrings */; };
+		6C465524A211A7666D6B05BB /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6564BDAE4756A631F661C4DB /* StoreKit.framework */; };
+		6E40329FE029D86C3F13EDF1 /* PDFFileRows.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EAC06C459EA079C65FDF05 /* PDFFileRows.swift */; };
+		74799F7209865EA1EE24AAE5 /* PDFInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF7686A91BE08C5640CAA15 /* PDFInspector.swift */; };
+		75ED8304BC7960084219C6F5 /* PDFKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9EAE0E4CC38E32049641AFA /* PDFKit.framework */; };
+		7B90C5053E21E7A7719ABBA6 /* OutputURLResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA8BF753260069879FEAC9A /* OutputURLResolverTests.swift */; };
+		817319EE80B6FC8E85227DF5 /* ProcessingTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6BD7DF4A378B496D517B78C /* ProcessingTask.swift */; };
+		8DF15EC8F963FB33D9C651AC /* MergeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCB623CCBA32BC738D050E1 /* MergeView.swift */; };
+		8F10F862D4EEB6EADA3F4B47 /* MacPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5716F086BAE4805480B56B9D /* MacPurchaseManager.swift */; };
+		92640E3460686FDBB3792A52 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B58AD5929D07FDCDFF007AA /* AppModel.swift */; };
+		9579ADD6990BCD0909FC2520 /* PDFKitMerger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9460E76E1FD4AFD6495149A8 /* PDFKitMerger.swift */; };
+		9943BF7E51C7FDF614C535D8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED8D41501793A07C71462E5 /* ContentView.swift */; };
+		A5E1A436EAD738C7A30C4FD0 /* PDFDropModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD226E9494A4E72D59A45CFE /* PDFDropModifier.swift */; };
+		B74E3CE0C7B420FD65C276B4 /* PDFKitMergerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EACBAF2E721C70910EFEE74 /* PDFKitMergerTests.swift */; };
+		CB0BE8D5E7CACF84D99A9FD0 /* PurchaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D8C4B60E1F91946C2E8392 /* PurchaseService.swift */; };
+		CE4C81B678CB3122EFDA8B1B /* LocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D040E11DD9CA22A5A4C32DA0 /* LocalizationTests.swift */; };
+		CED57885666CB4EF550F55D9 /* PDFServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E7A9397401EB052F14D57F /* PDFServices.swift */; };
+		D2898027EAD91FE1F4F7B590 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 582BA4A8AAB380664D0D16EC /* AppDelegate.swift */; };
+		D6482CA0649B055AD2D92966 /* OutputURLResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E82A11D3D343CCED168716 /* OutputURLResolver.swift */; };
+		D82F1F31478282EC2F4C7BE6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74A7935D47A15315FB0D94D0 /* Assets.xcassets */; };
+		D8811646BC5649E901C8F97B /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4052DC2A9FB901CFFE1496B3 /* Localizable.xcstrings */; };
+		E22FFFF9E07569078D2B68A8 /* PDFPreviewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B566773AD52A18BFF7397F /* PDFPreviewSheet.swift */; };
+		E6FF248A0609C629ED78C723 /* KeychainTrialQuotaStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB4E723D87B47ADBF8B3EDCE /* KeychainTrialQuotaStore.swift */; };
+		EEE479A2F232DA83684EFFC5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD4C9448DE615496C87BF10 /* SettingsView.swift */; };
+		F1936CF00EA52EBF2388AC93 /* PythonConverterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD70E2D91E307FFACA6B1E44 /* PythonConverterService.swift */; };
+		F5EA3F6E93A93D9DEACDA29A /* ExternalOpenCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F21B6E6A025F56D3C8C4937 /* ExternalOpenCenter.swift */; };
+		F7344B3BC1F88BCA335DDDAB /* BookmarkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F8CABD3C00B2EA1A775D1A /* BookmarkService.swift */; };
+		F9CD2AFBCE492D76AC131238 /* CloverPDFApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F090DF4463B634D3900E14 /* CloverPDFApp.swift */; };
+		FD63D33DE1992DA69A1EF4C4 /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11EC1CF577504D7FEAA227 /* TasksView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7E4988CF81C928EA30E5AA1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3DB9294189337D254C983D73 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 89A04341A1D6CB88E29145A8;
+			remoteInfo = CloverPDF;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		02D8C4B60E1F91946C2E8392 /* PurchaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseService.swift; sourceTree = "<group>"; };
+		06F41A5B35A7C4C04410F7F8 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
+		07B566773AD52A18BFF7397F /* PDFPreviewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFPreviewSheet.swift; sourceTree = "<group>"; };
+		0B8FF0A975C9564B13C6E1E9 /* FilePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePanel.swift; sourceTree = "<group>"; };
+		0ED8D41501793A07C71462E5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		0FA8BF753260069879FEAC9A /* OutputURLResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputURLResolverTests.swift; sourceTree = "<group>"; };
+		2265BC7E65C6089645A38877 /* CloverPDFTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CloverPDFTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		29BAB9ADB230001A3C3FE057 /* TaskQueueActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskQueueActor.swift; sourceTree = "<group>"; };
+		2CCB623CCBA32BC738D050E1 /* MergeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeView.swift; sourceTree = "<group>"; };
+		2F21B6E6A025F56D3C8C4937 /* ExternalOpenCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalOpenCenter.swift; sourceTree = "<group>"; };
+		35D1631C8404C625B6E032DF /* MacPaywallPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPaywallPresenter.swift; sourceTree = "<group>"; };
+		35F090DF4463B634D3900E14 /* CloverPDFApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloverPDFApp.swift; sourceTree = "<group>"; };
+		3FBE95973D61FEFC1A206D56 /* JSONTaskRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONTaskRepository.swift; sourceTree = "<group>"; };
+		4052DC2A9FB901CFFE1496B3 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		4CD4C9448DE615496C87BF10 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		5716F086BAE4805480B56B9D /* MacPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacPurchaseManager.swift; sourceTree = "<group>"; };
+		582BA4A8AAB380664D0D16EC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		6564BDAE4756A631F661C4DB /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		73EEF524A01B383F175D7852 /* CloverPDF.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CloverPDF.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		74A7935D47A15315FB0D94D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		75E7A9397401EB052F14D57F /* PDFServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFServices.swift; sourceTree = "<group>"; };
+		78C5F8C948AA6C22B5429729 /* ConvertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertView.swift; sourceTree = "<group>"; };
+		8A9161BD45D89161C2E54353 /* PDFSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFSource.swift; sourceTree = "<group>"; };
+		8B58AD5929D07FDCDFF007AA /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		8EACBAF2E721C70910EFEE74 /* PDFKitMergerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFKitMergerTests.swift; sourceTree = "<group>"; };
+		9460E76E1FD4AFD6495149A8 /* PDFKitMerger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFKitMerger.swift; sourceTree = "<group>"; };
+		9BF7686A91BE08C5640CAA15 /* PDFInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFInspector.swift; sourceTree = "<group>"; };
+		A404E305A76B5A282816CCB8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		BD226E9494A4E72D59A45CFE /* PDFDropModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFDropModifier.swift; sourceTree = "<group>"; };
+		BF11EC1CF577504D7FEAA227 /* TasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
+		C4EAC06C459EA079C65FDF05 /* PDFFileRows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFFileRows.swift; sourceTree = "<group>"; };
+		C6BD7DF4A378B496D517B78C /* ProcessingTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingTask.swift; sourceTree = "<group>"; };
+		CD70E2D91E307FFACA6B1E44 /* PythonConverterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PythonConverterService.swift; sourceTree = "<group>"; };
+		CEB460089CA0D42C1D06541D /* CloverPDFError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloverPDFError.swift; sourceTree = "<group>"; };
+		D040E11DD9CA22A5A4C32DA0 /* LocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationTests.swift; sourceTree = "<group>"; };
+		D7F8CABD3C00B2EA1A775D1A /* BookmarkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkService.swift; sourceTree = "<group>"; };
+		E9EAE0E4CC38E32049641AFA /* PDFKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PDFKit.framework; path = System/Library/Frameworks/PDFKit.framework; sourceTree = SDKROOT; };
+		F6E82A11D3D343CCED168716 /* OutputURLResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputURLResolver.swift; sourceTree = "<group>"; };
+		F97EB4E3ADB141F93117B008 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		FB4E723D87B47ADBF8B3EDCE /* KeychainTrialQuotaStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainTrialQuotaStore.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8183858534435B20B2457D70 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75ED8304BC7960084219C6F5 /* PDFKit.framework in Frameworks */,
+				0E4B834EE0023A046D1C4494 /* Security.framework in Frameworks */,
+				6C465524A211A7666D6B05BB /* StoreKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		06796D2C788AA2539E77FDE4 /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				29BAB9ADB230001A3C3FE057 /* TaskQueueActor.swift */,
+			);
+			path = Tasks;
+			sourceTree = "<group>";
+		};
+		07D79BE25C4567B68A5CCBAF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				73EEF524A01B383F175D7852 /* CloverPDF.app */,
+				2265BC7E65C6089645A38877 /* CloverPDFTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1E9C17D419A24484A1B0FC26 /* PDF */ = {
+			isa = PBXGroup;
+			children = (
+				9BF7686A91BE08C5640CAA15 /* PDFInspector.swift */,
+				9460E76E1FD4AFD6495149A8 /* PDFKitMerger.swift */,
+			);
+			path = PDF;
+			sourceTree = "<group>";
+		};
+		208435B3825FD64B46452255 /* Files */ = {
+			isa = PBXGroup;
+			children = (
+				D7F8CABD3C00B2EA1A775D1A /* BookmarkService.swift */,
+				F6E82A11D3D343CCED168716 /* OutputURLResolver.swift */,
+			);
+			path = Files;
+			sourceTree = "<group>";
+		};
+		220F5C5738A719CE56905434 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				74A7935D47A15315FB0D94D0 /* Assets.xcassets */,
+				06F41A5B35A7C4C04410F7F8 /* InfoPlist.xcstrings */,
+				4052DC2A9FB901CFFE1496B3 /* Localizable.xcstrings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		2695A1864B512CFCA839B605 = {
+			isa = PBXGroup;
+			children = (
+				A08B9B9DCA08217BEE653778 /* CloverPDF */,
+				AC7207A37EF19598F35D606C /* CloverPDFTests */,
+				B6D48FE904353ED9C9052D01 /* Frameworks */,
+				07D79BE25C4567B68A5CCBAF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		37AB48455923D91611D4833E /* Convert */ = {
+			isa = PBXGroup;
+			children = (
+				78C5F8C948AA6C22B5429729 /* ConvertView.swift */,
+			);
+			path = Convert;
+			sourceTree = "<group>";
+		};
+		49A4F7C18001DD0DE12A218D /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				4CD4C9448DE615496C87BF10 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		62C3B36AEFA949F61764B7A7 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				75E7A9397401EB052F14D57F /* PDFServices.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		654819CDD5D4177E1FEFF51B /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				0B8FF0A975C9564B13C6E1E9 /* FilePanel.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		68285868DED46D4D9DE964C6 /* Converter */ = {
+			isa = PBXGroup;
+			children = (
+				CD70E2D91E307FFACA6B1E44 /* PythonConverterService.swift */,
+			);
+			path = Converter;
+			sourceTree = "<group>";
+		};
+		6E3648BB98D0ADD961A0CDDE /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				9652184C3982226C2C1A9A30 /* Common */,
+				37AB48455923D91611D4833E /* Convert */,
+				BDF97D88A5457C3E5A4A8DF0 /* Merge */,
+				9EEEE8818147909377D4E590 /* Preview */,
+				EE8C71CEEFBF03EA871E76B4 /* Purchases */,
+				49A4F7C18001DD0DE12A218D /* Settings */,
+				BF4C1182206E42F3FD995A44 /* Tasks */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		9652184C3982226C2C1A9A30 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				BD226E9494A4E72D59A45CFE /* PDFDropModifier.swift */,
+				C4EAC06C459EA079C65FDF05 /* PDFFileRows.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		987BBA06C819C8DC71294D62 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8A9161BD45D89161C2E54353 /* PDFSource.swift */,
+				C6BD7DF4A378B496D517B78C /* ProcessingTask.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		9EEEE8818147909377D4E590 /* Preview */ = {
+			isa = PBXGroup;
+			children = (
+				07B566773AD52A18BFF7397F /* PDFPreviewSheet.swift */,
+			);
+			path = Preview;
+			sourceTree = "<group>";
+		};
+		9FA0AB7C1B927E0BCB2DFE02 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				582BA4A8AAB380664D0D16EC /* AppDelegate.swift */,
+				8B58AD5929D07FDCDFF007AA /* AppModel.swift */,
+				35F090DF4463B634D3900E14 /* CloverPDFApp.swift */,
+				0ED8D41501793A07C71462E5 /* ContentView.swift */,
+				2F21B6E6A025F56D3C8C4937 /* ExternalOpenCenter.swift */,
+				A404E305A76B5A282816CCB8 /* Info.plist */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A08B9B9DCA08217BEE653778 /* CloverPDF */ = {
+			isa = PBXGroup;
+			children = (
+				9FA0AB7C1B927E0BCB2DFE02 /* App */,
+				FD2C752DD65E705B5CAE73FA /* Core */,
+				6E3648BB98D0ADD961A0CDDE /* Features */,
+				A1AA7EA47FC0145AE53EAE20 /* Infrastructure */,
+				220F5C5738A719CE56905434 /* Resources */,
+			);
+			path = CloverPDF;
+			sourceTree = "<group>";
+		};
+		A1AA7EA47FC0145AE53EAE20 /* Infrastructure */ = {
+			isa = PBXGroup;
+			children = (
+				68285868DED46D4D9DE964C6 /* Converter */,
+				208435B3825FD64B46452255 /* Files */,
+				1E9C17D419A24484A1B0FC26 /* PDF */,
+				D396C6E275712BE35440A843 /* Persistence */,
+				06796D2C788AA2539E77FDE4 /* Tasks */,
+			);
+			path = Infrastructure;
+			sourceTree = "<group>";
+		};
+		AC7207A37EF19598F35D606C /* CloverPDFTests */ = {
+			isa = PBXGroup;
+			children = (
+				D040E11DD9CA22A5A4C32DA0 /* LocalizationTests.swift */,
+				0FA8BF753260069879FEAC9A /* OutputURLResolverTests.swift */,
+				8EACBAF2E721C70910EFEE74 /* PDFKitMergerTests.swift */,
+			);
+			path = CloverPDFTests;
+			sourceTree = "<group>";
+		};
+		B6D48FE904353ED9C9052D01 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E9EAE0E4CC38E32049641AFA /* PDFKit.framework */,
+				F97EB4E3ADB141F93117B008 /* Security.framework */,
+				6564BDAE4756A631F661C4DB /* StoreKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BDF97D88A5457C3E5A4A8DF0 /* Merge */ = {
+			isa = PBXGroup;
+			children = (
+				2CCB623CCBA32BC738D050E1 /* MergeView.swift */,
+			);
+			path = Merge;
+			sourceTree = "<group>";
+		};
+		BF4C1182206E42F3FD995A44 /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				BF11EC1CF577504D7FEAA227 /* TasksView.swift */,
+			);
+			path = Tasks;
+			sourceTree = "<group>";
+		};
+		D396C6E275712BE35440A843 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				3FBE95973D61FEFC1A206D56 /* JSONTaskRepository.swift */,
+				FB4E723D87B47ADBF8B3EDCE /* KeychainTrialQuotaStore.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		D66280EB513E6EBE33D685C8 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				CEB460089CA0D42C1D06541D /* CloverPDFError.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		EE8C71CEEFBF03EA871E76B4 /* Purchases */ = {
+			isa = PBXGroup;
+			children = (
+				02D8C4B60E1F91946C2E8392 /* PurchaseService.swift */,
+				FBA1D0EF0A67DB4EC9ACA8E1 /* Shared */,
+			);
+			path = Purchases;
+			sourceTree = "<group>";
+		};
+		FBA1D0EF0A67DB4EC9ACA8E1 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				35D1631C8404C625B6E032DF /* MacPaywallPresenter.swift */,
+				5716F086BAE4805480B56B9D /* MacPurchaseManager.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		FD2C752DD65E705B5CAE73FA /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				D66280EB513E6EBE33D685C8 /* Errors */,
+				987BBA06C819C8DC71294D62 /* Models */,
+				62C3B36AEFA949F61764B7A7 /* Protocols */,
+				654819CDD5D4177E1FEFF51B /* Utilities */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		89A04341A1D6CB88E29145A8 /* CloverPDF */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D4E7AD9C5333E97DA85E2372 /* Build configuration list for PBXNativeTarget "CloverPDF" */;
+			buildPhases = (
+				0D88041E17B8AB0DAEE0F387 /* Sources */,
+				4FE48BE8EB0F581CF4F274D6 /* Resources */,
+				8183858534435B20B2457D70 /* Frameworks */,
+				DF4FE06D6E7391209A5350D8 /* Embed Converter Helper */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CloverPDF;
+			packageProductDependencies = (
+			);
+			productName = CloverPDF;
+			productReference = 73EEF524A01B383F175D7852 /* CloverPDF.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E09B3BDF70C17838504AC6FA /* CloverPDFTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BDCE7C757547F26A1B263F97 /* Build configuration list for PBXNativeTarget "CloverPDFTests" */;
+			buildPhases = (
+				684EED5E273D156B5F40E866 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				78F162EB000E5D98F0AA1DF8 /* PBXTargetDependency */,
+			);
+			name = CloverPDFTests;
+			packageProductDependencies = (
+			);
+			productName = CloverPDFTests;
+			productReference = 2265BC7E65C6089645A38877 /* CloverPDFTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3DB9294189337D254C983D73 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					89A04341A1D6CB88E29145A8 = {
+						ProvisioningStyle = Automatic;
+					};
+					E09B3BDF70C17838504AC6FA = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = A0B0742E41E2917839595AAD /* Build configuration list for PBXProject "CloverPDF" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				de,
+				en,
+				ja,
+				ko,
+				ru,
+				"zh-Hans",
+			);
+			mainGroup = 2695A1864B512CFCA839B605;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				89A04341A1D6CB88E29145A8 /* CloverPDF */,
+				E09B3BDF70C17838504AC6FA /* CloverPDFTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4FE48BE8EB0F581CF4F274D6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D82F1F31478282EC2F4C7BE6 /* Assets.xcassets in Resources */,
+				68B8923237ED237D7B35BAD1 /* InfoPlist.xcstrings in Resources */,
+				D8811646BC5649E901C8F97B /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		DF4FE06D6E7391209A5350D8 /* Embed Converter Helper */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Converter Helper";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "bash \"$SRCROOT/scripts/embed_converter.sh\"";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0D88041E17B8AB0DAEE0F387 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D2898027EAD91FE1F4F7B590 /* AppDelegate.swift in Sources */,
+				92640E3460686FDBB3792A52 /* AppModel.swift in Sources */,
+				F7344B3BC1F88BCA335DDDAB /* BookmarkService.swift in Sources */,
+				F9CD2AFBCE492D76AC131238 /* CloverPDFApp.swift in Sources */,
+				3E90A4BC86E7EA9F8A279A1D /* CloverPDFError.swift in Sources */,
+				9943BF7E51C7FDF614C535D8 /* ContentView.swift in Sources */,
+				3935FED057AAF9EE8FCDBF0B /* ConvertView.swift in Sources */,
+				F5EA3F6E93A93D9DEACDA29A /* ExternalOpenCenter.swift in Sources */,
+				040EE374ECAF343EF92A69CD /* FilePanel.swift in Sources */,
+				5051029B3B0A74DCF3E95F2A /* JSONTaskRepository.swift in Sources */,
+				E6FF248A0609C629ED78C723 /* KeychainTrialQuotaStore.swift in Sources */,
+				428183CE564116D88896F12C /* MacPaywallPresenter.swift in Sources */,
+				8F10F862D4EEB6EADA3F4B47 /* MacPurchaseManager.swift in Sources */,
+				8DF15EC8F963FB33D9C651AC /* MergeView.swift in Sources */,
+				D6482CA0649B055AD2D92966 /* OutputURLResolver.swift in Sources */,
+				A5E1A436EAD738C7A30C4FD0 /* PDFDropModifier.swift in Sources */,
+				6E40329FE029D86C3F13EDF1 /* PDFFileRows.swift in Sources */,
+				74799F7209865EA1EE24AAE5 /* PDFInspector.swift in Sources */,
+				9579ADD6990BCD0909FC2520 /* PDFKitMerger.swift in Sources */,
+				E22FFFF9E07569078D2B68A8 /* PDFPreviewSheet.swift in Sources */,
+				CED57885666CB4EF550F55D9 /* PDFServices.swift in Sources */,
+				5E7BA823B918843343834DDA /* PDFSource.swift in Sources */,
+				817319EE80B6FC8E85227DF5 /* ProcessingTask.swift in Sources */,
+				CB0BE8D5E7CACF84D99A9FD0 /* PurchaseService.swift in Sources */,
+				F1936CF00EA52EBF2388AC93 /* PythonConverterService.swift in Sources */,
+				EEE479A2F232DA83684EFFC5 /* SettingsView.swift in Sources */,
+				331D0F90609C19E51F9079E7 /* TaskQueueActor.swift in Sources */,
+				FD63D33DE1992DA69A1EF4C4 /* TasksView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		684EED5E273D156B5F40E866 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE4C81B678CB3122EFDA8B1B /* LocalizationTests.swift in Sources */,
+				7B90C5053E21E7A7719ABBA6 /* OutputURLResolverTests.swift in Sources */,
+				B74E3CE0C7B420FD65C276B4 /* PDFKitMergerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		78F162EB000E5D98F0AA1DF8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 89A04341A1D6CB88E29145A8 /* CloverPDF */;
+			targetProxy = 7E4988CF81C928EA30E5AA1B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0BC5FF2A450CB8B4C040A903 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lingchen.cloverpdf.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CloverPDF.app/Contents/MacOS/CloverPDF";
+			};
+			name = Release;
+		};
+		129C1EF3E93B6F337AA98FCF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		59096ABB5C441FBC5E251E71 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CloverPDF/Entitlements/CloverPDF.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = CloverPDF/App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lingchen.cloverpdf;
+				PRODUCT_NAME = CloverPDF;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		7C3AEC19B01DA062A9D03EE3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		B2CBD02A80930A5AE6E6E51C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CloverPDF/Entitlements/CloverPDF.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = CloverPDF/App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lingchen.cloverpdf;
+				PRODUCT_NAME = CloverPDF;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		CC640AD2DCC4E3CDAD83D855 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lingchen.cloverpdf.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CloverPDF.app/Contents/MacOS/CloverPDF";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A0B0742E41E2917839595AAD /* Build configuration list for PBXProject "CloverPDF" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7C3AEC19B01DA062A9D03EE3 /* Debug */,
+				129C1EF3E93B6F337AA98FCF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BDCE7C757547F26A1B263F97 /* Build configuration list for PBXNativeTarget "CloverPDFTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CC640AD2DCC4E3CDAD83D855 /* Debug */,
+				0BC5FF2A450CB8B4C040A903 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D4E7AD9C5333E97DA85E2372 /* Build configuration list for PBXNativeTarget "CloverPDF" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				59096ABB5C441FBC5E251E71 /* Debug */,
+				B2CBD02A80930A5AE6E6E51C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3DB9294189337D254C983D73 /* Project object */;
+}

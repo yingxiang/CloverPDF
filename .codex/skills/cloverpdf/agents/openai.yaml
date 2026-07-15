@@ -1,0 +1,4 @@
+interface:
+  display_name: "CloverPDF macOS"
+  short_description: "Develop and maintain CloverPDF with project quality gates"
+  default_prompt: "Use $cloverpdf to implement or review this CloverPDF macOS change."
