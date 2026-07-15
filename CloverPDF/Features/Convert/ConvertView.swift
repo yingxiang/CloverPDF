@@ -20,7 +20,9 @@ struct ConvertView: View {
     private var workspace: some View {
         VStack(spacing: 0) {
             if model.conversionItems.isEmpty {
-                EmptyPDFState(title: "No PDFs selected", icon: "doc.badge.plus")
+                EmptyPDFState(title: "No PDFs selected", icon: "doc.badge.plus") {
+                    model.importPDFs(FilePanel.openPDFs(), destination: .convert)
+                }
             } else {
                 List(selection: $model.selectedConversionItemID) {
                     ForEach($model.conversionItems) { $item in

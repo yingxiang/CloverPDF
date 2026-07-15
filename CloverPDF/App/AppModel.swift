@@ -230,6 +230,10 @@ final class AppModel: ObservableObject {
         NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: source.path)])
     }
 
+    func revealSourceFile(atPath path: String) {
+        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: path)])
+    }
+
     func usePreviewForConversion() {
         guard let previewItem else { return }
         appendUnique([previewItem], to: &conversionItems)

@@ -18,8 +18,9 @@
 ## Workspace UI
 
 - Keep the window title synchronized with the selected sidebar section.
-- Keep the navigation sidebar fixed at 210 points so narrowing the window cannot clip or partially hide it.
+- Keep the navigation sidebar fixed at 210 points while expanded so narrowing the window cannot clip or partially hide it. Allow it to collapse from a title-bar toggle that remains available for expansion.
 - Put the shared `Add PDF` action in the title bar for Merge and Convert; use the same icon and label in both sections.
+- Make the centered empty-state icon in Merge and Convert invoke the same `Add PDF` file-panel flow as the title-bar action.
 - Generate row thumbnails with Quick Look so they match Finder's PDF thumbnail style; use the Finder file icon only as a fallback.
 - Use native SwiftUI `List.onMove` reordering so the whole row follows the pointer. Do not add custom drag handles or drop delegates.
 - Keep row thumbnails inside a clipped 48-by-60-point container with explicit spacing before the text column; include the source directory and provide Move Up, Move Down, Delete, and Show in Finder context actions. Hide both move actions when the list has one item and disable the unavailable direction at list boundaries.

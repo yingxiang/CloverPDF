@@ -20,7 +20,9 @@ struct MergeView: View {
     private var workspace: some View {
         VStack(spacing: 0) {
             if model.mergeItems.isEmpty {
-                EmptyPDFState(title: "No PDFs selected", icon: "square.stack.3d.up.slash")
+                EmptyPDFState(title: "No PDFs selected", icon: "square.stack.3d.up.slash") {
+                    model.importPDFs(FilePanel.openPDFs(), destination: .merge)
+                }
             } else {
                 List(selection: $model.selectedMergeItemID) {
                     ForEach($model.mergeItems) { $item in

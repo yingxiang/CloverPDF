@@ -77,20 +77,38 @@ struct PDFFileRowActions {
 }
 
 struct PDFThumbnail: NSViewRepresentable {
-    let source: PDFSource
+    private let source: PDFSource?
+    private let fileURL: URL?
+
+    init(source: PDFSource) {
+        self.source = source
+        fileURL = nil
+    }
+
+    init(fileURL: URL) {
+        source = nil
+        self.fileURL = fileURL
+    }
 
     func makeNSView(context: Context) -> PDFThumbnailContainerView {
         PDFThumbnailContainerView()
     }
 
     func updateNSView(_ view: PDFThumbnailContainerView, context: Context) {
-        let key = source.id.uuidString
+        let key = source?.id.uuidString ?? fileURL?.path
         guard context.coordinator.key != key else { return }
         context.coordinator.key = key
         context.coordinator.task?.cancel()
         view.image = nil
         context.coordinator.task = Task { @MainActor in
-            let thumbnail = await PDFThumbnailLoader.load(source: source)
+            let thumbnail: NSImage?
+            if let source {
+                thumbnail = await PDFThumbnailLoader.load(source: source)
+            } else if let fileURL {
+                thumbnail = await PDFThumbnailLoader.load(fileURL: fileURL)
+            } else {
+                thumbnail = nil
+            }
             guard !Task.isCancelled, context.coordinator.key == key else { return }
             view.image = thumbnail
         }
@@ -142,6 +160,13 @@ private enum PDFThumbnailLoader {
     @MainActor
     static func load(source: PDFSource) async -> NSImage? {
         guard !Task.isCancelled, let url = try? BookmarkService.resolve(source) else { return nil }
+        return await load(fileURL: url)
+    }
+
+    @MainActor
+    static func load(fileURL: URL) async -> NSImage? {
+        guard !Task.isCancelled else { return nil }
+        let url = fileURL
         let accessed = url.startAccessingSecurityScopedResource()
         defer {
             if accessed { url.stopAccessingSecurityScopedResource() }
@@ -165,16 +190,34 @@ private enum PDFThumbnailLoader {
 struct EmptyPDFState: View {
     let title: LocalizedStringKey
     let icon: String
+    var action: (() -> Void)? = nil
 
     var body: some View {
         VStack(spacing: 12) {
-            Image(systemName: icon)
-                .font(.system(size: 38))
-                .foregroundStyle(.secondary)
+            emptyStateIcon
             Text(title)
                 .font(.headline)
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    @ViewBuilder
+    private var emptyStateIcon: some View {
+        if let action {
+            Button(action: action) {
+                Image(systemName: icon)
+                    .font(.system(size: 38))
+                    .foregroundStyle(.secondary)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Add PDF")
+            .help("Add PDF")
+        } else {
+            Image(systemName: icon)
+                .font(.system(size: 38))
+                .foregroundStyle(.secondary)
+        }
     }
 }

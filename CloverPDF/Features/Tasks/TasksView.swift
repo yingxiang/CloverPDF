@@ -1,4 +1,6 @@
+import AppKit
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct TasksView: View {
     @EnvironmentObject private var model: AppModel
@@ -24,8 +26,7 @@ private struct TaskRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: task.kind == .merge ? "square.stack.3d.up" : "doc.text")
-                .frame(width: 28)
+            taskIcon
             VStack(alignment: .leading, spacing: 5) {
                 Text(task.title).lineLimit(1)
                 HStack(spacing: 8) {
@@ -37,6 +38,18 @@ private struct TaskRow: View {
                 }
                 .font(.caption)
                 .foregroundStyle(task.state == .failed ? .red : .secondary)
+                if task.kind == .merge, task.state == .succeeded {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 6) {
+                            ForEach(Array(task.inputPaths.enumerated()), id: \.offset) { _, path in
+                                TaskSourceFileButton(path: path) {
+                                    model.revealSourceFile(atPath: path)
+                                }
+                            }
+                        }
+                    }
+                    .frame(height: 22)
+                }
                 if task.state == .failed, let errorCode = task.errorCode {
                     Text(CloverPDFError.localizedDescription(for: errorCode))
                         .font(.caption2)
@@ -72,9 +85,64 @@ private struct TaskRow: View {
         }
         .padding(.vertical, 8)
     }
+
+    @ViewBuilder
+    private var taskIcon: some View {
+        if task.kind == .merge, task.state == .succeeded, let outputPath = task.outputPath {
+            PDFThumbnail(fileURL: URL(fileURLWithPath: outputPath))
+                .frame(width: 48, height: 60)
+                .clipped()
+        } else if task.kind == .merge, task.state.isActive {
+            Image(nsImage: NSWorkspace.shared.icon(for: .pdf))
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 48, height: 60)
+        } else {
+            Image(systemName: task.kind == .merge ? "square.stack.3d.up" : "doc.text")
+                .font(.system(size: 22))
+                .foregroundStyle(.secondary)
+                .frame(width: 48, height: 60)
+        }
+    }
+}
+
+private struct TaskSourceFileButton: View {
+    let path: String
+    let action: () -> Void
+    @State private var isHovered = false
+
+    var body: some View {
+        Button(action: action) {
+            Text(URL(fileURLWithPath: path).lastPathComponent)
+                .font(.caption2)
+                .lineLimit(1)
+                .foregroundStyle(foregroundColor)
+                .padding(.horizontal, 8)
+                .frame(height: 20)
+                .background {
+                    Capsule()
+                        .fill(backgroundColor)
+                }
+        }
+        .buttonStyle(.plain)
+        .onHover { isHovered = $0 }
+        .help(path)
+    }
+
+    private var foregroundColor: Color {
+        isHovered ? Color(nsColor: .textBackgroundColor) : .secondary
+    }
+
+    private var backgroundColor: Color {
+        isHovered ? Color(nsColor: .textColor) : .clear
+    }
 }
 
 private extension ProcessingTaskState {
+    var isActive: Bool {
+        self == .pending || self == .validating || self == .running
+    }
+
     var localizedTitle: String {
         switch self {
         case .pending: String(localized: "Waiting")

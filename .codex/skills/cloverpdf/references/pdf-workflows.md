@@ -10,6 +10,8 @@
 6. Write to a temporary PDF, validate its page count, then atomically move or replace the user-confirmed output URL.
 7. Clear the submitted merge inputs only after that merge task succeeds; preserve newly added files and keep the list after failure or cancellation.
 8. Treat missing passwords, incorrect passwords, corrupt files, cancellation, and write failures as distinct localized errors.
+9. Show original input PDF filenames as individual capsule buttons on a dedicated line for each successfully completed merge task. Highlight a filename with system text and text-background colors on hover, and reveal that source file in Finder when clicked.
+10. Show a 48-by-60-point Quick Look thumbnail of the merged output for successful merge tasks, matching Merge workspace rows. Use a fixed-size PDF document icon while a merge task is active.
 
 ## Convert
 

@@ -2,18 +2,21 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject private var model: AppModel
+    @State private var isSidebarVisible = true
 
     var body: some View {
         HStack(spacing: 0) {
-            List(AppSection.allCases, selection: $model.selection) { section in
-                Label(section.localizedTitle, systemImage: section.icon)
-                    .tag(section)
-            }
-            .listStyle(.sidebar)
-            .frame(width: 210)
-            .fixedSize(horizontal: true, vertical: false)
+            if isSidebarVisible {
+                List(AppSection.allCases, selection: $model.selection) { section in
+                    Label(section.localizedTitle, systemImage: section.icon)
+                        .tag(section)
+                }
+                .listStyle(.sidebar)
+                .frame(width: 210)
+                .fixedSize(horizontal: true, vertical: false)
 
-            Divider()
+                Divider()
+            }
 
             Group {
                 switch model.selection {
@@ -32,6 +35,18 @@ struct ContentView: View {
         }
         .navigationTitle(model.selection.localizedTitle)
         .toolbar {
+            ToolbarItem(placement: .navigation) {
+                Button {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        isSidebarVisible.toggle()
+                    }
+                } label: {
+                    Label(sidebarButtonTitle, systemImage: "sidebar.left")
+                        .labelStyle(.iconOnly)
+                }
+                .help(Text(sidebarButtonTitle))
+            }
+
             ToolbarItemGroup(placement: .primaryAction) {
                 if model.selection == .merge || model.selection == .convert {
                     Button {
@@ -88,6 +103,10 @@ struct ContentView: View {
 
     private var terminalTaskStates: Set<ProcessingTaskState> {
         [.succeeded, .failed, .cancelled, .interrupted]
+    }
+
+    private var sidebarButtonTitle: LocalizedStringKey {
+        isSidebarVisible ? "Hide Sidebar" : "Show Sidebar"
     }
 
     private func updateWindowTitle() {
