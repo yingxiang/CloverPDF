@@ -1,126 +1,129 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "CFBundleDisplayName": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "CFBundleDisplayName" : {
+      "comment" : "Bundle display name",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF"
           }
         }
       }
     },
-    "CFBundleName": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF"
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF"
           }
         }
       }
     },
-    "PDF Document": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF Document"
+    "PDF Document" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF-Dokument"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF 文档"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF Document"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF 문서"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF書類"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF書類"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF 문서"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF-Dokument"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Документ PDF"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Документ PDF"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF 文档"
           }
         }
       }
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }

@@ -1,3326 +1,3447 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "CloverPDF": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%lld free conversions remaining" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld kostenlose Konvertierungen übrig"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld free conversions remaining"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無料変換は残り%lld回"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무료 변환 %lld회 남음"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Осталось бесплатных преобразований: %lld"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "剩余 %lld 次免费转换"
           }
         }
       }
     },
-    "Merge PDFs": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Merge PDFs"
+    "%lld pages" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Seiten"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "合并 PDF"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld pages"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF 병합"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldページ"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDFを結合"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld페이지"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDFs zusammenführen"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld стр."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Объединить PDF"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld 页"
           }
         }
       }
     },
-    "PDF to Word": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF to Word"
+    "1-Year Subscription" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1-Jahres-Abo"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF 转 Word"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1-Year Subscription"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF를 Word로"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1年サブスクリプション"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDFをWordに変換"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1년 구독"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF in Word"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подписка на 1 год"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF в Word"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 年订阅"
           }
         }
       }
     },
-    "Tasks": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tasks"
+    "3-Month Subscription" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3-Monats-Abo"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "任务"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3-Month Subscription"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "작업"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3か月サブスクリプション"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "タスク"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3개월 구독"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aufgaben"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подписка на 3 месяца"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Задачи"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 个月订阅"
           }
         }
       }
     },
-    "Settings": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Settings"
+    "6-Month Subscription" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6-Monats-Abo"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "设置"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6-Month Subscription"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "설정"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6か月サブスクリプション"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "設定"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6개월 구독"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Einstellungen"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подписка на 6 месяцев"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Настройки"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 个月订阅"
           }
         }
       }
     },
-    "No PDFs selected": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No PDFs selected"
+    "About" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Über"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "未选择 PDF"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "선택한 PDF 없음"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "情報"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDFが選択されていません"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "정보"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine PDFs ausgewählt"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "О приложении"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF не выбраны"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关于"
           }
         }
       }
     },
-    "No tasks": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No tasks"
+    "Add PDF" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF hinzufügen"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "暂无任务"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add PDF"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "작업 없음"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDFを追加"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "タスクはありません"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF 추가"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine Aufgaben"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить PDF"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Нет задач"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加PDF"
           }
         }
       }
     },
-    "Add PDF": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Add PDF"
+    "Add to Merge" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zum Zusammenführen hinzufügen"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "添加PDF"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add to Merge"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF 추가"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "結合に追加"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDFを追加"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "병합에 추가"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF hinzufügen"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить к объединению"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Добавить PDF"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加到合并"
           }
         }
       }
     },
-    "Clear": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Clear"
+    "Application" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anwendung"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "清空"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Application"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "지우기"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリケーション"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "クリア"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "응용 프로그램"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Leeren"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Приложение"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Очистить"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用"
           }
         }
       }
     },
-    "Page Range": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Page Range"
+    "Auto-renewable subscription" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatisch verlängerbares Abo"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "页码范围"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto-renewable subscription"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "페이지 범위"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自動更新サブスクリプション"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ページ範囲"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "자동 갱신 구독"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Seitenbereich"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Автовозобновляемая подписка"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Диапазон страниц"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动续期订阅"
           }
         }
       }
     },
-    "Start: %lld": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start: %lld"
+    "Batch conversion" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stapelkonvertierung"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "开始：%lld"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Batch conversion"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "시작: %lld"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一括変換"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "開始：%lld"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일괄 변환"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start: %lld"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пакетное преобразование"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Начало: %lld"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "批量转换"
           }
         }
       }
     },
-    "End: %lld": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "End: %lld"
+    "Best value" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestes Angebot"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "结束：%lld"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Best value"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "끝: %lld"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最もお得"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "終了：%lld"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최고의 가치"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ende: %lld"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Лучшая цена"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Конец: %lld"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最划算"
           }
         }
       }
     },
-    "Premium required for batch conversion": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Premium required for batch conversion"
+    "Cancel" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "批量转换需要高级版"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "일괄 변환에는 프리미엄이 필요합니다"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "キャンセル"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "一括変換にはプレミアムが必要です"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "취소"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Premium für Stapelkonvertierung erforderlich"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отменить"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Для пакетного преобразования нужна Premium-версия"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消"
           }
         }
       }
     },
-    "Convert": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Convert"
+    "Cancelled" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgebrochen"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "转换"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelled"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "변환"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "キャンセル済み"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "変換"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "취소됨"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Konvertieren"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отменено"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Преобразовать"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已取消"
           }
         }
       }
     },
-    "Scanned PDF: OCR is not included": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scanned PDF: OCR is not included"
+    "Clear" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leeren"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "扫描版 PDF：当前不含 OCR"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "스캔 PDF: OCR은 포함되지 않음"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クリア"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "スキャンPDF：OCRは含まれません"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지우기"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gescanntes PDF: OCR ist nicht enthalten"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очистить"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сканированный PDF: OCR не поддерживается"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清空"
           }
         }
       }
     },
-    "Add to Merge": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Add to Merge"
+    "Clear Finished" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgeschlossene löschen"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "添加到合并"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear Finished"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "병합에 추가"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了項目を消去"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "結合に追加"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료 항목 지우기"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zum Zusammenführen hinzufügen"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очистить завершенные"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Добавить к объединению"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清除已完成"
           }
         }
       }
     },
-    "Convert to Word": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Convert to Word"
+    "CloverPDF" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "转为 Word"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Word로 변환"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wordに変換"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In Word konvertieren"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Преобразовать в Word"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF"
           }
         }
       }
     },
-    "Premium": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Premium"
+    "CloverPDF Premium is active" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF Premium ist aktiv"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "高级版"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF Premium is active"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "프리미엄"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDFプレミアムが有効です"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "プレミアム"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF 프리미엄이 활성화되었습니다"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Premium"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF Premium активирован"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Premium"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF 高级版已激活"
           }
         }
       }
     },
-    "Status": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Status"
+    "Completed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgeschlossen"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "状态"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completed"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "상태"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ステータス"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료됨"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Status"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завершено"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Статус"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已完成"
           }
         }
       }
     },
-    "Premium Active": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Premium Active"
+    "Conversion failed: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konvertierung fehlgeschlagen: %@"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "高级版已激活"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conversion failed: %@"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "프리미엄 활성화됨"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "変換に失敗しました：%@"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "プレミアム有効"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "변환 실패: %@"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Premium aktiv"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ошибка преобразования: %@"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Premium активирован"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "转换失败：%@"
           }
         }
       }
     },
-    "Free": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Free"
+    "Convert" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konvertieren"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "免费版"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Convert"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "무료"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "変換"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "無料"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "변환"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kostenlos"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Преобразовать"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бесплатно"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "转换"
           }
         }
       }
     },
-    "Free Conversions": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Free Conversions"
+    "Convert to Word" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Word konvertieren"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "免费转换"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Convert to Word"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "무료 변환"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wordに変換"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "無料変換"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Word로 변환"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kostenlose Konvertierungen"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Преобразовать в Word"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бесплатные преобразования"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "转为 Word"
           }
         }
       }
     },
-    "Unlock Premium": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unlock Premium"
+    "Default Folder" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standardordner"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "解锁高级版"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default Folder"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "프리미엄 잠금 해제"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デフォルトフォルダ"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "プレミアムを解除"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기본 폴더"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Premium freischalten"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Папка по умолчанию"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Разблокировать Premium"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "默认文件夹"
           }
         }
       }
     },
-    "Output": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Output"
+    "Delete" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löschen"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "输出"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "출력"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "削除"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "出力"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "삭제"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ausgabe"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удалить"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вывод"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除"
           }
         }
       }
     },
-    "Default Folder": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Default Folder"
+    "End: %lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ende: %lld"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "默认文件夹"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "End: %lld"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "기본 폴더"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "終了：%lld"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "デフォルトフォルダ"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "끝: %lld"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Standardordner"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Конец: %lld"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Папка по умолчанию"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "结束：%lld"
           }
         }
       }
     },
-    "About": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "About"
+    "Enter the PDF password before retrying." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geben Sie vor dem erneuten Versuch das PDF-Passwort ein."
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "关于"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the PDF password before retrying."
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "정보"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再試行する前にPDFパスワードを入力してください。"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "情報"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "재시도하기 전에 PDF 암호를 입력하세요."
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Über"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите пароль PDF перед повторной попыткой."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "О приложении"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请先输入 PDF 密码再重试。"
           }
         }
       }
     },
-    "Application": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Application"
+    "Failed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehlgeschlagen"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "应用"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "응용 프로그램"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "失敗"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "アプリケーション"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "실패"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Anwendung"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ошибка"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Приложение"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "失败"
           }
         }
       }
     },
-    "Privacy": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Privacy"
+    "Files stay on this Mac" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateien bleiben auf diesem Mac"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "隐私"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Files stay on this Mac"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "개인정보 보호"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ファイルはこのMac内に保持されます"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "プライバシー"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "파일은 이 Mac에만 보관됩니다"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Datenschutz"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Файлы остаются на этом Mac"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Конфиденциальность"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文件始终保留在此 Mac"
           }
         }
       }
     },
-    "Files stay on this Mac": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Files stay on this Mac"
+    "Free" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kostenlos"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "文件始终保留在此 Mac"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Free"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "파일은 이 Mac에만 보관됩니다"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無料"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ファイルはこのMac内に保持されます"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무료"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dateien bleiben auf diesem Mac"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бесплатно"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Файлы остаются на этом Mac"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "免费版"
           }
         }
       }
     },
-    "PDF to Word Engine": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF to Word Engine"
+    "Free Conversions" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kostenlose Konvertierungen"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF 转 Word 引擎"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Free Conversions"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF-Word 엔진"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無料変換"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDFからWord変換エンジン"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무료 변환"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF-zu-Word-Engine"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бесплатные преобразования"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Модуль PDF в Word"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "免费转换"
           }
         }
       }
     },
-    "Clear Finished": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Clear Finished"
+    "Full task history and retry" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vollständiger Aufgabenverlauf und Wiederholung"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "清除已完成"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full task history and retry"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "완료 항목 지우기"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完全なタスク履歴と再試行"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "完了項目を消去"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "전체 작업 기록 및 재시도"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abgeschlossene löschen"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Полная история задач и повтор"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Очистить завершенные"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完整任务历史和重试"
           }
         }
       }
     },
-    "Cancel": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cancel"
+    "Future premium PDF tools" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Künftige Premium-PDF-Werkzeuge"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "取消"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Future premium PDF tools"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "취소"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今後追加されるプレミアムPDFツール"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "キャンセル"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "향후 프리미엄 PDF 도구"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abbrechen"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Будущие Premium-инструменты PDF"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Отменить"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未来新增高级 PDF 工具"
           }
         }
       }
     },
-    "Retry": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retry"
+    "Interrupted" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unterbrochen"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "重试"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interrupted"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "재시도"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中断"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "再試行"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "중단됨"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wiederholen"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прервано"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Повторить"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已中断"
           }
         }
       }
     },
-    "Show in Finder": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Show in Finder"
+    "Lifetime Unlock" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dauerhaft freischalten"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "在 Finder 中显示"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lifetime Unlock"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Finder에서 보기"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "永久解除"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Finderに表示"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "평생 잠금 해제"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Im Finder anzeigen"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пожизненная разблокировка"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Показать в Finder"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "永久解锁"
           }
         }
       }
     },
-    "Move Up": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Move Up"
+    "Merge" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zusammenführen"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "向上移动"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merge"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "위로 이동"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "結合"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上へ移動"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "병합"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nach oben verschieben"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Объединить"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Переместить вверх"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "合并"
           }
         }
       }
     },
-    "Move Down": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Move Down"
+    "Merge PDFs" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDFs zusammenführen"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "向下移动"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merge PDFs"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "아래로 이동"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDFを結合"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "下へ移動"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF 병합"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nach unten verschieben"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Объединить PDF"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Переместить вниз"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "合并 PDF"
           }
         }
       }
     },
-    "Delete": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Delete"
+    "Move Down" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach unten verschieben"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "删除"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move Down"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "삭제"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下へ移動"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "削除"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아래로 이동"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Löschen"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Переместить вниз"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Удалить"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "向下移动"
           }
         }
       }
     },
-    "Waiting": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Waiting"
+    "Move Up" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach oben verschieben"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "等待中"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move Up"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "대기 중"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上へ移動"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "待機中"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "위로 이동"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wartet"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Переместить вверх"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ожидание"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "向上移动"
           }
         }
       }
     },
-    "Validating": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Validating"
+    "No pages are available to process." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es sind keine Seiten zur Verarbeitung verfügbar."
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "正在校验"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No pages are available to process."
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "검증 중"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "処理できるページがありません。"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "検証中"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "처리할 페이지가 없습니다."
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wird geprüft"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет страниц для обработки."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Проверка"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有可处理的页面。"
           }
         }
       }
     },
-    "Processing": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Processing"
+    "No PDFs selected" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine PDFs ausgewählt"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "处理中"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No PDFs selected"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "처리 중"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDFが選択されていません"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "処理中"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "선택한 PDF 없음"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wird verarbeitet"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF не выбраны"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Обработка"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未选择 PDF"
           }
         }
       }
     },
-    "Completed": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Completed"
+    "No tasks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Aufgaben"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "已完成"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No tasks"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "완료됨"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タスクはありません"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "完了"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "작업 없음"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abgeschlossen"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет задач"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Завершено"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂无任务"
           }
         }
       }
     },
-    "Failed": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Failed"
+    "OK" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "失败"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "실패"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "失敗"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "확인"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fehlgeschlagen"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ОК"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ошибка"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "好"
           }
         }
       }
     },
-    "Cancelled": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cancelled"
+    "One purchase, permanent access" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Kauf, dauerhafter Zugriff"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "已取消"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One purchase, permanent access"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "취소됨"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一度の購入で永久アクセス"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "キャンセル済み"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "한 번 구매로 영구 사용"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abgebrochen"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Одна покупка, постоянный доступ"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Отменено"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一次购买，永久使用"
           }
         }
       }
     },
-    "Interrupted": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Interrupted"
+    "Output" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgabe"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "已中断"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Output"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "중단됨"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "出力"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "中断"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "출력"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unterbrochen"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вывод"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Прервано"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "输出"
           }
         }
       }
     },
-    "Merge": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Merge"
+    "Page Range" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seitenbereich"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "合并"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Page Range"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "병합"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ページ範囲"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "結合"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "페이지 범위"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zusammenführen"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Диапазон страниц"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Объединить"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "页码范围"
           }
         }
       }
     },
-    "Save Merged PDF": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save Merged PDF"
+    "PDF Password" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF-Passwort"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "保存合并后的 PDF"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF Password"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "병합된 PDF 저장"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDFパスワード"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "結合したPDFを保存"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF 암호"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zusammengeführtes PDF sichern"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пароль PDF"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сохранить объединенный PDF"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF 密码"
           }
         }
       }
     },
-    "PDF Password": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF Password"
+    "PDF to Word" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF in Word"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF 密码"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF to Word"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF 암호"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDFをWordに変換"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDFパスワード"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF를 Word로"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF-Passwort"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF в Word"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пароль PDF"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF 转 Word"
           }
         }
       }
     },
-    "Remove": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Remove"
+    "PDF to Word Engine" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF-zu-Word-Engine"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "移除"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF to Word Engine"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "제거"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDFからWord変換エンジン"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "削除"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF-Word 엔진"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entfernen"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Модуль PDF в Word"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Удалить"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF 转 Word 引擎"
           }
         }
       }
     },
-    "%lld pages": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld pages"
+    "pdf2docx" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "pdf2docx"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld 页"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "pdf2docx"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld페이지"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "pdf2docx"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lldページ"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "pdf2docx"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld Seiten"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "pdf2docx"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld стр."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "pdf2docx"
           }
         }
       }
     },
-    "%lld free conversions remaining": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld free conversions remaining"
+    "Premium" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "剩余 %lld 次免费转换"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "무료 변환 %lld회 남음"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プレミアム"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "無料変換は残り%lld回"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "프리미엄"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld kostenlose Konvertierungen übrig"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Осталось бесплатных преобразований: %lld"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "高级版"
           }
         }
       }
     },
-    "Unlock CloverPDF Premium": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unlock CloverPDF Premium"
+    "Premium Active" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium aktiv"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "解锁 CloverPDF 高级版"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium Active"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF 프리미엄 잠금 해제"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プレミアム有効"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDFプレミアムを解除"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "프리미엄 활성화됨"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF Premium freischalten"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium активирован"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Разблокировать CloverPDF Premium"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "高级版已激活"
           }
         }
       }
     },
-    "CloverPDF Premium is active": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF Premium is active"
+    "Premium is required for this conversion." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für diese Konvertierung ist Premium erforderlich."
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF 高级版已激活"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium is required for this conversion."
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF 프리미엄이 활성화되었습니다"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この変換にはプレミアムが必要です。"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDFプレミアムが有効です"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 변환에는 프리미엄이 필요합니다."
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF Premium ist aktiv"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для этого преобразования нужна Premium-версия."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CloverPDF Premium активирован"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此转换需要高级版。"
           }
         }
       }
     },
-    "Purchase Failed": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Purchase Failed"
+    "Premium required for batch conversion" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium für Stapelkonvertierung erforderlich"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "购买失败"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium required for batch conversion"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "구매 실패"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一括変換にはプレミアムが必要です"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "購入に失敗しました"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일괄 변환에는 프리미엄이 필요합니다"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kauf fehlgeschlagen"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для пакетного преобразования нужна Premium-версия"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Покупка не удалась"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "批量转换需要高级版"
           }
         }
       }
     },
-    "Products are temporarily unavailable. Please try again later.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Products are temporarily unavailable. Please try again later."
+    "Privacy" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datenschutz"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "商品暂时不可用，请稍后再试。"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "상품을 일시적으로 사용할 수 없습니다. 나중에 다시 시도하세요."
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プライバシー"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "商品を一時的に利用できません。後でもう一度お試しください。"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "개인정보 보호"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Produkte sind vorübergehend nicht verfügbar. Bitte später erneut versuchen."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Конфиденциальность"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Товары временно недоступны. Повторите попытку позже."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隐私"
           }
         }
       }
     },
-    "Unlimited PDF to Word conversion": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unlimited PDF to Word conversion"
+    "Processing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird verarbeitet"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "无限 PDF 转 Word"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Processing"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "무제한 PDF-Word 변환"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "処理中"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDFからWordへの変換が無制限"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "처리 중"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unbegrenzte PDF-zu-Word-Konvertierung"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обработка"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Безлимитное преобразование PDF в Word"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "处理中"
           }
         }
       }
     },
-    "Batch conversion": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Batch conversion"
+    "Products are temporarily unavailable. Please try again later." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Produkte sind vorübergehend nicht verfügbar. Bitte später erneut versuchen."
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "批量转换"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Products are temporarily unavailable. Please try again later."
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "일괄 변환"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "商品を一時的に利用できません。後でもう一度お試しください。"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "一括変換"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "상품을 일시적으로 사용할 수 없습니다. 나중에 다시 시도하세요."
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stapelkonvertierung"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Товары временно недоступны. Повторите попытку позже."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пакетное преобразование"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "商品暂时不可用，请稍后再试。"
           }
         }
       }
     },
-    "Full task history and retry": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Full task history and retry"
+    "Purchase Failed" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kauf fehlgeschlagen"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "完整任务历史和重试"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Purchase Failed"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "전체 작업 기록 및 재시도"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "購入に失敗しました"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "完全なタスク履歴と再試行"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구매 실패"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vollständiger Aufgabenverlauf und Wiederholung"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Покупка не удалась"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Полная история задач и повтор"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "购买失败"
           }
         }
       }
     },
-    "Future premium PDF tools": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Future premium PDF tools"
+    "Remove" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entfernen"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "未来新增高级 PDF 工具"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "향후 프리미엄 PDF 도구"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "削除"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "今後追加されるプレミアムPDFツール"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "제거"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Künftige Premium-PDF-Werkzeuge"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удалить"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Будущие Premium-инструменты PDF"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "移除"
           }
         }
       }
     },
-    "Best value": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Best value"
+    "Retry" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiederholen"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "最划算"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retry"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "최고의 가치"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再試行"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "最もお得"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "재시도"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bestes Angebot"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повторить"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Лучшая цена"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重试"
           }
         }
       }
     },
-    "3-Month Subscription": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "3-Month Subscription"
+    "Save Merged PDF" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zusammengeführtes PDF sichern"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "3 个月订阅"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save Merged PDF"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "3개월 구독"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "結合したPDFを保存"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "3か月サブスクリプション"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "병합된 PDF 저장"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "3-Monats-Abo"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сохранить объединенный PDF"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Подписка на 3 месяца"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存合并后的 PDF"
           }
         }
       }
     },
-    "6-Month Subscription": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "6-Month Subscription"
+    "Scanned PDF: OCR is not included" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gescanntes PDF: OCR ist nicht enthalten"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "6 个月订阅"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scanned PDF: OCR is not included"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "6개월 구독"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スキャンPDF：OCRは含まれません"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "6か月サブスクリプション"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스캔 PDF: OCR은 포함되지 않음"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "6-Monats-Abo"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сканированный PDF: OCR не поддерживается"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Подписка на 6 месяцев"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "扫描版 PDF：当前不含 OCR"
           }
         }
       }
     },
-    "1-Year Subscription": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1-Year Subscription"
+    "Settings" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1 年订阅"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1년 구독"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1年サブスクリプション"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "설정"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1-Jahres-Abo"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Настройки"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Подписка на 1 год"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置"
           }
         }
       }
     },
-    "Lifetime Unlock": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lifetime Unlock"
+    "Show in Finder" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Finder anzeigen"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "永久解锁"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show in Finder"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "평생 잠금 해제"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finderに表示"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "永久解除"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finder에서 보기"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dauerhaft freischalten"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показать в Finder"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пожизненная разблокировка"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 Finder 中显示"
           }
         }
       }
     },
-    "One purchase, permanent access": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "One purchase, permanent access"
+    "Start: %lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start: %lld"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "一次购买，永久使用"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start: %lld"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "한 번 구매로 영구 사용"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開始：%lld"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "一度の購入で永久アクセス"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시작: %lld"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ein Kauf, dauerhafter Zugriff"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Начало: %lld"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Одна покупка, постоянный доступ"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开始：%lld"
           }
         }
       }
     },
-    "Auto-renewable subscription": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Auto-renewable subscription"
+    "Status" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "自动续期订阅"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "자동 갱신 구독"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ステータス"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "自動更新サブスクリプション"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "상태"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatisch verlängerbares Abo"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Статус"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Автовозобновляемая подписка"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "状态"
           }
         }
       }
     },
-    "OK": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OK"
+    "Tasks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufgaben"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "好"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tasks"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "확인"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タスク"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OK"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "작업"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OK"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Задачи"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ОК"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "任务"
           }
         }
       }
     },
-    "The PDF is damaged or unsupported.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The PDF is damaged or unsupported."
+    "The converter returned an invalid response." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Konverter hat eine ungültige Antwort geliefert."
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF 已损坏或不受支持。"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The converter returned an invalid response."
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF가 손상되었거나 지원되지 않습니다."
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "変換機能から無効な応答が返されました。"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDFが破損しているか対応していません。"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "변환기가 잘못된 응답을 반환했습니다."
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Das PDF ist beschädigt oder wird nicht unterstützt."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Конвертер вернул неверный ответ."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF поврежден или не поддерживается."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "转换器返回了无效响应。"
           }
         }
       }
     },
-    "This PDF requires a password.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "This PDF requires a password."
+    "The output file could not be created." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Ausgabedatei konnte nicht erstellt werden."
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "此 PDF 需要密码。"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The output file could not be created."
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "이 PDF에는 암호가 필요합니다."
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "出力ファイルを作成できませんでした。"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "このPDFにはパスワードが必要です。"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "출력 파일을 만들 수 없습니다."
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dieses PDF benötigt ein Passwort."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось создать выходной файл."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Для этого PDF требуется пароль."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法创建输出文件。"
           }
         }
       }
     },
-    "The PDF password is incorrect.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The PDF password is incorrect."
+    "The PDF is damaged or unsupported." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das PDF ist beschädigt oder wird nicht unterstützt."
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF 密码错误。"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The PDF is damaged or unsupported."
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDF 암호가 올바르지 않습니다."
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDFが破損しているか対応していません。"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PDFのパスワードが正しくありません。"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF가 손상되었거나 지원되지 않습니다."
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Das PDF-Passwort ist falsch."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF поврежден или не поддерживается."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Неверный пароль PDF."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF 已损坏或不受支持。"
           }
         }
       }
     },
-    "No pages are available to process.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No pages are available to process."
+    "The PDF password is incorrect." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das PDF-Passwort ist falsch."
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "没有可处理的页面。"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The PDF password is incorrect."
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "처리할 페이지가 없습니다."
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDFのパスワードが正しくありません。"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "処理できるページがありません。"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF 암호가 올바르지 않습니다."
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Es sind keine Seiten zur Verarbeitung verfügbar."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Неверный пароль PDF."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Нет страниц для обработки."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF 密码错误。"
           }
         }
       }
     },
-    "The selected page range is invalid.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The selected page range is invalid."
+    "The selected page range is invalid." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der ausgewählte Seitenbereich ist ungültig."
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "所选页码范围无效。"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The selected page range is invalid."
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "선택한 페이지 범위가 잘못되었습니다."
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択したページ範囲が無効です。"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "選択したページ範囲が無効です。"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "선택한 페이지 범위가 잘못되었습니다."
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Der ausgewählte Seitenbereich ist ungültig."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выбран неверный диапазон страниц."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Выбран неверный диапазон страниц."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所选页码范围无效。"
           }
         }
       }
     },
-    "The output file could not be created.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The output file could not be created."
+    "The source files must be added again." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Quelldateien müssen erneut hinzugefügt werden."
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "无法创建输出文件。"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The source files must be added again."
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "출력 파일을 만들 수 없습니다."
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "元のファイルを再度追加してください。"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "出力ファイルを作成できませんでした。"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "원본 파일을 다시 추가해야 합니다."
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die Ausgabedatei konnte nicht erstellt werden."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Необходимо снова добавить исходные файлы."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не удалось создать выходной файл."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "需要重新添加源文件。"
           }
         }
       }
     },
-    "The Word converter is unavailable.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The Word converter is unavailable."
+    "The task could not be completed." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Aufgabe konnte nicht abgeschlossen werden."
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Word 转换器不可用。"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The task could not be completed."
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Word 변환기를 사용할 수 없습니다."
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タスクを完了できませんでした。"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Word変換機能を利用できません。"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "작업을 완료할 수 없습니다."
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Der Word-Konverter ist nicht verfügbar."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось выполнить задачу."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Конвертер Word недоступен."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法完成任务。"
           }
         }
       }
     },
-    "The converter returned an invalid response.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The converter returned an invalid response."
+    "The task was cancelled." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Aufgabe wurde abgebrochen."
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "转换器返回了无效响应。"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The task was cancelled."
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "변환기가 잘못된 응답을 반환했습니다."
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タスクはキャンセルされました。"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "変換機能から無効な応答が返されました。"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "작업이 취소되었습니다."
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Der Konverter hat eine ungültige Antwort geliefert."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Задача отменена."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Конвертер вернул неверный ответ."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "任务已取消。"
           }
         }
       }
     },
-    "Conversion failed: %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Conversion failed: %@"
+    "The Word converter is unavailable." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Word-Konverter ist nicht verfügbar."
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "转换失败：%@"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Word converter is unavailable."
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "변환 실패: %@"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Word変換機能を利用できません。"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "変換に失敗しました：%@"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Word 변환기를 사용할 수 없습니다."
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Konvertierung fehlgeschlagen: %@"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Конвертер Word недоступен."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ошибка преобразования: %@"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Word 转换器不可用。"
           }
         }
       }
     },
-    "The task was cancelled.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The task was cancelled."
+    "This PDF requires a password." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses PDF benötigt ein Passwort."
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "任务已取消。"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This PDF requires a password."
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "작업이 취소되었습니다."
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このPDFにはパスワードが必要です。"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "タスクはキャンセルされました。"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 PDF에는 암호가 필요합니다."
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die Aufgabe wurde abgebrochen."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для этого PDF требуется пароль."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Задача отменена."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此 PDF 需要密码。"
           }
         }
       }
     },
-    "The task could not be completed.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The task could not be completed."
+    "Unlimited PDF to Word conversion" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbegrenzte PDF-zu-Word-Konvertierung"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "无法完成任务。"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlimited PDF to Word conversion"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "작업을 완료할 수 없습니다."
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDFからWordへの変換が無制限"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "タスクを完了できませんでした。"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무제한 PDF-Word 변환"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die Aufgabe konnte nicht abgeschlossen werden."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Безлимитное преобразование PDF в Word"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не удалось выполнить задачу."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无限 PDF 转 Word"
           }
         }
       }
     },
-    "The source files must be added again.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The source files must be added again."
+    "Unlock CloverPDF Premium" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF Premium freischalten"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "需要重新添加源文件。"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlock CloverPDF Premium"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "원본 파일을 다시 추가해야 합니다."
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDFプレミアムを解除"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "元のファイルを再度追加してください。"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloverPDF 프리미엄 잠금 해제"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die Quelldateien müssen erneut hinzugefügt werden."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разблокировать CloverPDF Premium"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Необходимо снова добавить исходные файлы."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解锁 CloverPDF 高级版"
           }
         }
       }
     },
-    "Enter the PDF password before retrying.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enter the PDF password before retrying."
+    "Unlock Premium" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium freischalten"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "请先输入 PDF 密码再重试。"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlock Premium"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "재시도하기 전에 PDF 암호를 입력하세요."
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プレミアムを解除"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "再試行する前にPDFパスワードを入力してください。"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "프리미엄 잠금 해제"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geben Sie vor dem erneuten Versuch das PDF-Passwort ein."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разблокировать Premium"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Введите пароль PDF перед повторной попыткой."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解锁高级版"
           }
         }
       }
     },
-    "Premium is required for this conversion.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Premium is required for this conversion."
+    "Validating" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird geprüft"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "此转换需要高级版。"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Validating"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "이 변환에는 프리미엄이 필요합니다."
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検証中"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "この変換にはプレミアムが必要です。"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "검증 중"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Für diese Konvertierung ist Premium erforderlich."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проверка"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Для этого преобразования нужна Premium-версия."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在校验"
           }
         }
       }
     },
-    "暂时无法加载解锁产品，请稍后再试": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unable to load products. Please try again later."
+    "Waiting" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wartet"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "暂时无法加载解锁产品，请稍后再试"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "상품을 불러올 수 없습니다. 나중에 다시 시도하세요."
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "待機中"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "商品を読み込めません。後でもう一度お試しください。"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "대기 중"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Produkte können nicht geladen werden. Bitte später erneut versuchen."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ожидание"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не удалось загрузить товары. Повторите попытку позже."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等待中"
           }
         }
       }
     },
-    "购买正在处理中，请稍后再检查解锁状态": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The purchase is pending. Check the unlock status later."
+    "暂时无法加载解锁产品，请稍后再试" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Produkte können nicht geladen werden. Bitte später erneut versuchen."
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "购买正在处理中，请稍后再检查解锁状态"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to load products. Please try again later."
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "구매 처리 중입니다. 나중에 잠금 해제 상태를 확인하세요."
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "商品を読み込めません。後でもう一度お試しください。"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "購入を処理中です。後で解除状態をご確認ください。"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "상품을 불러올 수 없습니다. 나중에 다시 시도하세요."
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Der Kauf wird verarbeitet. Prüfen Sie den Status später erneut."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось загрузить товары. Повторите попытку позже."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Покупка обрабатывается. Проверьте статус позже."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂时无法加载解锁产品，请稍后再试"
           }
         }
       }
     },
-    "购买验证失败，请稍后再试": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Purchase verification failed. Please try again later."
+    "购买正在处理中，请稍后再检查解锁状态" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Kauf wird verarbeitet. Prüfen Sie den Status später erneut."
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "购买验证失败，请稍后再试"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The purchase is pending. Check the unlock status later."
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "구매 확인에 실패했습니다. 나중에 다시 시도하세요."
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "購入を処理中です。後で解除状態をご確認ください。"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "購入の検証に失敗しました。後でもう一度お試しください。"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구매 처리 중입니다. 나중에 잠금 해제 상태를 확인하세요."
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kaufprüfung fehlgeschlagen. Bitte später erneut versuchen."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Покупка обрабатывается. Проверьте статус позже."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не удалось проверить покупку. Повторите попытку позже."
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "购买正在处理中，请稍后再检查解锁状态"
+          }
+        }
+      }
+    },
+    "购买验证失败，请稍后再试" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaufprüfung fehlgeschlagen. Bitte später erneut versuchen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Purchase verification failed. Please try again later."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "購入の検証に失敗しました。後でもう一度お試しください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구매 확인에 실패했습니다. 나중에 다시 시도하세요."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось проверить покупку. Повторите попытку позже."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "购买验证失败，请稍后再试"
           }
         }
       }
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }

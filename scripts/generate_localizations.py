@@ -40,6 +40,7 @@ T: dict[str, tuple[str, str, str, str, str, str]] = {
     "Privacy": ("Privacy", "隐私", "개인정보 보호", "プライバシー", "Datenschutz", "Конфиденциальность"),
     "Files stay on this Mac": ("Files stay on this Mac", "文件始终保留在此 Mac", "파일은 이 Mac에만 보관됩니다", "ファイルはこのMac内に保持されます", "Dateien bleiben auf diesem Mac", "Файлы остаются на этом Mac"),
     "PDF to Word Engine": ("PDF to Word Engine", "PDF 转 Word 引擎", "PDF-Word 엔진", "PDFからWord変換エンジン", "PDF-zu-Word-Engine", "Модуль PDF в Word"),
+    "pdf2docx": ("pdf2docx", "pdf2docx", "pdf2docx", "pdf2docx", "pdf2docx", "pdf2docx"),
     "Clear Finished": ("Clear Finished", "清除已完成", "완료 항목 지우기", "完了項目を消去", "Abgeschlossene löschen", "Очистить завершенные"),
     "Cancel": ("Cancel", "取消", "취소", "キャンセル", "Abbrechen", "Отменить"),
     "Retry": ("Retry", "重试", "재시도", "再試行", "Wiederholen", "Повторить"),

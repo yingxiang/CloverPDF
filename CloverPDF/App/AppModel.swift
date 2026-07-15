@@ -103,7 +103,7 @@ final class AppModel: ObservableObject {
     }
 
     func enqueueMerge() {
-        guard !mergeItems.isEmpty else { return }
+        guard mergeItems.count >= 2 else { return }
         guard let outputURL = FilePanel.saveMergedPDF() else { return }
         let submittedItems = mergeItems
         let inputs = submittedItems.map { PDFInput(source: $0.source, password: $0.password.nilIfEmpty) }

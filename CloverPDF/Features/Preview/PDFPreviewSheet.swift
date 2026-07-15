@@ -106,7 +106,9 @@ struct PDFWorkspacePreview: View {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(item.source.displayName).font(.headline).lineLimit(1)
-                    Text("\(item.source.pageCount) pages").font(.caption).foregroundStyle(.secondary)
+                    Text(String(localized: "\(item.source.pageCount) pages"))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
                 Spacer()
             }

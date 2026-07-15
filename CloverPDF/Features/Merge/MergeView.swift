@@ -52,7 +52,7 @@ struct MergeView: View {
                     Label("Merge", systemImage: "square.stack.3d.up")
                 }
                 .buttonStyle(.borderedProminent)
-                .disabled(model.mergeItems.isEmpty)
+                .disabled(model.mergeItems.count < 2)
             }
             .padding(16)
         }
