@@ -3,15 +3,17 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		040EE374ECAF343EF92A69CD /* FilePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8FF0A975C9564B13C6E1E9 /* FilePanel.swift */; };
+		0B7511DA389FD2424983464A /* MergeFilenameGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECBCA8D3DAAEDDE3638B5C2E /* MergeFilenameGeneratorTests.swift */; };
 		0E4B834EE0023A046D1C4494 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F97EB4E3ADB141F93117B008 /* Security.framework */; };
 		331D0F90609C19E51F9079E7 /* TaskQueueActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BAB9ADB230001A3C3FE057 /* TaskQueueActor.swift */; };
 		3935FED057AAF9EE8FCDBF0B /* ConvertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C5F8C948AA6C22B5429729 /* ConvertView.swift */; };
 		3E90A4BC86E7EA9F8A279A1D /* CloverPDFError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB460089CA0D42C1D06541D /* CloverPDFError.swift */; };
+		3F9095ACEF9CF3DC4DDBC8F1 /* MergeFilenameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087BC318D905FE527BA1DE5C /* MergeFilenameGenerator.swift */; };
 		428183CE564116D88896F12C /* MacPaywallPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D1631C8404C625B6E032DF /* MacPaywallPresenter.swift */; };
 		5051029B3B0A74DCF3E95F2A /* JSONTaskRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBE95973D61FEFC1A206D56 /* JSONTaskRepository.swift */; };
 		5E7BA823B918843343834DDA /* PDFSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9161BD45D89161C2E54353 /* PDFSource.swift */; };
@@ -60,6 +62,7 @@
 		02D8C4B60E1F91946C2E8392 /* PurchaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseService.swift; sourceTree = "<group>"; };
 		06F41A5B35A7C4C04410F7F8 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		07B566773AD52A18BFF7397F /* PDFPreviewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFPreviewSheet.swift; sourceTree = "<group>"; };
+		087BC318D905FE527BA1DE5C /* MergeFilenameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeFilenameGenerator.swift; sourceTree = "<group>"; };
 		0B8FF0A975C9564B13C6E1E9 /* FilePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePanel.swift; sourceTree = "<group>"; };
 		0ED8D41501793A07C71462E5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0FA8BF753260069879FEAC9A /* OutputURLResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputURLResolverTests.swift; sourceTree = "<group>"; };
@@ -94,6 +97,7 @@
 		D040E11DD9CA22A5A4C32DA0 /* LocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationTests.swift; sourceTree = "<group>"; };
 		D7F8CABD3C00B2EA1A775D1A /* BookmarkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkService.swift; sourceTree = "<group>"; };
 		E9EAE0E4CC38E32049641AFA /* PDFKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PDFKit.framework; path = System/Library/Frameworks/PDFKit.framework; sourceTree = SDKROOT; };
+		ECBCA8D3DAAEDDE3638B5C2E /* MergeFilenameGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeFilenameGeneratorTests.swift; sourceTree = "<group>"; };
 		F6E82A11D3D343CCED168716 /* OutputURLResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputURLResolver.swift; sourceTree = "<group>"; };
 		F97EB4E3ADB141F93117B008 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		FB4E723D87B47ADBF8B3EDCE /* KeychainTrialQuotaStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainTrialQuotaStore.swift; sourceTree = "<group>"; };
@@ -196,6 +200,7 @@
 			isa = PBXGroup;
 			children = (
 				0B8FF0A975C9564B13C6E1E9 /* FilePanel.swift */,
+				087BC318D905FE527BA1DE5C /* MergeFilenameGenerator.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -289,6 +294,7 @@
 			isa = PBXGroup;
 			children = (
 				D040E11DD9CA22A5A4C32DA0 /* LocalizationTests.swift */,
+				ECBCA8D3DAAEDDE3638B5C2E /* MergeFilenameGeneratorTests.swift */,
 				0FA8BF753260069879FEAC9A /* OutputURLResolverTests.swift */,
 				8EACBAF2E721C70910EFEE74 /* PDFKitMergerTests.swift */,
 			);
@@ -417,9 +423,6 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
-					89A04341A1D6CB88E29145A8 = {
-						ProvisioningStyle = Automatic;
-					};
 					E09B3BDF70C17838504AC6FA = {
 						ProvisioningStyle = Automatic;
 					};
@@ -440,7 +443,6 @@
 			);
 			mainGroup = 2695A1864B512CFCA839B605;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -503,6 +505,7 @@
 				E6FF248A0609C629ED78C723 /* KeychainTrialQuotaStore.swift in Sources */,
 				428183CE564116D88896F12C /* MacPaywallPresenter.swift in Sources */,
 				8F10F862D4EEB6EADA3F4B47 /* MacPurchaseManager.swift in Sources */,
+				3F9095ACEF9CF3DC4DDBC8F1 /* MergeFilenameGenerator.swift in Sources */,
 				8DF15EC8F963FB33D9C651AC /* MergeView.swift in Sources */,
 				D6482CA0649B055AD2D92966 /* OutputURLResolver.swift in Sources */,
 				A5E1A436EAD738C7A30C4FD0 /* PDFDropModifier.swift in Sources */,
@@ -526,6 +529,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE4C81B678CB3122EFDA8B1B /* LocalizationTests.swift in Sources */,
+				0B7511DA389FD2424983464A /* MergeFilenameGeneratorTests.swift in Sources */,
 				7B90C5053E21E7A7719ABBA6 /* OutputURLResolverTests.swift in Sources */,
 				B74E3CE0C7B420FD65C276B4 /* PDFKitMergerTests.swift in Sources */,
 			);
@@ -622,8 +626,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = CloverPDF/Entitlements/CloverPDF.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = GBJH26W27R;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = CloverPDF/App/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -631,8 +639,10 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lingchen.cloverpdf;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lingchen.pdf;
 				PRODUCT_NAME = CloverPDF;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = pdf_debug;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -707,8 +717,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = CloverPDF/Entitlements/CloverPDF.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "3rd Party Mac Developer Application";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = GBJH26W27R;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = CloverPDF/App/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -716,8 +730,10 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lingchen.cloverpdf;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lingchen.pdf;
 				PRODUCT_NAME = CloverPDF;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = pdf_release;
 				SDKROOT = macosx;
 			};
 			name = Release;

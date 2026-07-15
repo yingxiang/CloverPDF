@@ -29,19 +29,19 @@ final class PDFKitMerger: PDFMerging, @unchecked Sendable {
                 }
             }
             guard outputIndex > 0 else { throw CloverPDFError.noPages }
-            let temporaryURL = try OutputURLResolver.temporaryURL(extension: "pdf")
-            guard output.write(to: temporaryURL) else { throw CloverPDFError.outputFailed }
-            guard PDFDocument(url: temporaryURL)?.pageCount == outputIndex else {
-                try? FileManager.default.removeItem(at: temporaryURL)
-                throw CloverPDFError.outputFailed
-            }
-            let finalURL = OutputURLResolver.availableURL(
-                directory: request.outputDirectory,
-                baseName: request.outputName,
-                extension: "pdf"
-            )
-            try BookmarkService.withAccess(to: request.outputDirectory) {
-                try FileManager.default.moveItem(at: temporaryURL, to: finalURL)
+            let finalURL = request.outputURL
+            let temporaryURL = finalURL.deletingLastPathComponent()
+                .appendingPathComponent(".cloverpdf-\(UUID().uuidString).pdf")
+            defer { try? FileManager.default.removeItem(at: temporaryURL) }
+            try BookmarkService.withAccess(to: finalURL) {
+                guard output.write(to: temporaryURL), PDFDocument(url: temporaryURL)?.pageCount == outputIndex else {
+                    throw CloverPDFError.outputFailed
+                }
+                if FileManager.default.fileExists(atPath: finalURL.path) {
+                    _ = try FileManager.default.replaceItemAt(finalURL, withItemAt: temporaryURL)
+                } else {
+                    try FileManager.default.moveItem(at: temporaryURL, to: finalURL)
+                }
             }
             return finalURL
         }.value

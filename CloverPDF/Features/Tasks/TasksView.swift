@@ -5,18 +5,6 @@ struct TasksView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                Text("Tasks").font(.title2).fontWeight(.semibold)
-                Spacer()
-                Button {
-                    model.clearFinishedTasks()
-                } label: {
-                    Label("Clear Finished", systemImage: "trash")
-                }
-                .disabled(!model.tasks.contains { $0.state.isFinished })
-            }
-            .padding(16)
-            Divider()
             if model.tasks.isEmpty {
                 EmptyPDFState(title: "No tasks", icon: "list.bullet.rectangle")
             } else {
@@ -87,10 +75,6 @@ private struct TaskRow: View {
 }
 
 private extension ProcessingTaskState {
-    var isFinished: Bool {
-        [.succeeded, .failed, .cancelled, .interrupted].contains(self)
-    }
-
     var localizedTitle: String {
         switch self {
         case .pending: String(localized: "Waiting")

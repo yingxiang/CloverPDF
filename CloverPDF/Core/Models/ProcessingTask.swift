@@ -30,8 +30,7 @@ struct ProcessingTaskRecord: Codable, Identifiable, Sendable {
 
 struct MergeRequest: Sendable {
     let inputs: [PDFInput]
-    let outputDirectory: URL
-    let outputName: String
+    let outputURL: URL
 }
 
 struct ConversionRequest: Sendable {

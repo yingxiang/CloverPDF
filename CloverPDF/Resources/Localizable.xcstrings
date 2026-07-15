@@ -281,18 +281,18 @@
         }
       }
     },
-    "Add PDFs": {
+    "Add PDF": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Add PDFs"
+            "value": "Add PDF"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "添加 PDF"
+            "value": "添加PDF"
           }
         },
         "ko": {
@@ -310,7 +310,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "PDFs hinzufügen"
+            "value": "PDF hinzufügen"
           }
         },
         "ru": {
@@ -1361,6 +1361,126 @@
         }
       }
     },
+    "Move Up": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move Up"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "向上移动"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "위로 이동"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上へ移動"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach oben verschieben"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Переместить вверх"
+          }
+        }
+      }
+    },
+    "Move Down": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move Down"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "向下移动"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아래로 이동"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下へ移動"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach unten verschieben"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Переместить вниз"
+          }
+        }
+      }
+    },
+    "Delete": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "删除"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "삭제"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "削除"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Löschen"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить"
+          }
+        }
+      }
+    },
     "Waiting": {
       "localizations": {
         "en": {
@@ -1641,46 +1761,6 @@
         }
       }
     },
-    "Output Name": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Output Name"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "输出名称"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "출력 이름"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "出力名"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ausgabename"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Имя результата"
-          }
-        }
-      }
-    },
     "Merge": {
       "localizations": {
         "en": {
@@ -1721,42 +1801,42 @@
         }
       }
     },
-    "Merged PDF": {
+    "Save Merged PDF": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Merged PDF"
+            "value": "Save Merged PDF"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "合并后的 PDF"
+            "value": "保存合并后的 PDF"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "병합된 PDF"
+            "value": "병합된 PDF 저장"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "結合済みPDF"
+            "value": "結合したPDFを保存"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zusammengeführtes PDF"
+            "value": "Zusammengeführtes PDF sichern"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Объединенный PDF"
+            "value": "Сохранить объединенный PDF"
           }
         }
       }
@@ -1797,86 +1877,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Пароль PDF"
-          }
-        }
-      }
-    },
-    "Move Up": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Move Up"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上移"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "위로 이동"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上へ移動"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nach oben"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Переместить вверх"
-          }
-        }
-      }
-    },
-    "Move Down": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Move Down"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "下移"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "아래로 이동"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "下へ移動"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nach unten"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Переместить вниз"
           }
         }
       }

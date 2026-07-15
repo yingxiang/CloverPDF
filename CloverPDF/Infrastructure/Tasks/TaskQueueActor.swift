@@ -37,12 +37,13 @@ actor TaskQueueActor {
         tasks.sorted { $0.createdAt > $1.createdAt }
     }
 
-    func enqueueMerge(_ request: MergeRequest) {
+    @discardableResult
+    func enqueueMerge(_ request: MergeRequest) -> UUID {
         let id = UUID()
         tasks.append(ProcessingTaskRecord(
             id: id,
             kind: .merge,
-            title: request.outputName,
+            title: request.outputURL.lastPathComponent,
             inputPaths: request.inputs.map(\.source.path),
             state: .pending,
             progress: 0,
@@ -50,6 +51,7 @@ actor TaskQueueActor {
         ))
         operations[id] = .merge(request)
         persistAndRun()
+        return id
     }
 
     func enqueueConversions(_ requests: [ConversionRequest], premiumUnlocked: Bool) throws {

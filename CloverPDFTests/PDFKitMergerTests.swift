@@ -16,13 +16,33 @@ final class PDFKitMergerTests: XCTestCase {
                 PDFInput(source: try inspector.inspect(url: first), password: nil),
                 PDFInput(source: try inspector.inspect(url: second), password: nil),
             ],
-            outputDirectory: directory,
-            outputName: "merged"
+            outputURL: directory.appendingPathComponent("merged.pdf")
         )
 
         let output = try await PDFKitMerger().merge(request)
 
         XCTAssertEqual(PDFDocument(url: output)?.pageCount, 3)
+    }
+
+    func testMergeReplacesConfirmedOutputAndRemovesTemporaryFile() async throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let sourceURL = try makePDF(pageCount: 2, name: "source", directory: directory)
+        let outputURL = try makePDF(pageCount: 1, name: "selected-output", directory: directory)
+        let source = try PDFInspector().inspect(url: sourceURL)
+        let request = MergeRequest(
+            inputs: [PDFInput(source: source, password: nil)],
+            outputURL: outputURL
+        )
+
+        let result = try await PDFKitMerger().merge(request)
+
+        XCTAssertEqual(result, outputURL)
+        XCTAssertEqual(PDFDocument(url: outputURL)?.pageCount, 2)
+        let leftovers = try FileManager.default.contentsOfDirectory(atPath: directory.path)
+            .filter { $0.hasPrefix(".cloverpdf-") }
+        XCTAssertTrue(leftovers.isEmpty)
     }
 
     private func makePDF(pageCount: Int, name: String, directory: URL) throws -> URL {

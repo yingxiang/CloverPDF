@@ -26,3 +26,9 @@ Receive external URLs through `NSApplicationDelegate.application(_:open:)`. Open
 - Sign nested libraries and the helper before signing the main application.
 - Do not download Python, wheels, scripts, or executable code at runtime.
 - Resolve PyMuPDF commercial licensing before closed-source App Store distribution.
+
+## User-Managed Signing
+
+- Keep the active application bundle identifier `com.lingchen.pdf` unless the user explicitly changes it again.
+- Preserve Team `GBJH26W27R`, Debug profile `pdf_debug`, Release profile `pdf_release`, and their configured signing identities.
+- Use `CODE_SIGNING_ALLOWED=NO` only as a command-line build override for local verification; never persist that override into the project.

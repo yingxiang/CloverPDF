@@ -5,8 +5,10 @@
 1. Accept PDFs from file panels, drag and drop, or Finder open events.
 2. Validate type, reachability, encryption, and page count without modifying the source.
 3. Preserve displayed order when inserting pages into the output `PDFDocument`.
-4. Write to a temporary PDF, validate its page count, then atomically move it to the resolved output URL.
-5. Treat missing passwords, incorrect passwords, corrupt files, cancellation, and write failures as distinct localized errors.
+4. Ask for the output only when the user clicks Merge. Open `NSSavePanel` in Downloads with a local-time `yyyyMMddHHmm.pdf` default name and allow editing.
+5. Write to a temporary PDF, validate its page count, then atomically move or replace the user-confirmed output URL.
+6. Clear the submitted merge inputs only after that merge task succeeds; preserve newly added files and keep the list after failure or cancellation.
+7. Treat missing passwords, incorrect passwords, corrupt files, cancellation, and write failures as distinct localized errors.
 
 ## Convert
 

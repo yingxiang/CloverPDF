@@ -4,63 +4,57 @@ struct ConvertView: View {
     @EnvironmentObject private var model: AppModel
 
     var body: some View {
-        VStack(spacing: 0) {
-            toolbar
-            Divider()
-            Group {
-                if model.conversionItems.isEmpty {
-                    EmptyPDFState(title: "No PDFs selected", icon: "doc.badge.plus")
-                } else {
-                    List {
-                        ForEach(Array(model.conversionItems.indices), id: \.self) { index in
-                            PDFFileRow(
-                                item: $model.conversionItems[index],
-                                index: index,
-                                count: model.conversionItems.count,
-                                moveUp: { move(index, offset: -1) },
-                                moveDown: { move(index, offset: 1) },
-                                remove: { model.conversionItems.remove(at: index) }
-                            )
-                        }
-                    }
-                    .listStyle(.inset)
+        Group {
+            if let selectedItem {
+                HSplitView {
+                    workspace
+                    PDFWorkspacePreview(item: selectedItem)
                 }
+            } else {
+                workspace
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            Divider()
-            options
         }
         .acceptsPDFDrops { model.importPDFs($0, destination: .convert) }
     }
 
-    private var toolbar: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 2) {
-                Text("PDF to Word").font(.title2).fontWeight(.semibold)
-                Text("\(model.remainingTrialConversions) free conversions remaining")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+    private var workspace: some View {
+        VStack(spacing: 0) {
+            if model.conversionItems.isEmpty {
+                EmptyPDFState(title: "No PDFs selected", icon: "doc.badge.plus")
+            } else {
+                List(selection: $model.selectedConversionItemID) {
+                    ForEach($model.conversionItems) { $item in
+                        PDFFileRow(
+                            item: $item,
+                            actions: PDFFileRowActions(
+                                canMoveUp: item.id != model.conversionItems.first?.id,
+                                canMoveDown: item.id != model.conversionItems.last?.id,
+                                moveUp: { model.moveConversionItem(item.id, offset: -1) },
+                                moveDown: { model.moveConversionItem(item.id, offset: 1) },
+                                remove: { model.removeConversionItem(item.id) },
+                                revealInFinder: { model.revealSource(item.source) }
+                            )
+                        )
+                        .tag(item.id)
+                    }
+                    .onMove { offsets, destination in
+                        model.conversionItems.move(fromOffsets: offsets, toOffset: destination)
+                    }
+                }
+                .listStyle(.inset)
             }
-            Spacer()
-            Button {
-                model.importPDFs(FilePanel.openPDFs(), destination: .convert)
-            } label: {
-                Label("Add PDFs", systemImage: "plus")
-            }
-            Button {
-                model.conversionItems.removeAll()
-            } label: {
-                Image(systemName: "trash")
-            }
-            .help("Clear")
-            .disabled(model.conversionItems.isEmpty)
+            Divider()
+            options
         }
-        .padding(16)
+        .frame(minWidth: 280, maxWidth: .infinity, maxHeight: .infinity)
     }
 
     private var options: some View {
         VStack(spacing: 12) {
             HStack {
+                Text(String(localized: "\(model.remainingTrialConversions) free conversions remaining"))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
                 Toggle("Page Range", isOn: $model.pageRangeEnabled)
                 if model.pageRangeEnabled {
                     Stepper("Start: \(model.startPage)", value: $model.startPage, in: 1...99999)
@@ -95,9 +89,8 @@ struct ConvertView: View {
         .padding(16)
     }
 
-    private func move(_ index: Int, offset: Int) {
-        let destination = index + offset
-        guard model.conversionItems.indices.contains(destination) else { return }
-        model.conversionItems.swapAt(index, destination)
+    private var selectedItem: WorkspacePDF? {
+        guard let id = model.selectedConversionItemID else { return nil }
+        return model.conversionItems.first { $0.id == id }
     }
 }

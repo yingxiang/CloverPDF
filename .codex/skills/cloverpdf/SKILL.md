@@ -17,7 +17,7 @@ description: Develop, fix, refactor, test, or review the CloverPDF native macOS 
 
 ## Project Invariants
 
-- Keep product name `CloverPDF` and bundle identifier `com.lingchen.cloverpdf`.
+- Keep product name `CloverPDF`. Treat the bundle identifier, signing identities, team, and provisioning profiles in `CloverPDF.xcodeproj` as user-managed settings; inspect them for drift but never rewrite them unless explicitly requested.
 - Build a native macOS app with SwiftUI, AppKit, and PDFKit. Keep the Python converter behind a protocol and child-process boundary.
 - Keep PDF merging free. Allow three successful single-file PDF-to-Word trial conversions; require premium for batch conversion or further conversions.
 - Support `zh-Hans`, `en`, `ko`, `ja`, `de`, and `ru` for every user-visible string.

@@ -21,10 +21,11 @@ final class AppModel: ObservableObject {
     @Published var selection: AppSection = .merge
     @Published var mergeItems: [WorkspacePDF] = []
     @Published var conversionItems: [WorkspacePDF] = []
+    @Published var selectedMergeItemID: UUID?
+    @Published var selectedConversionItemID: UUID?
     @Published var previewItem: WorkspacePDF?
     @Published var tasks: [ProcessingTaskRecord] = []
     @Published var outputDirectory: URL
-    @Published var mergeOutputName = String(localized: "Merged PDF")
     @Published var pageRangeEnabled = false
     @Published var startPage = 1
     @Published var endPage = 1
@@ -37,6 +38,7 @@ final class AppModel: ObservableObject {
     private let trialStore: TrialQuotaStoring
     private let queue: TaskQueueActor
     private var refreshTask: Task<Void, Never>?
+    private var mergeInputsByTask: [UUID: Set<UUID>] = [:]
 
     init() {
         let repository = JSONTaskRepository()
@@ -75,9 +77,11 @@ final class AppModel: ObservableObject {
             switch destination {
             case .merge:
                 appendUnique(inspected, to: &mergeItems)
+                selectedMergeItemID = selectedMergeItemID ?? inspected.first?.id
                 selection = .merge
             case .convert:
                 appendUnique(inspected, to: &conversionItems)
+                selectedConversionItemID = selectedConversionItemID ?? inspected.first?.id
                 selection = .convert
             default:
                 break
@@ -92,6 +96,7 @@ final class AppModel: ObservableObject {
                 previewItem = inspected[0]
             } else if inspected.count > 1 {
                 appendUnique(inspected, to: &mergeItems)
+                selectedMergeItemID = selectedMergeItemID ?? inspected.first?.id
                 selection = .merge
             }
         }
@@ -99,14 +104,16 @@ final class AppModel: ObservableObject {
 
     func enqueueMerge() {
         guard !mergeItems.isEmpty else { return }
-        let inputs = mergeItems.map { PDFInput(source: $0.source, password: $0.password.nilIfEmpty) }
+        guard let outputURL = FilePanel.saveMergedPDF() else { return }
+        let submittedItems = mergeItems
+        let inputs = submittedItems.map { PDFInput(source: $0.source, password: $0.password.nilIfEmpty) }
         let request = MergeRequest(
             inputs: inputs,
-            outputDirectory: outputDirectory,
-            outputName: mergeOutputName
+            outputURL: outputURL
         )
         Task {
-            await queue.enqueueMerge(request)
+            let taskID = await queue.enqueueMerge(request)
+            mergeInputsByTask[taskID] = Set(submittedItems.map(\.id))
             selection = .tasks
         }
     }
@@ -141,6 +148,34 @@ final class AppModel: ObservableObject {
         Task { await queue.clearFinished() }
     }
 
+    func clearMergeItems() {
+        mergeItems.removeAll()
+        selectedMergeItemID = nil
+    }
+
+    func clearConversionItems() {
+        conversionItems.removeAll()
+        selectedConversionItemID = nil
+    }
+
+    func removeMergeItem(_ id: UUID) {
+        mergeItems.removeAll { $0.id == id }
+        if selectedMergeItemID == id { selectedMergeItemID = nil }
+    }
+
+    func removeConversionItem(_ id: UUID) {
+        conversionItems.removeAll { $0.id == id }
+        if selectedConversionItemID == id { selectedConversionItemID = nil }
+    }
+
+    func moveMergeItem(_ id: UUID, offset: Int) {
+        Self.moveWorkspaceItem(id, offset: offset, in: &mergeItems)
+    }
+
+    func moveConversionItem(_ id: UUID, offset: Int) {
+        Self.moveWorkspaceItem(id, offset: offset, in: &conversionItems)
+    }
+
     func retryTask(_ task: ProcessingTaskRecord) {
         Task {
             if await queue.retry(task.id) { return }
@@ -162,12 +197,13 @@ final class AppModel: ObservableObject {
                 return
             }
             if task.kind == .merge {
+                guard let outputURL = FilePanel.saveMergedPDF(suggestedName: task.title) else { return }
                 let request = MergeRequest(
                     inputs: inspected.map { PDFInput(source: $0.source, password: nil) },
-                    outputDirectory: outputDirectory,
-                    outputName: task.title
+                    outputURL: outputURL
                 )
-                await queue.enqueueMerge(request)
+                let taskID = await queue.enqueueMerge(request)
+                mergeInputsByTask[taskID] = Set(inspected.map(\.id))
             } else {
                 let requests = inspected.map {
                     ConversionRequest(
@@ -188,6 +224,10 @@ final class AppModel: ObservableObject {
     func reveal(_ task: ProcessingTaskRecord) {
         guard let outputPath = task.outputPath else { return }
         NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: outputPath)])
+    }
+
+    func revealSource(_ source: PDFSource) {
+        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: source.path)])
     }
 
     func usePreviewForConversion() {
@@ -222,10 +262,32 @@ final class AppModel: ObservableObject {
         collection.append(contentsOf: items.filter { !existing.contains($0.source.path) })
     }
 
+    private static func moveWorkspaceItem(_ id: UUID, offset: Int, in items: inout [WorkspacePDF]) {
+        guard let sourceIndex = items.firstIndex(where: { $0.id == id }) else { return }
+        let destinationIndex = sourceIndex + offset
+        guard items.indices.contains(destinationIndex) else { return }
+        items.swapAt(sourceIndex, destinationIndex)
+    }
+
     private func refreshTasks() async {
         tasks = await queue.snapshot()
         remainingTrialConversions = trialStore.remainingConversions()
+        let terminalStates: Set<ProcessingTaskState> = [.succeeded, .failed, .cancelled, .interrupted]
+        let completedMerges = mergeInputsByTask.compactMap { taskID, inputIDs -> (UUID, Set<UUID>, ProcessingTaskState)? in
+            guard let task = tasks.first(where: { $0.id == taskID }), terminalStates.contains(task.state) else { return nil }
+            return (taskID, inputIDs, task.state)
+        }
+        for (taskID, inputIDs, state) in completedMerges {
+            if state == .succeeded {
+                mergeItems.removeAll { inputIDs.contains($0.id) }
+                if let selectedMergeItemID, inputIDs.contains(selectedMergeItemID) {
+                    self.selectedMergeItemID = nil
+                }
+            }
+            mergeInputsByTask[taskID] = nil
+        }
     }
+
 }
 
 private extension String {

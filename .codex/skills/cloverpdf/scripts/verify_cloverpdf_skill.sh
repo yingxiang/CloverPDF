@@ -4,6 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")/../../../.." && pwd)"
 SKILL_DIR="$ROOT_DIR/.codex/skills/cloverpdf"
 APP_DIR="$ROOT_DIR/CloverPDF"
+PROJECT_FILE="$ROOT_DIR/CloverPDF.xcodeproj/project.pbxproj"
 
 required=(
   "$SKILL_DIR/SKILL.md"
@@ -16,6 +17,7 @@ required=(
   "$APP_DIR/App/Info.plist"
   "$APP_DIR/Resources/Localizable.xcstrings"
   "$APP_DIR/Resources/InfoPlist.xcstrings"
+  "$PROJECT_FILE"
 )
 
 for path in "${required[@]}"; do
@@ -25,8 +27,8 @@ for path in "${required[@]}"; do
   fi
 done
 
-if ! rg -q 'com\.lingchen\.cloverpdf' "$ROOT_DIR/project.yml"; then
-  echo "[ERROR] bundle identifier is missing from project.yml" >&2
+if ! rg -q 'PRODUCT_BUNDLE_IDENTIFIER = com\.lingchen\.pdf;' "$PROJECT_FILE"; then
+  echo "[ERROR] active application bundle identifier drifted from com.lingchen.pdf" >&2
   exit 1
 fi
 
