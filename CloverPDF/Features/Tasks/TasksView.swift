@@ -116,25 +116,17 @@ private struct TaskSourceFileButton: View {
             Text(URL(fileURLWithPath: path).lastPathComponent)
                 .font(.caption2)
                 .lineLimit(1)
-                .foregroundStyle(foregroundColor)
+                .foregroundStyle(Color(nsColor: .textBackgroundColor))
                 .padding(.horizontal, 8)
                 .frame(height: 20)
                 .background {
                     Capsule()
-                        .fill(backgroundColor)
+                        .fill(Color(nsColor: .textColor).opacity(isHovered ? 1 : 0.5))
                 }
         }
         .buttonStyle(.plain)
         .onHover { isHovered = $0 }
         .help(path)
-    }
-
-    private var foregroundColor: Color {
-        isHovered ? Color(nsColor: .textBackgroundColor) : .secondary
-    }
-
-    private var backgroundColor: Color {
-        isHovered ? Color(nsColor: .textColor) : .clear
     }
 }
 
