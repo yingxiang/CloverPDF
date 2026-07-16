@@ -16,7 +16,7 @@ actor TaskQueueActor {
     private var operations: [UUID: PendingOperation] = [:]
     private var runner: Task<Void, Never>?
     private var runningTaskID: UUID?
-    private var currentOperationTask: Task<URL, Error>?
+    private var currentOperationTask: Task<[URL], Error>?
     private var persistenceTask: Task<Void, Never>?
 
     init(
@@ -116,14 +116,14 @@ actor TaskQueueActor {
         persist()
     }
 
-    func delete(_ id: UUID) async {
-        guard tasks.contains(where: { $0.id == id }) else { return }
-        if runningTaskID == id {
+    func delete(_ ids: Set<UUID>) async {
+        guard !ids.isEmpty else { return }
+        if let runningTaskID, ids.contains(runningTaskID) {
             let operationTask = currentOperationTask
             operationTask?.cancel()
             _ = await operationTask?.result
         }
-        removeTasks(withIDs: [id])
+        removeTasks(withIDs: ids)
     }
 
     func clearFinished() {
@@ -182,14 +182,14 @@ actor TaskQueueActor {
             do {
                 let operationTask = Task { try await execute(operation, id: id) }
                 currentOperationTask = operationTask
-                let outputURL = try await operationTask.value
+                let outputURLs = try await operationTask.value
                 if case .convert(_, true) = operation { try trialStore.consumeSuccessfulConversion() }
-                finish(id: id, state: .succeeded, outputPath: outputURL.path, errorCode: nil)
+                finish(id: id, state: .succeeded, outputURLs: outputURLs, errorCode: nil)
             } catch is CancellationError {
-                finish(id: id, state: .cancelled, outputPath: nil, errorCode: "cancelled")
+                finish(id: id, state: .cancelled, outputURLs: [], errorCode: "cancelled")
             } catch {
                 let code = (error as? CloverPDFError)?.code ?? "unknown"
-                finish(id: id, state: .failed, outputPath: nil, errorCode: code)
+                finish(id: id, state: .failed, outputURLs: [], errorCode: code)
             }
             if tasks.first(where: { $0.id == id })?.state != .failed {
                 operations[id] = nil
@@ -201,16 +201,16 @@ actor TaskQueueActor {
         persist()
     }
 
-    private func execute(_ operation: PendingOperation, id: UUID) async throws -> URL {
+    private func execute(_ operation: PendingOperation, id: UUID) async throws -> [URL] {
         switch operation {
         case .merge(let request):
-            return try await merger.merge(request)
+            return [try await merger.merge(request)]
         case .batchImage(let request):
             return try await imageExporter.export(request)
         case .convert(let request, _):
-            return try await converter.convert(request) { [weak self] update in
+            return [try await converter.convert(request) { [weak self] update in
                 Task { await self?.updateProgress(id: id, fraction: update.fraction) }
-            }
+            }]
         }
     }
 
@@ -219,11 +219,12 @@ actor TaskQueueActor {
         tasks[index].progress = min(max(fraction, 0), 1)
     }
 
-    private func finish(id: UUID, state: ProcessingTaskState, outputPath: String?, errorCode: String?) {
+    private func finish(id: UUID, state: ProcessingTaskState, outputURLs: [URL], errorCode: String?) {
         guard let index = tasks.firstIndex(where: { $0.id == id }) else { return }
         tasks[index].state = state
         tasks[index].progress = state == .succeeded ? 1 : tasks[index].progress
-        tasks[index].outputPath = outputPath
+        tasks[index].outputPath = outputURLs.first?.path
+        tasks[index].outputPaths = outputURLs.isEmpty ? nil : outputURLs.map(\.path)
         tasks[index].errorCode = errorCode
         tasks[index].finishedAt = Date()
         persist()

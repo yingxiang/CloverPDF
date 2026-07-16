@@ -21,8 +21,9 @@ final class AppModel: ObservableObject {
     @Published var selection: AppSection = .merge
     @Published var mergeItems: [WorkspacePDF] = []
     @Published var conversionItems: [WorkspacePDF] = []
-    @Published var selectedMergeItemID: UUID?
-    @Published var selectedConversionItemID: UUID?
+    @Published var selectedMergeItemIDs: Set<UUID> = []
+    @Published var selectedConversionItemIDs: Set<UUID> = []
+    @Published var selectedTaskIDs: Set<UUID> = []
     @Published var previewItem: WorkspacePDF?
     @Published var tasks: [ProcessingTaskRecord] = []
     @Published var outputDirectory: URL
@@ -78,11 +79,11 @@ final class AppModel: ObservableObject {
             switch destination {
             case .merge:
                 appendUnique(inspected, to: &mergeItems)
-                selectedMergeItemID = selectedMergeItemID ?? inspected.first?.id
+                selectFirstImportedItemIfNeeded(inspected, selection: &selectedMergeItemIDs)
                 selection = .merge
             case .convert:
                 appendUnique(inspected, to: &conversionItems)
-                selectedConversionItemID = selectedConversionItemID ?? inspected.first?.id
+                selectFirstImportedItemIfNeeded(inspected, selection: &selectedConversionItemIDs)
                 selection = .convert
             default:
                 break
@@ -97,7 +98,7 @@ final class AppModel: ObservableObject {
                 previewItem = inspected[0]
             } else if inspected.count > 1 {
                 appendUnique(inspected, to: &mergeItems)
-                selectedMergeItemID = selectedMergeItemID ?? inspected.first?.id
+                selectFirstImportedItemIfNeeded(inspected, selection: &selectedMergeItemIDs)
                 selection = .merge
             }
         }
@@ -164,29 +165,31 @@ final class AppModel: ObservableObject {
         Task { await queue.clearFinished() }
     }
 
-    func deleteTask(_ id: UUID) {
-        mergeInputsByTask[id] = nil
-        Task { await queue.delete(id) }
+    func deleteTasks(_ ids: Set<UUID>) {
+        guard !ids.isEmpty else { return }
+        for id in ids { mergeInputsByTask[id] = nil }
+        selectedTaskIDs.subtract(ids)
+        Task { await queue.delete(ids) }
     }
 
     func clearMergeItems() {
         mergeItems.removeAll()
-        selectedMergeItemID = nil
+        selectedMergeItemIDs.removeAll()
     }
 
     func clearConversionItems() {
         conversionItems.removeAll()
-        selectedConversionItemID = nil
+        selectedConversionItemIDs.removeAll()
     }
 
-    func removeMergeItem(_ id: UUID) {
-        mergeItems.removeAll { $0.id == id }
-        if selectedMergeItemID == id { selectedMergeItemID = nil }
+    func removeMergeItems(_ ids: Set<UUID>) {
+        mergeItems.removeAll { ids.contains($0.id) }
+        selectedMergeItemIDs.subtract(ids)
     }
 
-    func removeConversionItem(_ id: UUID) {
-        conversionItems.removeAll { $0.id == id }
-        if selectedConversionItemID == id { selectedConversionItemID = nil }
+    func removeConversionItems(_ ids: Set<UUID>) {
+        conversionItems.removeAll { ids.contains($0.id) }
+        selectedConversionItemIDs.subtract(ids)
     }
 
     func moveMergeItem(_ id: UUID, offset: Int) {
@@ -251,17 +254,23 @@ final class AppModel: ObservableObject {
         }
     }
 
-    func reveal(_ task: ProcessingTaskRecord) {
-        guard let outputPath = task.outputPath else { return }
-        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: outputPath)])
+    func revealTasks(_ ids: Set<UUID>) {
+        let paths = tasks
+            .filter { ids.contains($0.id) }
+            .compactMap(\.representativePath)
+        revealPaths(paths)
+    }
+
+    func revealWorkspaceItems(_ ids: Set<UUID>, in items: [WorkspacePDF]) {
+        revealPaths(items.filter { ids.contains($0.id) }.map(\.source.path))
     }
 
     func revealSource(_ source: PDFSource) {
-        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: source.path)])
+        revealPaths([source.path])
     }
 
     func revealSourceFile(atPath path: String) {
-        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: path)])
+        revealPaths([path])
     }
 
     func usePreviewForConversion() {
@@ -296,6 +305,25 @@ final class AppModel: ObservableObject {
         collection.append(contentsOf: items.filter { !existing.contains($0.source.path) })
     }
 
+    private func revealPaths(_ paths: [String]) {
+        var seen: Set<String> = []
+        let urls = paths.compactMap { path -> URL? in
+            guard seen.insert(path).inserted else { return nil }
+            return URL(fileURLWithPath: path)
+        }
+        guard !urls.isEmpty else { return }
+        NSWorkspace.shared.activateFileViewerSelecting(urls)
+    }
+
+    private func selectFirstImportedItemIfNeeded(
+        _ items: [WorkspacePDF],
+        selection: inout Set<UUID>
+    ) {
+        if selection.isEmpty, let firstID = items.first?.id {
+            selection.insert(firstID)
+        }
+    }
+
     private static func moveWorkspaceItem(_ id: UUID, offset: Int, in items: inout [WorkspacePDF]) {
         guard let sourceIndex = items.firstIndex(where: { $0.id == id }) else { return }
         let destinationIndex = sourceIndex + offset
@@ -305,6 +333,7 @@ final class AppModel: ObservableObject {
 
     private func refreshTasks() async {
         tasks = await queue.snapshot()
+        selectedTaskIDs.formIntersection(tasks.map(\.id))
         remainingTrialConversions = trialStore.remainingConversions()
         let terminalStates: Set<ProcessingTaskState> = [.succeeded, .failed, .cancelled, .interrupted]
         let completedMerges = mergeInputsByTask.compactMap { taskID, inputIDs -> (UUID, Set<UUID>, ProcessingTaskState)? in
@@ -314,9 +343,7 @@ final class AppModel: ObservableObject {
         for (taskID, inputIDs, state) in completedMerges {
             if state == .succeeded {
                 mergeItems.removeAll { inputIDs.contains($0.id) }
-                if let selectedMergeItemID, inputIDs.contains(selectedMergeItemID) {
-                    self.selectedMergeItemID = nil
-                }
+                selectedMergeItemIDs.subtract(inputIDs)
             }
             mergeInputsByTask[taskID] = nil
         }
@@ -326,4 +353,10 @@ final class AppModel: ObservableObject {
 
 private extension String {
     var nilIfEmpty: String? { isEmpty ? nil : self }
+}
+
+private extension ProcessingTaskRecord {
+    var representativePath: String? {
+        outputPaths?.first ?? outputPath ?? inputPaths.first
+    }
 }

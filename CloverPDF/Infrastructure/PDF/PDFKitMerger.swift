@@ -19,15 +19,14 @@ final class PDFKitMerger: PDFMerging, @unchecked Sendable {
 }
 
 final class PDFImageExporter: PDFImageExporting, @unchecked Sendable {
-    func export(_ request: BatchImageRequest) async throws -> URL {
+    func export(_ request: BatchImageRequest) async throws -> [URL] {
         try await Task.detached(priority: .userInitiated) {
             let pages = try PDFPagePipeline.loadNamedPages(from: request.inputs)
-            try PDFPageImageRenderer.writeDocumentImages(
+            return try PDFPageImageRenderer.writeDocumentImages(
                 pages,
                 format: request.imageFormat,
                 to: request.outputDirectory
             )
-            return request.outputDirectory
         }.value
     }
 }
@@ -123,10 +122,10 @@ enum PDFPageImageRenderer {
         _ pages: [PDFPagePipeline.NamedPage],
         format: RasterImageFormat,
         to directory: URL
-    ) throws {
+    ) throws -> [URL] {
         let staging = directory.appendingPathComponent(".cloverpdf-\(UUID().uuidString)", isDirectory: true)
         defer { try? FileManager.default.removeItem(at: staging) }
-        try BookmarkService.withAccess(to: directory) {
+        return try BookmarkService.withAccess(to: directory) {
             try FileManager.default.createDirectory(at: staging, withIntermediateDirectories: true)
             var stagedFiles: [(URL, String)] = []
             for documentPages in groupedBySource(pages) {
@@ -142,6 +141,7 @@ enum PDFPageImageRenderer {
                 try writeImageData(image, format: format, to: temporaryURL)
                 stagedFiles.append((temporaryURL, baseName))
             }
+            var outputURLs: [URL] = []
             for (temporaryURL, baseName) in stagedFiles {
                 let finalURL = OutputURLResolver.availableURL(
                     directory: directory,
@@ -149,7 +149,9 @@ enum PDFPageImageRenderer {
                     extension: format.fileExtension
                 )
                 try FileManager.default.moveItem(at: temporaryURL, to: finalURL)
+                outputURLs.append(finalURL)
             }
+            return outputURLs
         }
     }
 

@@ -24,7 +24,7 @@ struct MergeView: View {
                     model.importPDFs(FilePanel.openPDFs(), destination: .merge)
                 }
             } else {
-                List(selection: $model.selectedMergeItemID) {
+                List(selection: $model.selectedMergeItemIDs) {
                     ForEach($model.mergeItems) { $item in
                         PDFFileRow(
                             item: $item,
@@ -33,8 +33,13 @@ struct MergeView: View {
                                 canMoveDown: item.id != model.mergeItems.last?.id,
                                 moveUp: { model.moveMergeItem(item.id, offset: -1) },
                                 moveDown: { model.moveMergeItem(item.id, offset: 1) },
-                                remove: { model.removeMergeItem(item.id) },
-                                revealInFinder: { model.revealSource(item.source) }
+                                remove: { model.removeMergeItems(contextSelection(for: item.id)) },
+                                revealInFinder: {
+                                    model.revealWorkspaceItems(
+                                        contextSelection(for: item.id),
+                                        in: model.mergeItems
+                                    )
+                                }
                             )
                         )
                         .tag(item.id)
@@ -68,7 +73,10 @@ struct MergeView: View {
     }
 
     private var selectedItem: WorkspacePDF? {
-        guard let id = model.selectedMergeItemID else { return nil }
-        return model.mergeItems.first { $0.id == id }
+        model.mergeItems.first { model.selectedMergeItemIDs.contains($0.id) }
+    }
+
+    private func contextSelection(for id: UUID) -> Set<UUID> {
+        model.selectedMergeItemIDs.contains(id) ? model.selectedMergeItemIDs : [id]
     }
 }

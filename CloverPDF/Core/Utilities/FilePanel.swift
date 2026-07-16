@@ -48,21 +48,19 @@ enum FilePanel {
     }
 
     static func chooseBatchImageDestination() -> BatchImageDestination? {
-        let panel = NSOpenPanel()
+        let panel = FileDirectoryPanel()
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
         panel.canCreateDirectories = true
         panel.allowsMultipleSelection = false
+        panel.allowedContentTypes = [.png, .jpeg]
         panel.directoryURL = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first
         panel.prompt = String(localized: "Choose")
         panel.title = String(localized: "Choose Batch Output Folder")
-        let accessory = FileFormatAccessory(contentTypes: [.png, .jpeg])
-        panel.accessoryView = accessory.view
-        panel.isAccessoryViewDisclosed = true
-        guard panel.runModal() == .OK, let url = panel.url else { return nil }
+        guard panel.runModalWithVisibleFormat() == .OK, let url = panel.url else { return nil }
         return BatchImageDestination(
             directoryURL: url,
-            format: rasterImageFormat(for: accessory.selectedContentType)
+            format: panel.selectedContentType == .jpeg ? .jpeg : .png
         )
     }
 
@@ -79,9 +77,6 @@ enum FilePanel {
         contentType == .png ? .image(.png) : (contentType == .jpeg ? .image(.jpeg) : .pdf)
     }
 
-    private static func rasterImageFormat(for contentType: UTType) -> RasterImageFormat {
-        contentType == .jpeg ? .jpeg : .png
-    }
 }
 
 @MainActor
@@ -102,6 +97,83 @@ private final class FileSavePanel: NSSavePanel {
             formatAccessory = accessory
             accessoryView = accessory.view
         }
+    }
+}
+
+@MainActor
+private final class FileDirectoryPanel: NSOpenPanel {
+    private(set) var selectedContentType: UTType = .png
+    private var formatAccessory: FileFormatAccessory?
+
+    override var allowedContentTypes: [UTType] {
+        get { super.allowedContentTypes }
+        set {
+            isExtensionHidden = true
+            allowsOtherFileTypes = false
+            showsResizeIndicator = true
+            super.allowedContentTypes = newValue
+            let accessory = FileFormatAccessory(contentTypes: newValue) { [weak self] contentType in
+                self?.selectedContentType = contentType
+            }
+            formatAccessory = accessory
+            accessoryView = accessory.view
+        }
+    }
+
+    func runModalWithVisibleFormat() -> NSApplication.ModalResponse {
+        isAccessoryViewDisclosed = true
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(panelDidUpdate),
+            name: NSWindow.didUpdateNotification,
+            object: self
+        )
+        DispatchQueue.main.async { [weak self] in
+            self?.hideAccessoryDisclosureButton()
+        }
+        let response = runModal()
+        NotificationCenter.default.removeObserver(
+            self,
+            name: NSWindow.didUpdateNotification,
+            object: self
+        )
+        return response
+    }
+
+    @objc private func panelDidUpdate() {
+        hideAccessoryDisclosureButton()
+    }
+
+    private func hideAccessoryDisclosureButton() {
+        guard let rootView = contentView else { return }
+        hideAccessoryDisclosureButton(in: rootView)
+    }
+
+    private func hideAccessoryDisclosureButton(in view: NSView) {
+        if let button = view as? NSButton {
+            if button.bezelStyle == .disclosure
+                || actionControlsAccessory(button.action)
+                || titleControlsOptions(button.title) {
+                button.isHidden = true
+            }
+        }
+        for subview in view.subviews {
+            hideAccessoryDisclosureButton(in: subview)
+        }
+    }
+
+    private func actionControlsAccessory(_ action: Selector?) -> Bool {
+        guard let action else { return false }
+        return NSStringFromSelector(action).localizedCaseInsensitiveContains("accessory")
+    }
+
+    private func titleControlsOptions(_ title: String) -> Bool {
+        let normalized = title.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+        let optionTerms = [
+            "options", "optionen", "opciones", "opzioni", "opcoes", "opties",
+            "选项", "選項", "オプション", "옵션", "параметр",
+        ]
+        return optionTerms.contains { normalized.localizedCaseInsensitiveContains($0) }
     }
 }
 

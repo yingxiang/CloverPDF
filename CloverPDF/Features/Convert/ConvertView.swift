@@ -24,7 +24,7 @@ struct ConvertView: View {
                     model.importPDFs(FilePanel.openPDFs(), destination: .convert)
                 }
             } else {
-                List(selection: $model.selectedConversionItemID) {
+                List(selection: $model.selectedConversionItemIDs) {
                     ForEach($model.conversionItems) { $item in
                         PDFFileRow(
                             item: $item,
@@ -33,8 +33,13 @@ struct ConvertView: View {
                                 canMoveDown: item.id != model.conversionItems.last?.id,
                                 moveUp: { model.moveConversionItem(item.id, offset: -1) },
                                 moveDown: { model.moveConversionItem(item.id, offset: 1) },
-                                remove: { model.removeConversionItem(item.id) },
-                                revealInFinder: { model.revealSource(item.source) }
+                                remove: { model.removeConversionItems(contextSelection(for: item.id)) },
+                                revealInFinder: {
+                                    model.revealWorkspaceItems(
+                                        contextSelection(for: item.id),
+                                        in: model.conversionItems
+                                    )
+                                }
                             )
                         )
                         .tag(item.id)
@@ -52,47 +57,39 @@ struct ConvertView: View {
     }
 
     private var options: some View {
-        VStack(spacing: 12) {
-            HStack {
-                Text(String(localized: "\(model.remainingTrialConversions) free conversions remaining"))
+        HStack(spacing: 12) {
+            Text(String(localized: "\(model.remainingTrialConversions) free conversions remaining"))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Toggle("Page Range", isOn: $model.pageRangeEnabled)
+            if model.pageRangeEnabled {
+                Stepper("Start: \(model.startPage)", value: $model.startPage, in: 1...99999)
+                    .fixedSize()
+                Stepper("End: \(model.endPage)", value: $model.endPage, in: model.startPage...99999)
+                    .fixedSize()
+            }
+            Spacer()
+            if !model.purchaseService.isPremiumUnlocked && model.conversionItems.count > 1 {
+                Label("Premium required for batch conversion", systemImage: "lock.fill")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                Toggle("Page Range", isOn: $model.pageRangeEnabled)
-                if model.pageRangeEnabled {
-                    Stepper("Start: \(model.startPage)", value: $model.startPage, in: 1...99999)
-                        .fixedSize()
-                    Stepper("End: \(model.endPage)", value: $model.endPage, in: model.startPage...99999)
-                        .fixedSize()
-                }
-                Spacer()
             }
-            HStack {
-                Button {
-                    model.outputDirectory = FilePanel.chooseDirectory(current: model.outputDirectory) ?? model.outputDirectory
-                } label: {
-                    Label(model.outputDirectory.lastPathComponent, systemImage: "folder")
-                        .lineLimit(1)
-                }
-                Spacer()
-                if !model.purchaseService.isPremiumUnlocked && model.conversionItems.count > 1 {
-                    Label("Premium required for batch conversion", systemImage: "lock.fill")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                Button {
-                    model.enqueueConversions()
-                } label: {
-                    Label("Convert", systemImage: "doc.text")
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(model.conversionItems.isEmpty || (model.pageRangeEnabled && model.endPage < model.startPage))
+            Button {
+                model.enqueueConversions()
+            } label: {
+                Label("Convert", systemImage: "doc.text")
             }
+            .buttonStyle(.borderedProminent)
+            .disabled(model.conversionItems.isEmpty || (model.pageRangeEnabled && model.endPage < model.startPage))
         }
         .padding(16)
     }
 
     private var selectedItem: WorkspacePDF? {
-        guard let id = model.selectedConversionItemID else { return nil }
-        return model.conversionItems.first { $0.id == id }
+        model.conversionItems.first { model.selectedConversionItemIDs.contains($0.id) }
+    }
+
+    private func contextSelection(for id: UUID) -> Set<UUID> {
+        model.selectedConversionItemIDs.contains(id) ? model.selectedConversionItemIDs : [id]
     }
 }

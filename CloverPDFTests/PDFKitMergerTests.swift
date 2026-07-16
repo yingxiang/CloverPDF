@@ -4,6 +4,14 @@ import XCTest
 @testable import CloverPDF
 
 final class PDFKitMergerTests: XCTestCase {
+    @MainActor
+    func testThumbnailContainerDoesNotExpandToLoadedImageSize() {
+        let view = PDFThumbnailContainerView()
+
+        XCTAssertEqual(view.intrinsicContentSize.width, NSView.noIntrinsicMetric)
+        XCTAssertEqual(view.intrinsicContentSize.height, NSView.noIntrinsicMetric)
+    }
+
     func testMergePreservesTotalPageCount() async throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -85,16 +93,43 @@ final class PDFKitMergerTests: XCTestCase {
             imageFormat: .jpeg
         )
 
-        let output = try await PDFImageExporter().export(request)
-        let files = try FileManager.default.contentsOfDirectory(at: output, includingPropertiesForKeys: nil)
+        let files = try await PDFImageExporter().export(request)
 
         XCTAssertEqual(files.map(\.lastPathComponent), ["source.jpg"])
+        XCTAssertEqual(files.first?.deletingLastPathComponent(), outputDirectory)
         let firstImage = try XCTUnwrap(NSImage(contentsOf: files[0]))
         let firstRepresentation = try XCTUnwrap(
             firstImage.representations.compactMap { $0 as? NSBitmapImageRep }.first
         )
         XCTAssertGreaterThan(firstRepresentation.pixelsHigh, firstRepresentation.pixelsWide * 2)
         XCTAssertTrue(containsNonWhitePixel(firstRepresentation))
+    }
+
+    func testEveryBatchOutputProducesANonBlackRasterThumbnail() async throws {
+        let directory = try makeTemporaryDirectory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let outputDirectory = directory.appendingPathComponent("images", isDirectory: true)
+        try FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: true)
+        let inspector = PDFInspector()
+        let inputs = try (1...3).map { index in
+            let url = try makePDF(pageCount: index, name: "source-\(index)", directory: directory)
+            return PDFInput(source: try inspector.inspect(url: url), password: nil)
+        }
+        let request = BatchImageRequest(
+            inputs: inputs,
+            outputDirectory: outputDirectory,
+            imageFormat: .png
+        )
+
+        let outputs = try await PDFImageExporter().export(request)
+
+        XCTAssertEqual(outputs.count, 3)
+        for output in outputs {
+            let image = await RasterThumbnailLoader.load(fileURL: output)
+            let thumbnail = try XCTUnwrap(image)
+            let representation = try bitmapRepresentation(of: thumbnail)
+            XCTAssertTrue(containsLightPixel(representation), "Black thumbnail for \(output.lastPathComponent)")
+        }
     }
 
     func testImageExportPreservesVerticalOrientation() async throws {
@@ -139,6 +174,18 @@ final class PDFKitMergerTests: XCTestCase {
         guard byteCount >= 4 else { return false }
         for index in stride(from: 0, to: byteCount - 3, by: 4) {
             if data[index] < 240 || data[index + 1] < 240 || data[index + 2] < 240 {
+                return true
+            }
+        }
+        return false
+    }
+
+    private func containsLightPixel(_ representation: NSBitmapImageRep) -> Bool {
+        guard let data = representation.bitmapData else { return false }
+        let byteCount = representation.bytesPerRow * representation.pixelsHigh
+        guard byteCount >= 4 else { return false }
+        for index in stride(from: 0, to: byteCount - 3, by: 4) {
+            if data[index] > 80 || data[index + 1] > 80 || data[index + 2] > 80 {
                 return true
             }
         }
@@ -198,7 +245,7 @@ final class PDFKitMergerTests: XCTestCase {
 }
 
 final class TaskQueueActorTests: XCTestCase {
-    func testDeletingRunningTaskCancelsOperationAndRemovesPersistedRecord() async throws {
+    func testDeletingSelectedTasksCancelsRunningOperationAndRemovesAllRecords() async throws {
         let repository = TestTaskRepository()
         let probe = CancellationProbe()
         let queue = TaskQueueActor(
@@ -223,17 +270,52 @@ final class TaskQueueActorTests: XCTestCase {
             pageRange: nil
         )
 
-        try await queue.enqueueConversions([request], premiumUnlocked: true)
+        try await queue.enqueueConversions([request, request], premiumUnlocked: true)
         try await waitUntil { await probe.hasStarted }
         let queuedTasks = await queue.snapshot()
-        let taskID = try XCTUnwrap(queuedTasks.first?.id)
-        await queue.delete(taskID)
+        XCTAssertEqual(queuedTasks.count, 2)
+        await queue.delete(Set(queuedTasks.map(\.id)))
         try await waitUntil { await repository.records.isEmpty }
 
         let wasCancelled = await probe.wasCancelled
         let remainingTasks = await queue.snapshot()
         XCTAssertTrue(wasCancelled)
         XCTAssertTrue(remainingTasks.isEmpty)
+    }
+
+    func testBatchTaskStoresEveryGeneratedOutputPath() async throws {
+        let repository = TestTaskRepository()
+        let queue = TaskQueueActor(
+            merger: TestMerger(),
+            imageExporter: TestImageExporter(),
+            converter: BlockingConverter(probe: CancellationProbe()),
+            repository: repository,
+            trialStore: TestTrialStore()
+        )
+        let source = PDFSource(
+            displayName: "source.pdf",
+            path: "/tmp/source.pdf",
+            bookmark: nil,
+            pageCount: 1,
+            fileSize: 1,
+            isLocked: false,
+            appearsScanned: false
+        )
+        let request = BatchImageRequest(
+            inputs: [PDFInput(source: source, password: nil)],
+            outputDirectory: URL(fileURLWithPath: "/tmp/output"),
+            imageFormat: .png
+        )
+
+        let taskID = await queue.enqueueBatchImages(request)
+        try await waitUntil {
+            await queue.snapshot().first(where: { $0.id == taskID })?.state == .succeeded
+        }
+
+        let snapshot = await queue.snapshot()
+        let task = try XCTUnwrap(snapshot.first(where: { $0.id == taskID }))
+        XCTAssertEqual(task.outputPaths, ["/tmp/output/output.png"])
+        XCTAssertEqual(task.outputPath, task.outputPaths?.first)
     }
 
     private func waitUntil(_ condition: @escaping @Sendable () async -> Bool) async throws {
@@ -283,7 +365,9 @@ private struct TestMerger: PDFMerging {
 }
 
 private struct TestImageExporter: PDFImageExporting {
-    func export(_ request: BatchImageRequest) async throws -> URL { request.outputDirectory }
+    func export(_ request: BatchImageRequest) async throws -> [URL] {
+        [request.outputDirectory.appendingPathComponent("output.png")]
+    }
 }
 
 private struct TestTrialStore: TrialQuotaStoring {

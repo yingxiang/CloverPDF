@@ -1,4 +1,5 @@
 import AppKit
+import ImageIO
 import QuickLookThumbnailing
 import SwiftUI
 
@@ -134,12 +135,20 @@ final class PDFThumbnailContainerView: NSView {
         set { imageView.image = newValue }
     }
 
+    override var intrinsicContentSize: NSSize {
+        NSSize(width: NSView.noIntrinsicMetric, height: NSView.noIntrinsicMetric)
+    }
+
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         wantsLayer = true
         layer?.masksToBounds = true
         imageView.imageAlignment = .alignCenter
         imageView.imageScaling = .scaleProportionallyDown
+        imageView.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        imageView.setContentHuggingPriority(.defaultLow, for: .vertical)
+        imageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(imageView)
         NSLayoutConstraint.activate([
@@ -166,6 +175,9 @@ private enum PDFThumbnailLoader {
     @MainActor
     static func load(fileURL: URL) async -> NSImage? {
         guard !Task.isCancelled else { return nil }
+        if isRasterImage(fileURL), let image = await RasterThumbnailLoader.load(fileURL: fileURL) {
+            return image
+        }
         let url = fileURL
         let accessed = url.startAccessingSecurityScopedResource()
         defer {
@@ -184,6 +196,33 @@ private enum PDFThumbnailLoader {
             }
         }
         return thumbnail ?? NSWorkspace.shared.icon(forFile: url.path)
+    }
+
+    private static func isRasterImage(_ url: URL) -> Bool {
+        ["png", "jpg", "jpeg"].contains(url.pathExtension.lowercased())
+    }
+
+}
+
+enum RasterThumbnailLoader {
+    @MainActor
+    static func load(fileURL url: URL) async -> NSImage? {
+        let cgImage: CGImage? = await Task.detached(priority: .utility) { () -> CGImage? in
+            let accessed = url.startAccessingSecurityScopedResource()
+            defer {
+                if accessed { url.stopAccessingSecurityScopedResource() }
+            }
+            guard let source = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
+            let options: [CFString: Any] = [
+                kCGImageSourceCreateThumbnailFromImageAlways: true,
+                kCGImageSourceCreateThumbnailWithTransform: true,
+                kCGImageSourceThumbnailMaxPixelSize: 160,
+                kCGImageSourceShouldCacheImmediately: true,
+            ]
+            return CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary)
+        }.value
+        guard let cgImage else { return nil }
+        return NSImage(cgImage: cgImage, size: NSSize(width: cgImage.width, height: cgImage.height))
     }
 }
 

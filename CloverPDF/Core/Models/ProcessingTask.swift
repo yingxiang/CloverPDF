@@ -22,6 +22,7 @@ struct ProcessingTaskRecord: Codable, Identifiable, Sendable {
     let title: String
     let inputPaths: [String]
     var outputPath: String? = nil
+    var outputPaths: [String]? = nil
     var state: ProcessingTaskState
     var progress: Double
     var errorCode: String? = nil
