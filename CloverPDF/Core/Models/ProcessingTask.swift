@@ -3,6 +3,7 @@ import Foundation
 enum ProcessingTaskKind: String, Codable, Sendable {
     case merge
     case convert
+    case batchImage
 }
 
 enum ProcessingTaskState: String, Codable, Sendable {
@@ -31,6 +32,25 @@ struct ProcessingTaskRecord: Codable, Identifiable, Sendable {
 struct MergeRequest: Sendable {
     let inputs: [PDFInput]
     let outputURL: URL
+    let outputFormat: MergeOutputFormat
+}
+
+enum RasterImageFormat: String, Sendable {
+    case png
+    case jpeg
+
+    var fileExtension: String { rawValue == "jpeg" ? "jpg" : rawValue }
+}
+
+enum MergeOutputFormat: Sendable {
+    case pdf
+    case image(RasterImageFormat)
+}
+
+struct BatchImageRequest: Sendable {
+    let inputs: [PDFInput]
+    let outputDirectory: URL
+    let imageFormat: RasterImageFormat
 }
 
 struct ConversionRequest: Sendable {

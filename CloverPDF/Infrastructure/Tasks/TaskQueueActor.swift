@@ -2,11 +2,13 @@ import Foundation
 
 private enum PendingOperation: Sendable {
     case merge(MergeRequest)
+    case batchImage(BatchImageRequest)
     case convert(ConversionRequest, consumesTrial: Bool)
 }
 
 actor TaskQueueActor {
     private let merger: PDFMerging
+    private let imageExporter: PDFImageExporting
     private let converter: PDFConverting
     private let repository: TaskRepository
     private let trialStore: TrialQuotaStoring
@@ -15,14 +17,17 @@ actor TaskQueueActor {
     private var runner: Task<Void, Never>?
     private var runningTaskID: UUID?
     private var currentOperationTask: Task<URL, Error>?
+    private var persistenceTask: Task<Void, Never>?
 
     init(
         merger: PDFMerging,
+        imageExporter: PDFImageExporting,
         converter: PDFConverting,
         repository: TaskRepository,
         trialStore: TrialQuotaStoring
     ) {
         self.merger = merger
+        self.imageExporter = imageExporter
         self.converter = converter
         self.repository = repository
         self.trialStore = trialStore
@@ -50,6 +55,23 @@ actor TaskQueueActor {
             createdAt: Date()
         ))
         operations[id] = .merge(request)
+        persistAndRun()
+        return id
+    }
+
+    @discardableResult
+    func enqueueBatchImages(_ request: BatchImageRequest) -> UUID {
+        let id = UUID()
+        tasks.append(ProcessingTaskRecord(
+            id: id,
+            kind: .batchImage,
+            title: request.outputDirectory.lastPathComponent,
+            inputPaths: request.inputs.map(\.source.path),
+            state: .pending,
+            progress: 0,
+            createdAt: Date()
+        ))
+        operations[id] = .batchImage(request)
         persistAndRun()
         return id
     }
@@ -94,9 +116,20 @@ actor TaskQueueActor {
         persist()
     }
 
+    func delete(_ id: UUID) async {
+        guard tasks.contains(where: { $0.id == id }) else { return }
+        if runningTaskID == id {
+            let operationTask = currentOperationTask
+            operationTask?.cancel()
+            _ = await operationTask?.result
+        }
+        removeTasks(withIDs: [id])
+    }
+
     func clearFinished() {
-        tasks.removeAll { [.succeeded, .failed, .cancelled, .interrupted].contains($0.state) }
-        persist()
+        let finishedStates: Set<ProcessingTaskState> = [.succeeded, .failed, .cancelled, .interrupted]
+        let finishedIDs = Set(tasks.filter { finishedStates.contains($0.state) }.map(\.id))
+        removeTasks(withIDs: finishedIDs)
     }
 
     func retry(_ id: UUID) -> Bool {
@@ -121,7 +154,18 @@ actor TaskQueueActor {
 
     private func persist() {
         let snapshot = tasks
-        Task { try? await repository.save(snapshot) }
+        let previousTask = persistenceTask
+        persistenceTask = Task {
+            _ = await previousTask?.result
+            try? await repository.save(snapshot)
+        }
+    }
+
+    private func removeTasks(withIDs ids: Set<UUID>) {
+        guard !ids.isEmpty else { return }
+        tasks.removeAll { ids.contains($0.id) }
+        for id in ids { operations[id] = nil }
+        persist()
     }
 
     private func processQueue() async {
@@ -161,6 +205,8 @@ actor TaskQueueActor {
         switch operation {
         case .merge(let request):
             return try await merger.merge(request)
+        case .batchImage(let request):
+            return try await imageExporter.export(request)
         case .convert(let request, _):
             return try await converter.convert(request) { [weak self] update in
                 Task { await self?.updateProgress(id: id, fraction: update.fraction) }

@@ -4,6 +4,10 @@ protocol PDFMerging: Sendable {
     func merge(_ request: MergeRequest) async throws -> URL
 }
 
+protocol PDFImageExporting: Sendable {
+    func export(_ request: BatchImageRequest) async throws -> URL
+}
+
 protocol PDFConverting: Sendable {
     func convert(
         _ request: ConversionRequest,

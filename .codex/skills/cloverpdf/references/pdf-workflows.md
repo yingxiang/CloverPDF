@@ -6,12 +6,15 @@
 2. Require at least two input PDFs. Keep the Merge button disabled for zero or one item and enforce the same guard in `AppModel`.
 3. Validate type, reachability, encryption, and page count without modifying the source.
 4. Preserve displayed order when inserting pages into the output `PDFDocument`.
-5. Ask for the output only when the user clicks Merge. Open `NSSavePanel` in Downloads with a local-time `yyyyMMddHHmm.pdf` default name and allow editing.
-6. Write to a temporary PDF, validate its page count, then atomically move or replace the user-confirmed output URL.
-7. Clear the submitted merge inputs only after that merge task succeeds; preserve newly added files and keep the list after failure or cancellation.
-8. Treat missing passwords, incorrect passwords, corrupt files, cancellation, and write failures as distinct localized errors.
-9. Show original input PDF filenames as individual capsule buttons on a dedicated line for each successfully completed merge task. Highlight a filename with system text and text-background colors on hover, and reveal that source file in Finder when clicked.
-10. Show a 48-by-60-point Quick Look thumbnail of the merged output for successful merge tasks, matching Merge workspace rows. Use a fixed-size PDF document icon while a merge task is active.
+5. Ask for the output only when the user clicks Merge. Use the `FileSavePanel` subclass pattern from the reference app: assigning PDF, PNG, and JPEG content types installs and retains a standard format popup inside `NSSavePanel`. Start in Downloads with a local-time `yyyyMMddHHmm` base name, then derive and append the extension from the selected `UTType`; never require the user to edit it.
+6. Keep PDF as the default. For PNG or JPEG, render every input page through the shared image renderer and vertically combine all pages into one long image in displayed order.
+7. Put Batch Convert immediately left of Merge. Let it choose an output folder with the same shared format popup for PNG or JPEG and set `NSOpenPanel.accessoryViewDisclosed` so the popup is visible immediately instead of being hidden under Show Options. Export one vertically combined image per input PDF using the original base filename with only the selected extension changed.
+8. Share PDF loading, password handling, page rendering, image encoding, collision resolution, and temporary-output behavior between long-image merge and batch image conversion.
+9. Write each output to a temporary location before moving or replacing the user-confirmed destination.
+10. Clear the submitted merge inputs only after that merge task succeeds; preserve newly added files and keep the list after failure or cancellation. Batch conversion does not clear the merge workspace.
+11. Treat missing passwords, incorrect passwords, corrupt files, cancellation, and write failures as distinct localized errors.
+12. Show original input PDF filenames as individual capsule buttons on a dedicated line for each successfully completed merge or batch-image task, and reveal that source file in Finder when clicked.
+13. Show a 48-by-60-point Quick Look thumbnail of the merged output for successful merge tasks, matching Merge workspace rows. Use fixed-size operation icons while merge or batch-image tasks are active.
 
 ## Convert
 
@@ -25,5 +28,7 @@
 
 - Use one conversion worker at a time for predictable CPU and memory use.
 - Let one failed item finish as failed and continue with the next queued item.
+- Let every task row be deleted individually from its context menu. Remove pending and finished tasks directly; cancel and await an active operation before removing its task record.
+- Serialize task-repository writes so a late cancellation snapshot cannot restore a deleted task.
 - Persist non-secret task metadata and bookmarks. Mark previously running tasks interrupted after relaunch.
 - Never retain PDF passwords in persisted task data.

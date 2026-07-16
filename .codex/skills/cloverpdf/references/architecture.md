@@ -25,7 +25,9 @@
 - Use native SwiftUI `List.onMove` reordering so the whole row follows the pointer. Do not add custom drag handles or drop delegates.
 - Keep row thumbnails inside a clipped 48-by-60-point container with explicit spacing before the text column; include the source directory and provide Move Up, Move Down, Delete, and Show in Finder context actions. Hide both move actions when the list has one item and disable the unavailable direction at list boundaries.
 - Use three panes when a file is selected: sidebar, file workspace, and a resizable PDF preview. Collapse the preview when selection is empty and auto-scale PDF pages whenever the preview width changes.
+- Put Batch Convert immediately left of Merge. Use a retained `FileFormatAccessory` through the reference-style `FileSavePanel` subclass for merge and disclose the same accessory immediately on the batch `NSOpenPanel`. Center the format label and popup together within the panel while constraining both edges for long localized names; derive extensions from the selected `UTType`, queue both operations, and reuse `PDFPagePipeline` plus `PDFPageImageRenderer` for merged long images and one long image per batch input PDF.
 - Render original-PDF path buttons in task rows with `textBackgroundColor` text over a `textColor` capsule. Use 50 percent background opacity normally and 100 percent on hover, without an outline.
+- Provide a destructive Delete action in each task row's context menu. Route deletion through `TaskQueueActor`, cancel active work before removal, and keep repository writes ordered.
 
 ## Build
 

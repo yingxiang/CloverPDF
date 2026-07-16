@@ -38,7 +38,7 @@ private struct TaskRow: View {
                 }
                 .font(.caption)
                 .foregroundStyle(task.state == .failed ? .red : .secondary)
-                if task.kind == .merge, task.state == .succeeded {
+                if task.kind != .convert, task.state == .succeeded {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 6) {
                             ForEach(Array(task.inputPaths.enumerated()), id: \.offset) { _, path in
@@ -84,6 +84,11 @@ private struct TaskRow: View {
             }
         }
         .padding(.vertical, 8)
+        .contextMenu {
+            Button("Delete", role: .destructive) {
+                model.deleteTask(task.id)
+            }
+        }
     }
 
     @ViewBuilder
@@ -98,10 +103,20 @@ private struct TaskRow: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 48, height: 60)
         } else {
-            Image(systemName: task.kind == .merge ? "square.stack.3d.up" : "doc.text")
+            Image(systemName: task.kind.icon)
                 .font(.system(size: 22))
                 .foregroundStyle(.secondary)
                 .frame(width: 48, height: 60)
+        }
+    }
+}
+
+private extension ProcessingTaskKind {
+    var icon: String {
+        switch self {
+        case .merge: "square.stack.3d.up"
+        case .batchImage: "photo.on.rectangle.angled"
+        case .convert: "doc.text"
         }
     }
 }

@@ -49,6 +49,7 @@ final class AppModel: ObservableObject {
         paywallCoordinator = CloverPaywallCoordinator(purchaseService: purchaseService)
         queue = TaskQueueActor(
             merger: PDFKitMerger(),
+            imageExporter: PDFImageExporter(),
             converter: PythonConverterService(),
             repository: repository,
             trialStore: trialStore
@@ -104,16 +105,31 @@ final class AppModel: ObservableObject {
 
     func enqueueMerge() {
         guard mergeItems.count >= 2 else { return }
-        guard let outputURL = FilePanel.saveMergedPDF() else { return }
+        guard let destination = FilePanel.saveMergedOutput() else { return }
         let submittedItems = mergeItems
         let inputs = submittedItems.map { PDFInput(source: $0.source, password: $0.password.nilIfEmpty) }
         let request = MergeRequest(
             inputs: inputs,
-            outputURL: outputURL
+            outputURL: destination.url,
+            outputFormat: destination.format
         )
         Task {
             let taskID = await queue.enqueueMerge(request)
             mergeInputsByTask[taskID] = Set(submittedItems.map(\.id))
+            selection = .tasks
+        }
+    }
+
+    func enqueueBatchImages() {
+        guard !mergeItems.isEmpty else { return }
+        guard let destination = FilePanel.chooseBatchImageDestination() else { return }
+        let request = BatchImageRequest(
+            inputs: mergeItems.map { PDFInput(source: $0.source, password: $0.password.nilIfEmpty) },
+            outputDirectory: destination.directoryURL,
+            imageFormat: destination.format
+        )
+        Task {
+            await queue.enqueueBatchImages(request)
             selection = .tasks
         }
     }
@@ -146,6 +162,11 @@ final class AppModel: ObservableObject {
 
     func clearFinishedTasks() {
         Task { await queue.clearFinished() }
+    }
+
+    func deleteTask(_ id: UUID) {
+        mergeInputsByTask[id] = nil
+        Task { await queue.delete(id) }
     }
 
     func clearMergeItems() {
@@ -186,7 +207,7 @@ final class AppModel: ObservableObject {
                 return
             }
             if inspected.contains(where: \.source.isLocked) {
-                if task.kind == .merge {
+                if task.kind == .merge || task.kind == .batchImage {
                     appendUnique(inspected, to: &mergeItems)
                     selection = .merge
                 } else {
@@ -197,13 +218,22 @@ final class AppModel: ObservableObject {
                 return
             }
             if task.kind == .merge {
-                guard let outputURL = FilePanel.saveMergedPDF(suggestedName: task.title) else { return }
+                guard let destination = FilePanel.saveMergedOutput(suggestedName: task.title) else { return }
                 let request = MergeRequest(
                     inputs: inspected.map { PDFInput(source: $0.source, password: nil) },
-                    outputURL: outputURL
+                    outputURL: destination.url,
+                    outputFormat: destination.format
                 )
                 let taskID = await queue.enqueueMerge(request)
                 mergeInputsByTask[taskID] = Set(inspected.map(\.id))
+            } else if task.kind == .batchImage {
+                guard let destination = FilePanel.chooseBatchImageDestination() else { return }
+                let request = BatchImageRequest(
+                    inputs: inspected.map { PDFInput(source: $0.source, password: nil) },
+                    outputDirectory: destination.directoryURL,
+                    imageFormat: destination.format
+                )
+                await queue.enqueueBatchImages(request)
             } else {
                 let requests = inspected.map {
                     ConversionRequest(

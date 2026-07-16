@@ -49,6 +49,12 @@ struct MergeView: View {
             HStack {
                 Spacer()
                 Button {
+                    model.enqueueBatchImages()
+                } label: {
+                    Label("Batch Convert", systemImage: "photo.on.rectangle.angled")
+                }
+                .disabled(model.mergeItems.isEmpty)
+                Button {
                     model.enqueueMerge()
                 } label: {
                     Label("Merge", systemImage: "square.stack.3d.up")
