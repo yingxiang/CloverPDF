@@ -34,12 +34,19 @@ actor TaskQueueActor {
     }
 
     func restore() async {
-        tasks = (try? await repository.load()) ?? []
+        let restoredTasks = (try? await repository.load()) ?? []
+        tasks = restoredTasks.flatMap(Self.expandLegacyBatchTask)
         try? await repository.save(tasks)
     }
 
     func snapshot() -> [ProcessingTaskRecord] {
-        tasks.sorted { $0.createdAt > $1.createdAt }
+        tasks.enumerated()
+            .sorted { lhs, rhs in
+                lhs.element.createdAt == rhs.element.createdAt
+                    ? lhs.offset < rhs.offset
+                    : lhs.element.createdAt > rhs.element.createdAt
+            }
+            .map(\.element)
     }
 
     @discardableResult
@@ -50,6 +57,9 @@ actor TaskQueueActor {
             kind: .merge,
             title: request.outputURL.lastPathComponent,
             inputPaths: request.inputs.map(\.source.path),
+            inputPageCount: request.inputs.reduce(0) { $0 + $1.source.pageCount },
+            inputFileSize: request.inputs.reduce(0) { $0 + $1.source.fileSize },
+            targetDirectoryPath: request.outputURL.deletingLastPathComponent().path,
             state: .pending,
             progress: 0,
             createdAt: Date()
@@ -60,25 +70,38 @@ actor TaskQueueActor {
     }
 
     @discardableResult
-    func enqueueBatchImages(_ request: BatchImageRequest) -> UUID {
-        let id = UUID()
-        tasks.append(ProcessingTaskRecord(
-            id: id,
-            kind: .batchImage,
-            title: request.outputDirectory.lastPathComponent,
-            inputPaths: request.inputs.map(\.source.path),
-            state: .pending,
-            progress: 0,
-            createdAt: Date()
-        ))
-        operations[id] = .batchImage(request)
+    func enqueueBatchImages(_ request: BatchImageRequest) -> [UUID] {
+        let createdAt = Date()
+        let taskIDs = request.inputs.map { input -> UUID in
+            let id = UUID()
+            let itemRequest = BatchImageRequest(
+                inputs: [input],
+                outputDirectory: request.outputDirectory,
+                imageFormat: request.imageFormat
+            )
+            tasks.append(ProcessingTaskRecord(
+                id: id,
+                kind: .batchImage,
+                title: Self.batchOutputName(input: input, format: request.imageFormat),
+                inputPaths: [input.source.path],
+                inputPageCount: input.source.pageCount,
+                inputFileSize: input.source.fileSize,
+                targetDirectoryPath: request.outputDirectory.path,
+                state: .pending,
+                progress: 0,
+                createdAt: createdAt
+            ))
+            operations[id] = .batchImage(itemRequest)
+            return id
+        }
         persistAndRun()
-        return id
+        return taskIDs
     }
 
     func enqueueConversions(_ requests: [ConversionRequest], premiumUnlocked: Bool) throws {
-        if requests.count > 1 && !premiumUnlocked { throw CloverPDFError.premiumRequired }
-        for request in requests {
+        let eligibleRequests = requests.filter { !$0.pageIndices.isEmpty }
+        if eligibleRequests.count > 1 && !premiumUnlocked { throw CloverPDFError.premiumRequired }
+        for request in eligibleRequests {
             let consumesTrial = !premiumUnlocked
             let activeIDs = Set(tasks.filter { $0.state == .pending || $0.state == .running }.map(\.id))
             let reservedTrials = operations.filter { id, operation in
@@ -93,8 +116,12 @@ actor TaskQueueActor {
             tasks.append(ProcessingTaskRecord(
                 id: id,
                 kind: .convert,
-                title: request.input.source.displayName,
+                title: Self.wordOutputName(input: request.input),
                 inputPaths: [request.input.source.path],
+                inputPageCount: request.pageIndices.count,
+                inputFileSize: request.input.source.fileSize,
+                targetDirectoryPath: request.outputDirectory.path,
+                conversionPageIndices: request.pageIndices,
                 state: .pending,
                 progress: 0,
                 createdAt: Date()
@@ -228,5 +255,55 @@ actor TaskQueueActor {
         tasks[index].errorCode = errorCode
         tasks[index].finishedAt = Date()
         persist()
+    }
+
+    private static func batchOutputName(input: PDFInput, format: RasterImageFormat) -> String {
+        URL(fileURLWithPath: input.source.displayName)
+            .deletingPathExtension()
+            .appendingPathExtension(format.fileExtension)
+            .lastPathComponent
+    }
+
+    private static func wordOutputName(input: PDFInput) -> String {
+        URL(fileURLWithPath: input.source.displayName)
+            .deletingPathExtension()
+            .appendingPathExtension("docx")
+            .lastPathComponent
+    }
+
+    private static func expandLegacyBatchTask(_ task: ProcessingTaskRecord) -> [ProcessingTaskRecord] {
+        guard task.kind == .batchImage else { return [task] }
+        let outputPaths = task.outputPaths ?? task.outputPath.map { [$0] } ?? []
+        let itemCount = max(task.inputPaths.count, outputPaths.count)
+        guard itemCount > 1 else { return [task] }
+        return (0..<itemCount).map { index in
+            let outputPath = outputPaths[safe: index]
+            let inputPath = task.inputPaths[safe: index]
+            return ProcessingTaskRecord(
+                id: index == 0 ? task.id : UUID(),
+                kind: .batchImage,
+                title: outputPath.map { URL(fileURLWithPath: $0).lastPathComponent }
+                    ?? inputPath.map { URL(fileURLWithPath: $0).lastPathComponent }
+                    ?? task.title,
+                inputPaths: inputPath.map { [$0] } ?? [],
+                inputPageCount: task.inputPageCount,
+                inputFileSize: task.inputFileSize,
+                targetDirectoryPath: task.targetDirectoryPath,
+                conversionPageIndices: task.conversionPageIndices,
+                outputPath: outputPath,
+                outputPaths: outputPath.map { [$0] },
+                state: task.state,
+                progress: task.progress,
+                errorCode: task.errorCode,
+                createdAt: task.createdAt,
+                finishedAt: task.finishedAt
+            )
+        }
+    }
+}
+
+private extension Array {
+    subscript(safe index: Index) -> Element? {
+        indices.contains(index) ? self[index] : nil
     }
 }

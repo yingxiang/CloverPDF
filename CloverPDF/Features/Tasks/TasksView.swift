@@ -4,46 +4,217 @@ import UniformTypeIdentifiers
 
 struct TasksView: View {
     @EnvironmentObject private var model: AppModel
+    @State private var collapsedSectionIDs: Set<Date> = []
+    @State private var sectionPendingDeletion: TaskSectionModel?
+    @State private var selectionAnchor: UUID?
 
     var body: some View {
+        Group {
+            if let previewItem = model.taskPreviewItem {
+                HSplitView {
+                    taskList
+                    PDFWorkspacePreview(item: previewItem)
+                }
+            } else {
+                taskList
+            }
+        }
+        .onAppear { model.updateTaskPreview() }
+        .onChange(of: model.selectedTaskIDs) { _ in model.updateTaskPreview() }
+        .alert(
+            "Delete Task Section",
+            isPresented: Binding(
+                get: { sectionPendingDeletion != nil },
+                set: { if !$0 { sectionPendingDeletion = nil } }
+            )
+        ) {
+            Button("Cancel", role: .cancel) { sectionPendingDeletion = nil }
+            Button("Delete", role: .destructive) { deletePendingSection() }
+        } message: {
+            Text("Delete all tasks in this section?")
+        }
+    }
+
+    private var taskList: some View {
         VStack(spacing: 0) {
             if model.tasks.isEmpty {
                 EmptyPDFState(title: "No tasks", icon: "list.bullet.rectangle")
             } else {
-                List(model.tasks, selection: $model.selectedTaskIDs) { task in
-                    TaskRow(task: task)
-                        .environmentObject(model)
-                        .tag(task.id)
+                List {
+                    ForEach(taskSections) { section in
+                        TaskSectionHeader(
+                            section: section,
+                            isCollapsed: collapsedSectionIDs.contains(section.id),
+                            toggle: { toggle(section) },
+                            requestDelete: { sectionPendingDeletion = section },
+                            deleteImmediately: { delete(section) },
+                            revealInFinder: { model.revealTasks(section.taskIDs) }
+                        )
+                        .listRowInsets(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))
+
+                        if !collapsedSectionIDs.contains(section.id) {
+                            ForEach(section.tasks) { task in
+                                TaskRow(task: task)
+                                    .environmentObject(model)
+                                    .selectableItem(isSelected: model.selectedTaskIDs.contains(task.id)) {
+                                        updateSelection(task.id)
+                                    }
+                            }
+                        }
+                    }
                 }
                 .listStyle(.inset)
+                .environment(\.defaultMinListRowHeight, 40)
             }
         }
+    }
+
+    private var taskSections: [TaskSectionModel] {
+        TaskSectionModel.group(model.tasks)
+    }
+
+    private func toggle(_ section: TaskSectionModel) {
+        if collapsedSectionIDs.contains(section.id) {
+            collapsedSectionIDs.remove(section.id)
+        } else {
+            collapsedSectionIDs.insert(section.id)
+        }
+    }
+
+    private func delete(_ section: TaskSectionModel) {
+        collapsedSectionIDs.remove(section.id)
+        model.deleteTasks(section.taskIDs)
+    }
+
+    private func deletePendingSection() {
+        guard let section = sectionPendingDeletion else { return }
+        sectionPendingDeletion = nil
+        delete(section)
+    }
+
+    private func updateSelection(_ id: UUID) {
+        let update = ItemSelectionController.update(
+            id: id,
+            orderedIDs: model.tasks.map(\.id),
+            selection: model.selectedTaskIDs,
+            anchor: selectionAnchor
+        )
+        model.selectedTaskIDs = update.selection
+        selectionAnchor = update.anchor
+    }
+}
+
+struct TaskSectionModel: Identifiable {
+    let date: Date
+    let kind: ProcessingTaskKind
+    var tasks: [ProcessingTaskRecord]
+    var id: Date { date }
+    var taskIDs: Set<UUID> { Set(tasks.map(\.id)) }
+
+    static func group(_ tasks: [ProcessingTaskRecord]) -> [TaskSectionModel] {
+        var sections: [TaskSectionModel] = []
+        for task in tasks {
+            let sectionDate = Date(timeIntervalSince1970: floor(task.createdAt.timeIntervalSince1970))
+            if let index = sections.firstIndex(where: { $0.date == sectionDate }) {
+                sections[index].tasks.append(task)
+            } else {
+                sections.append(TaskSectionModel(date: sectionDate, kind: task.kind, tasks: [task]))
+            }
+        }
+        return sections
+    }
+}
+
+private struct TaskSectionHeader: View {
+    let section: TaskSectionModel
+    let isCollapsed: Bool
+    let toggle: () -> Void
+    let requestDelete: () -> Void
+    let deleteImmediately: () -> Void
+    let revealInFinder: () -> Void
+
+    var body: some View {
+        HStack(spacing: 4) {
+            Button(action: toggle) {
+                HStack(spacing: 5) {
+                    Image(systemName: isCollapsed ? "chevron.right" : "chevron.down")
+                        .font(.caption2)
+                        .frame(width: 10)
+                    Text(section.kind.taskSectionTitle)
+                        .font(.caption)
+                        .lineLimit(1)
+                        .foregroundStyle(Color.black.opacity(0.75))
+                        .padding(.horizontal, 7)
+                        .frame(height: 18)
+                        .background {
+                            Capsule().fill(section.kind.taskSectionColor)
+                        }
+                    Text(TaskTimestampFormatter.string(from: section.date))
+                        .monospacedDigit()
+                        .fixedSize()
+                    Spacer(minLength: 8)
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+
+            Button(action: requestDelete) {
+                Image(systemName: "trash")
+                    .frame(width: 16, height: 16)
+            }
+            .buttonStyle(.borderless)
+            .help("Delete")
+        }
+        .frame(height: 20)
+        .contextMenu {
+            Button("Show in Finder", action: revealInFinder)
+            Divider()
+            Button("Delete", role: .destructive, action: deleteImmediately)
+        }
+    }
+}
+
+enum TaskTimestampFormatter {
+    static func string(from date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = .current
+        formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
+        return formatter.string(from: date)
     }
 }
 
 private struct TaskRow: View {
     @EnvironmentObject private var model: AppModel
+    @State private var outputAvailability = TaskOutputAvailability.unknown
     let task: ProcessingTaskRecord
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(alignment: .center, spacing: 14) {
             taskIcon
-            VStack(alignment: .leading, spacing: 5) {
-                taskTitle
-                HStack(spacing: 8) {
-                    Text(task.state.localizedTitle)
-                    if task.state == .running {
-                        ProgressView(value: task.progress)
-                            .frame(maxWidth: 220)
-                    }
+            PDFItemDetails(
+                title: displayTitle,
+                titleIsUnavailable: outputAvailability == .missing,
+                pageCount: task.inputPageCount,
+                fileSize: task.inputFileSize,
+                path: directoryPath
+            ) {
+                if task.state == .running {
+                    ProgressView(value: task.progress)
+                        .frame(maxWidth: 220)
                 }
-                .font(.caption)
-                .foregroundStyle(task.state == .failed ? .red : .secondary)
-                if task.kind == .merge, task.state == .succeeded {
+                if task.state == .failed, let errorCode = task.errorCode {
+                    Text(CloverPDFError.localizedDescription(for: errorCode))
+                        .font(.caption2)
+                        .foregroundStyle(.red)
+                        .lineLimit(2)
+                }
+                if !task.inputPaths.isEmpty {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 6) {
                             ForEach(Array(task.inputPaths.enumerated()), id: \.offset) { _, path in
-                                TaskSourceFileButton(path: path) {
+                                TaskFileButton(path: path) {
                                     model.revealSourceFile(atPath: path)
                                 }
                             }
@@ -51,14 +222,7 @@ private struct TaskRow: View {
                     }
                     .frame(height: 22)
                 }
-                if task.state == .failed, let errorCode = task.errorCode {
-                    Text(CloverPDFError.localizedDescription(for: errorCode))
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(2)
-                }
             }
-            Spacer()
             if task.state == .pending || task.state == .running {
                 Button {
                     model.cancelTask(task.id)
@@ -75,7 +239,7 @@ private struct TaskRow: View {
                 }
                 .help("Retry")
             }
-            if task.outputPath != nil {
+            if outputAvailability == .available {
                 Button {
                     model.revealTasks(contextSelection)
                 } label: {
@@ -84,34 +248,54 @@ private struct TaskRow: View {
                 .help("Show in Finder")
             }
         }
-        .padding(.vertical, 8)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 7)
+        .contentShape(Rectangle())
         .contextMenu {
-            Button("Show in Finder") {
-                model.revealTasks(contextSelection)
+            if outputAvailability == .available {
+                Button("Show in Finder") {
+                    model.revealTasks(contextSelection)
+                }
+                Divider()
             }
-            Divider()
             Button("Delete", role: .destructive) {
                 model.deleteTasks(contextSelection)
             }
         }
+        .task(id: representativeOutputPath) {
+            guard let path = representativeOutputPath else {
+                outputAvailability = .unknown
+                return
+            }
+            outputAvailability = .unknown
+            let exists = await Task.detached(priority: .utility) {
+                FileManager.default.fileExists(atPath: path)
+            }.value
+            guard !Task.isCancelled else { return }
+            outputAvailability = exists ? .available : .missing
+        }
     }
 
-    @ViewBuilder
-    private var taskTitle: some View {
-        if task.kind == .batchImage, let outputPaths = task.outputPaths, !outputPaths.isEmpty {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 6) {
-                    ForEach(Array(outputPaths.enumerated()), id: \.offset) { _, path in
-                        TaskSourceFileButton(path: path) {
-                            model.revealSourceFile(atPath: path)
-                        }
-                    }
-                }
-            }
-            .frame(height: 22)
-        } else {
-            Text(task.title).lineLimit(1)
+    private var displayTitle: String {
+        representativeOutputPath.map { URL(fileURLWithPath: $0).lastPathComponent } ?? task.title
+    }
+
+    private var directoryPath: String {
+        if let representativeOutputPath {
+            return URL(fileURLWithPath: representativeOutputPath).deletingLastPathComponent().path
         }
+        if let targetDirectoryPath = task.targetDirectoryPath { return targetDirectoryPath }
+        let sourcePath = task.inputPaths.first ?? ""
+        return URL(fileURLWithPath: sourcePath).deletingLastPathComponent().path
+    }
+
+    private var representativeOutputPath: String? {
+        outputPaths.first
+    }
+
+    private var outputPaths: [String] {
+        if let outputPaths = task.outputPaths, !outputPaths.isEmpty { return outputPaths }
+        return task.outputPath.map { [$0] } ?? []
     }
 
     private var contextSelection: Set<UUID> {
@@ -120,18 +304,10 @@ private struct TaskRow: View {
 
     @ViewBuilder
     private var taskIcon: some View {
-        if task.kind == .batchImage, task.state == .succeeded,
-           let outputPaths = task.outputPaths, !outputPaths.isEmpty {
-            StackedFileThumbnails(paths: Array(outputPaths.prefix(3)))
-        } else if task.kind == .merge, task.state == .succeeded, let outputPath = task.outputPath {
-            PDFThumbnail(fileURL: URL(fileURLWithPath: outputPath))
+        if let path = representativeOutputPath ?? task.inputPaths.first {
+            PDFThumbnail(fileURL: URL(fileURLWithPath: path))
                 .frame(width: 48, height: 60)
                 .clipped()
-        } else if task.kind == .merge, task.state.isActive {
-            Image(nsImage: NSWorkspace.shared.icon(for: .pdf))
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 48, height: 60)
         } else {
             Image(systemName: task.kind.icon)
                 .font(.system(size: 22))
@@ -141,46 +317,29 @@ private struct TaskRow: View {
     }
 }
 
-private struct StackedFileThumbnails: View {
-    let paths: [String]
-
-    var body: some View {
-        ZStack {
-            ForEach(Array(paths.prefix(3).enumerated()).reversed(), id: \.offset) { index, path in
-                PDFThumbnail(fileURL: URL(fileURLWithPath: path))
-                    .frame(width: 44, height: 56)
-                    .clipped()
-                    .background(Color(nsColor: .windowBackgroundColor))
-                    .overlay {
-                        Rectangle().stroke(Color(nsColor: .separatorColor), lineWidth: 0.5)
-                    }
-                    .shadow(color: .black.opacity(0.22), radius: 1.5, y: 1)
-                    .rotationEffect(rotation(for: index))
-                    .offset(offset(for: index))
-            }
-        }
-        .frame(width: 62, height: 66)
-        .fixedSize()
-    }
-
-    private func rotation(for index: Int) -> Angle {
-        switch index {
-        case 1: .degrees(-6)
-        case 2: .degrees(6)
-        default: .zero
-        }
-    }
-
-    private func offset(for index: Int) -> CGSize {
-        switch index {
-        case 1: CGSize(width: -4, height: 1)
-        case 2: CGSize(width: 4, height: 2)
-        default: .zero
-        }
-    }
+private enum TaskOutputAvailability: Equatable {
+    case unknown
+    case available
+    case missing
 }
 
 private extension ProcessingTaskKind {
+    var taskSectionTitle: String {
+        switch self {
+        case .merge: String(localized: "PDF Merge")
+        case .batchImage: String(localized: "PDF Batch Conversion")
+        case .convert: String(localized: "PDF to Word Task")
+        }
+    }
+
+    var taskSectionColor: Color {
+        switch self {
+        case .merge: Color(red: 251.0 / 255.0, green: 192.0 / 255.0, blue: 58.0 / 255.0)
+        case .batchImage: Color(red: 98.0 / 255.0, green: 180.0 / 255.0, blue: 232.0 / 255.0)
+        case .convert: Color(red: 159.0 / 255.0, green: 212.0 / 255.0, blue: 70.0 / 255.0)
+        }
+    }
+
     var icon: String {
         switch self {
         case .merge: "square.stack.3d.up"
@@ -190,7 +349,7 @@ private extension ProcessingTaskKind {
     }
 }
 
-private struct TaskSourceFileButton: View {
+private struct TaskFileButton: View {
     let path: String
     let action: () -> Void
     @State private var isHovered = false
@@ -211,23 +370,5 @@ private struct TaskSourceFileButton: View {
         .buttonStyle(.plain)
         .onHover { isHovered = $0 }
         .help(path)
-    }
-}
-
-private extension ProcessingTaskState {
-    var isActive: Bool {
-        self == .pending || self == .validating || self == .running
-    }
-
-    var localizedTitle: String {
-        switch self {
-        case .pending: String(localized: "Waiting")
-        case .validating: String(localized: "Validating")
-        case .running: String(localized: "Processing")
-        case .succeeded: String(localized: "Completed")
-        case .failed: String(localized: "Failed")
-        case .cancelled: String(localized: "Cancelled")
-        case .interrupted: String(localized: "Interrupted")
-        }
     }
 }

@@ -13,7 +13,14 @@ enum AppSection: String, CaseIterable, Identifiable {
 struct WorkspacePDF: Identifiable, Sendable {
     let source: PDFSource
     var password = ""
+    var selectedPageIndices: Set<Int>
     var id: UUID { source.id }
+
+    init(source: PDFSource, password: String = "", selectedPageIndices: Set<Int>? = nil) {
+        self.source = source
+        self.password = password
+        self.selectedPageIndices = selectedPageIndices ?? Set(0..<source.pageCount)
+    }
 }
 
 @MainActor
@@ -25,11 +32,9 @@ final class AppModel: ObservableObject {
     @Published var selectedConversionItemIDs: Set<UUID> = []
     @Published var selectedTaskIDs: Set<UUID> = []
     @Published var previewItem: WorkspacePDF?
+    @Published var taskPreviewItem: WorkspacePDF?
     @Published var tasks: [ProcessingTaskRecord] = []
     @Published var outputDirectory: URL
-    @Published var pageRangeEnabled = false
-    @Published var startPage = 1
-    @Published var endPage = 1
     @Published var alertMessage: String?
     @Published private(set) var remainingTrialConversions = 3
 
@@ -39,6 +44,9 @@ final class AppModel: ObservableObject {
     private let trialStore: TrialQuotaStoring
     private let queue: TaskQueueActor
     private var refreshTask: Task<Void, Never>?
+    private var taskPreviewLoadTask: Task<Void, Never>?
+    private var taskPreviewTaskID: UUID?
+    private var taskPreviewPath: String?
     private var mergeInputsByTask: [UUID: Set<UUID>] = [:]
 
     init() {
@@ -70,6 +78,7 @@ final class AppModel: ObservableObject {
 
     deinit {
         refreshTask?.cancel()
+        taskPreviewLoadTask?.cancel()
     }
 
     func importPDFs(_ urls: [URL], destination: AppSection) {
@@ -136,15 +145,16 @@ final class AppModel: ObservableObject {
     }
 
     func enqueueConversions() {
-        guard !conversionItems.isEmpty else { return }
-        let range: ClosedRange<Int>? = pageRangeEnabled ? startPage...endPage : nil
-        let requests = conversionItems.map { item in
-            ConversionRequest(
+        let requests = conversionItems.compactMap { item -> ConversionRequest? in
+            let selectedPages = item.selectedPageIndices.sorted()
+            guard !selectedPages.isEmpty else { return nil }
+            return ConversionRequest(
                 input: PDFInput(source: item.source, password: item.password.nilIfEmpty),
                 outputDirectory: outputDirectory,
-                pageRange: range
+                pageIndices: selectedPages
             )
         }
+        guard !requests.isEmpty else { return }
         Task {
             do {
                 try await queue.enqueueConversions(requests, premiumUnlocked: purchaseService.isPremiumUnlocked)
@@ -169,7 +179,29 @@ final class AppModel: ObservableObject {
         guard !ids.isEmpty else { return }
         for id in ids { mergeInputsByTask[id] = nil }
         selectedTaskIDs.subtract(ids)
+        updateTaskPreview()
         Task { await queue.delete(ids) }
+    }
+
+    func updateTaskPreview() {
+        guard let task = tasks.first(where: { selectedTaskIDs.contains($0.id) }),
+              let path = task.previewPDFPath else {
+            clearTaskPreview()
+            return
+        }
+        guard taskPreviewTaskID != task.id || taskPreviewPath != path else { return }
+        taskPreviewLoadTask?.cancel()
+        taskPreviewTaskID = task.id
+        taskPreviewPath = path
+        taskPreviewItem = nil
+        taskPreviewLoadTask = Task { [weak self] in
+            guard let self else { return }
+            let item = await self.inspect([URL(fileURLWithPath: path)]).first
+            guard !Task.isCancelled,
+                  self.selectedTaskIDs.contains(task.id),
+                  self.taskPreviewPath == path else { return }
+            self.taskPreviewItem = item
+        }
     }
 
     func clearMergeItems() {
@@ -238,11 +270,15 @@ final class AppModel: ObservableObject {
                 )
                 await queue.enqueueBatchImages(request)
             } else {
-                let requests = inspected.map {
-                    ConversionRequest(
-                        input: PDFInput(source: $0.source, password: nil),
+                let requests = inspected.map { item in
+                    let savedPages = task.conversionPageIndices ?? Array(0..<item.source.pageCount)
+                    let validPages = savedPages.filter { page in
+                        page >= 0 && page < item.source.pageCount
+                    }
+                    return ConversionRequest(
+                        input: PDFInput(source: item.source, password: nil),
                         outputDirectory: outputDirectory,
-                        pageRange: nil
+                        pageIndices: validPages
                     )
                 }
                 do {
@@ -334,6 +370,7 @@ final class AppModel: ObservableObject {
     private func refreshTasks() async {
         tasks = await queue.snapshot()
         selectedTaskIDs.formIntersection(tasks.map(\.id))
+        updateTaskPreview()
         remainingTrialConversions = trialStore.remainingConversions()
         let terminalStates: Set<ProcessingTaskState> = [.succeeded, .failed, .cancelled, .interrupted]
         let completedMerges = mergeInputsByTask.compactMap { taskID, inputIDs -> (UUID, Set<UUID>, ProcessingTaskState)? in
@@ -349,6 +386,14 @@ final class AppModel: ObservableObject {
         }
     }
 
+    private func clearTaskPreview() {
+        taskPreviewLoadTask?.cancel()
+        taskPreviewLoadTask = nil
+        taskPreviewTaskID = nil
+        taskPreviewPath = nil
+        taskPreviewItem = nil
+    }
+
 }
 
 private extension String {
@@ -358,5 +403,13 @@ private extension String {
 private extension ProcessingTaskRecord {
     var representativePath: String? {
         outputPaths?.first ?? outputPath ?? inputPaths.first
+    }
+
+    var previewPDFPath: String? {
+        let output = outputPaths?.first ?? outputPath
+        if let output, URL(fileURLWithPath: output).pathExtension.lowercased() == "pdf" {
+            return output
+        }
+        return inputPaths.first { URL(fileURLWithPath: $0).pathExtension.lowercased() == "pdf" }
     }
 }

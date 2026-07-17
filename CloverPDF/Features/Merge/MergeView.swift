@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MergeView: View {
     @EnvironmentObject private var model: AppModel
+    @State private var selectionAnchor: UUID?
 
     var body: some View {
         Group {
@@ -24,7 +25,7 @@ struct MergeView: View {
                     model.importPDFs(FilePanel.openPDFs(), destination: .merge)
                 }
             } else {
-                List(selection: $model.selectedMergeItemIDs) {
+                List {
                     ForEach($model.mergeItems) { $item in
                         PDFFileRow(
                             item: $item,
@@ -42,7 +43,9 @@ struct MergeView: View {
                                 }
                             )
                         )
-                        .tag(item.id)
+                        .selectableItem(isSelected: model.selectedMergeItemIDs.contains(item.id)) {
+                            updateSelection(item.id)
+                        }
                     }
                     .onMove { offsets, destination in
                         model.mergeItems.move(fromOffsets: offsets, toOffset: destination)
@@ -78,5 +81,16 @@ struct MergeView: View {
 
     private func contextSelection(for id: UUID) -> Set<UUID> {
         model.selectedMergeItemIDs.contains(id) ? model.selectedMergeItemIDs : [id]
+    }
+
+    private func updateSelection(_ id: UUID) {
+        let update = ItemSelectionController.update(
+            id: id,
+            orderedIDs: model.mergeItems.map(\.id),
+            selection: model.selectedMergeItemIDs,
+            anchor: selectionAnchor
+        )
+        model.selectedMergeItemIDs = update.selection
+        selectionAnchor = update.anchor
     }
 }

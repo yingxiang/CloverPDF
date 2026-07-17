@@ -12,8 +12,13 @@ LOCALES = ("en", "zh-Hans", "ko", "ja", "de", "ru")
 T: dict[str, tuple[str, str, str, str, str, str]] = {
     "CloverPDF": ("CloverPDF", "CloverPDF", "CloverPDF", "CloverPDF", "CloverPDF", "CloverPDF"),
     "Merge PDFs": ("Merge PDFs", "合并 PDF", "PDF 병합", "PDFを結合", "PDFs zusammenführen", "Объединить PDF"),
+    "PDF Merge": ("PDF Merge", "PDF合并", "PDF 병합", "PDF結合", "PDF-Zusammenführung", "Объединение PDF"),
+    "PDF Batch Conversion": ("PDF Batch Conversion", "PDF批量转换", "PDF 일괄 변환", "PDF一括変換", "PDF-Stapelkonvertierung", "Пакетное преобразование PDF"),
     "PDF to Word": ("PDF to Word", "PDF 转 Word", "PDF를 Word로", "PDFをWordに変換", "PDF in Word", "PDF в Word"),
+    "PDF to Word Task": ("PDF to Word", "PDF转Word", "PDF를 Word로", "PDFをWordに変換", "PDF in Word", "PDF в Word"),
     "Tasks": ("Tasks", "任务", "작업", "タスク", "Aufgaben", "Задачи"),
+    "Delete Task Section": ("Delete Task Section", "删除任务分组", "작업 섹션 삭제", "タスクセクションを削除", "Aufgabenabschnitt löschen", "Удалить раздел задач"),
+    "Delete all tasks in this section?": ("Delete all tasks in this section?", "确定删除此分组中的所有任务吗？", "이 섹션의 모든 작업을 삭제하시겠습니까?", "このセクションのすべてのタスクを削除しますか？", "Alle Aufgaben in diesem Abschnitt löschen?", "Удалить все задачи в этом разделе?"),
     "Settings": ("Settings", "设置", "설정", "設定", "Einstellungen", "Настройки"),
     "No PDFs selected": ("No PDFs selected", "未选择 PDF", "선택한 PDF 없음", "PDFが選択されていません", "Keine PDFs ausgewählt", "PDF не выбраны"),
     "No tasks": ("No tasks", "暂无任务", "작업 없음", "タスクはありません", "Keine Aufgaben", "Нет задач"),

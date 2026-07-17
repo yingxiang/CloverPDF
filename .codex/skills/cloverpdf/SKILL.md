@@ -59,7 +59,15 @@ description: Develop, fix, refactor, test, or review the CloverPDF native macOS 
 - Require complete translations for all six supported locales. Do not leave empty or `needs_review` values for active keys.
 - Return structured codes from Python and localize them in Swift.
 - Use `FormatStyle` for prices, dates, counts, and file sizes. Use plural variations instead of sentence concatenation.
-- Verify German and Russian long text, plus Japanese and Korean line wrapping, before delivery.
+- Implement layouts that accommodate German and Russian long text plus Japanese and Korean line wrapping. Leave visual acceptance to the user under the UI verification rules below.
+
+## UI Verification Ownership
+
+- Treat UI visual and interaction acceptance as user-owned verification.
+- Do not independently launch CloverPDF, capture screenshots, inspect windows through accessibility APIs, or run UI automation to validate UI changes.
+- Continue to run compiler checks, unit tests, localization completeness checks, source limits, Release builds, and the Skill gates after UI implementation.
+- Do not block delivery on visual inspection or ask the user to report UI verification results.
+- Perform UI validation only when the user explicitly requests it in the current task.
 
 ## Finder And Sandbox Rules
 

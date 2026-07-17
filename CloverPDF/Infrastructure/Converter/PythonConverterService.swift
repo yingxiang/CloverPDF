@@ -4,8 +4,7 @@ private struct ConverterRequestPayload: Encodable {
     let input: String
     let output: String
     let password: String?
-    let startPage: Int?
-    let endPage: Int?
+    let pages: [Int]
 }
 
 private struct ConverterEvent: Decodable {
@@ -84,8 +83,7 @@ final class PythonConverterService: PDFConverting, @unchecked Sendable {
                 input: workingInputURL.path,
                 output: temporaryURL.path,
                 password: request.input.password,
-                startPage: request.pageRange?.lowerBound,
-                endPage: request.pageRange?.upperBound
+                pages: request.pageIndices
             )
             let payloadData = try JSONEncoder().encode(payload) + Data([0x0A])
             try process.run()

@@ -245,6 +245,20 @@ final class PDFKitMergerTests: XCTestCase {
 }
 
 final class TaskQueueActorTests: XCTestCase {
+    func testWorkspacePDFSelectsEveryPageByDefault() {
+        let source = PDFSource(
+            displayName: "source.pdf",
+            path: "/tmp/source.pdf",
+            bookmark: nil,
+            pageCount: 3,
+            fileSize: 1,
+            isLocked: false,
+            appearsScanned: false
+        )
+
+        XCTAssertEqual(WorkspacePDF(source: source).selectedPageIndices, [0, 1, 2])
+    }
+
     func testDeletingSelectedTasksCancelsRunningOperationAndRemovesAllRecords() async throws {
         let repository = TestTaskRepository()
         let probe = CancellationProbe()
@@ -267,13 +281,15 @@ final class TaskQueueActorTests: XCTestCase {
         let request = ConversionRequest(
             input: PDFInput(source: source, password: nil),
             outputDirectory: FileManager.default.temporaryDirectory,
-            pageRange: nil
+            pageIndices: [0]
         )
 
         try await queue.enqueueConversions([request, request], premiumUnlocked: true)
         try await waitUntil { await probe.hasStarted }
         let queuedTasks = await queue.snapshot()
         XCTAssertEqual(queuedTasks.count, 2)
+        XCTAssertTrue(queuedTasks.allSatisfy { $0.conversionPageIndices == [0] })
+        XCTAssertTrue(queuedTasks.allSatisfy { $0.inputPageCount == 1 })
         await queue.delete(Set(queuedTasks.map(\.id)))
         try await waitUntil { await repository.records.isEmpty }
 
@@ -283,7 +299,7 @@ final class TaskQueueActorTests: XCTestCase {
         XCTAssertTrue(remainingTasks.isEmpty)
     }
 
-    func testBatchTaskStoresEveryGeneratedOutputPath() async throws {
+    func testBatchConversionCreatesOneTaskPerInputUnderTheSameTimestamp() async throws {
         let repository = TestTaskRepository()
         let queue = TaskQueueActor(
             merger: TestMerger(),
@@ -292,30 +308,132 @@ final class TaskQueueActorTests: XCTestCase {
             repository: repository,
             trialStore: TestTrialStore()
         )
-        let source = PDFSource(
-            displayName: "source.pdf",
-            path: "/tmp/source.pdf",
-            bookmark: nil,
-            pageCount: 1,
-            fileSize: 1,
-            isLocked: false,
-            appearsScanned: false
-        )
+        let inputs = ["first.pdf", "second.pdf"].enumerated().map { index, name in
+            PDFInput(source: PDFSource(
+                displayName: name,
+                path: "/tmp/\(name)",
+                bookmark: nil,
+                pageCount: index + 1,
+                fileSize: Int64((index + 1) * 1_000),
+                isLocked: false,
+                appearsScanned: false
+            ), password: nil)
+        }
         let request = BatchImageRequest(
-            inputs: [PDFInput(source: source, password: nil)],
+            inputs: inputs,
             outputDirectory: URL(fileURLWithPath: "/tmp/output"),
             imageFormat: .png
         )
 
-        let taskID = await queue.enqueueBatchImages(request)
+        let taskIDs = await queue.enqueueBatchImages(request)
+        XCTAssertEqual(taskIDs.count, 2)
         try await waitUntil {
-            await queue.snapshot().first(where: { $0.id == taskID })?.state == .succeeded
+            let tasks = await queue.snapshot().filter { taskIDs.contains($0.id) }
+            return tasks.count == 2 && tasks.allSatisfy { $0.state == .succeeded }
         }
 
-        let snapshot = await queue.snapshot()
-        let task = try XCTUnwrap(snapshot.first(where: { $0.id == taskID }))
-        XCTAssertEqual(task.outputPaths, ["/tmp/output/output.png"])
-        XCTAssertEqual(task.outputPath, task.outputPaths?.first)
+        let tasks = await queue.snapshot().filter { taskIDs.contains($0.id) }
+        XCTAssertEqual(Set(tasks.map(\.createdAt)).count, 1)
+        XCTAssertEqual(tasks.map(\.inputPaths), [["/tmp/first.pdf"], ["/tmp/second.pdf"]])
+        XCTAssertEqual(tasks.map(\.inputPageCount), [1, 2])
+        XCTAssertEqual(tasks.map(\.inputFileSize), [1_000, 2_000])
+        XCTAssertTrue(tasks.allSatisfy { $0.targetDirectoryPath == "/tmp/output" })
+        XCTAssertEqual(tasks.map(\.outputPaths), [
+            ["/tmp/output/first.png"],
+            ["/tmp/output/second.png"],
+        ])
+        XCTAssertTrue(tasks.allSatisfy { $0.outputPath == $0.outputPaths?.first })
+    }
+
+    func testTaskRecordDecodesWithoutInputMetadata() throws {
+        let task = ProcessingTaskRecord(
+            id: UUID(),
+            kind: .convert,
+            title: "source.docx",
+            inputPaths: ["/tmp/source.pdf"],
+            state: .succeeded,
+            progress: 1,
+            createdAt: Date(timeIntervalSince1970: 1_768_000_000)
+        )
+        let encoded = try JSONEncoder().encode(task)
+        var object = try XCTUnwrap(JSONSerialization.jsonObject(with: encoded) as? [String: Any])
+        object.removeValue(forKey: "inputPageCount")
+        object.removeValue(forKey: "inputFileSize")
+        object.removeValue(forKey: "targetDirectoryPath")
+        object.removeValue(forKey: "conversionPageIndices")
+
+        let legacyData = try JSONSerialization.data(withJSONObject: object)
+        let decoded = try JSONDecoder().decode(ProcessingTaskRecord.self, from: legacyData)
+
+        XCTAssertNil(decoded.inputPageCount)
+        XCTAssertNil(decoded.inputFileSize)
+        XCTAssertNil(decoded.targetDirectoryPath)
+        XCTAssertNil(decoded.conversionPageIndices)
+    }
+
+    func testTaskSectionsGroupBySecondAndUseRequiredTimestampFormat() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = .current
+        let firstDate = try XCTUnwrap(calendar.date(from: DateComponents(
+            year: 2026,
+            month: 7,
+            day: 17,
+            hour: 9,
+            minute: 19,
+            second: 24
+        )))
+        let secondDate = firstDate.addingTimeInterval(0.8)
+        let tasks = [firstDate, secondDate].map { date in
+            ProcessingTaskRecord(
+                id: UUID(),
+                kind: .batchImage,
+                title: "output.png",
+                inputPaths: [],
+                state: .succeeded,
+                progress: 1,
+                createdAt: date
+            )
+        }
+
+        let sections = TaskSectionModel.group(tasks)
+
+        XCTAssertEqual(sections.count, 1)
+        XCTAssertEqual(sections[0].tasks.count, 2)
+        XCTAssertEqual(sections[0].taskIDs, Set(tasks.map(\.id)))
+        XCTAssertEqual(TaskTimestampFormatter.string(from: sections[0].date), "2026/07/17 09:19:24")
+    }
+
+    func testRestoreSplitsLegacyCombinedBatchTaskIntoIndividualItems() async throws {
+        let createdAt = Date(timeIntervalSince1970: 1_768_000_000)
+        let originalID = UUID()
+        let legacyTask = ProcessingTaskRecord(
+            id: originalID,
+            kind: .batchImage,
+            title: "images",
+            inputPaths: ["/tmp/first.pdf", "/tmp/second.pdf"],
+            outputPath: "/tmp/first.png",
+            outputPaths: ["/tmp/first.png", "/tmp/second.png"],
+            state: .succeeded,
+            progress: 1,
+            createdAt: createdAt
+        )
+        let repository = TestTaskRepository(records: [legacyTask])
+        let queue = TaskQueueActor(
+            merger: TestMerger(),
+            imageExporter: TestImageExporter(),
+            converter: BlockingConverter(probe: CancellationProbe()),
+            repository: repository,
+            trialStore: TestTrialStore()
+        )
+
+        await queue.restore()
+        let tasks = await queue.snapshot()
+
+        XCTAssertEqual(tasks.count, 2)
+        XCTAssertEqual(tasks.first?.id, originalID)
+        XCTAssertEqual(Set(tasks.map(\.createdAt)), [createdAt])
+        XCTAssertEqual(tasks.map(\.inputPaths), [["/tmp/first.pdf"], ["/tmp/second.pdf"]])
+        XCTAssertEqual(tasks.map(\.outputPaths), [["/tmp/first.png"], ["/tmp/second.png"]])
     }
 
     private func waitUntil(_ condition: @escaping @Sendable () async -> Bool) async throws {
@@ -328,7 +446,11 @@ final class TaskQueueActorTests: XCTestCase {
 }
 
 private actor TestTaskRepository: TaskRepository {
-    private(set) var records: [ProcessingTaskRecord] = []
+    private(set) var records: [ProcessingTaskRecord]
+
+    init(records: [ProcessingTaskRecord] = []) {
+        self.records = records
+    }
 
     func load() async throws -> [ProcessingTaskRecord] { records }
     func save(_ tasks: [ProcessingTaskRecord]) async throws { records = tasks }
@@ -366,7 +488,12 @@ private struct TestMerger: PDFMerging {
 
 private struct TestImageExporter: PDFImageExporting {
     func export(_ request: BatchImageRequest) async throws -> [URL] {
-        [request.outputDirectory.appendingPathComponent("output.png")]
+        let sourceName = request.inputs[0].source.displayName
+        let outputName = URL(fileURLWithPath: sourceName)
+            .deletingPathExtension()
+            .appendingPathExtension(request.imageFormat.fileExtension)
+            .lastPathComponent
+        return [request.outputDirectory.appendingPathComponent(outputName)]
     }
 }
 

@@ -16,8 +16,7 @@ class Request:
     input: str
     output: str
     password: str | None
-    start_page: int | None
-    end_page: int | None
+    pages: tuple[int, ...]
 
 
 def emit(event_type: str, **values: Any) -> None:
@@ -35,8 +34,7 @@ def read_request() -> Request:
         input=str(payload["input"]),
         output=str(payload["output"]),
         password=payload.get("password"),
-        start_page=payload.get("startPage"),
-        end_page=payload.get("endPage"),
+        pages=tuple(int(page) for page in payload.get("pages", [])),
     )
 
 
@@ -46,7 +44,7 @@ def error_code(error: Exception) -> str:
         return "password_required"
     if "incorrect password" in message:
         return "incorrect_password"
-    if "no parsed pages" in message:
+    if "no parsed pages" in message or "no_pages" in message:
         return "no_pages"
     if isinstance(error, FileNotFoundError):
         return "input_not_found"
@@ -58,20 +56,16 @@ def convert(request: Request) -> None:
 
     if not os.path.isfile(request.input):
         raise FileNotFoundError(request.input)
+    if not request.pages or any(page < 0 for page in request.pages):
+        raise ValueError("no_pages")
     os.makedirs(os.path.dirname(request.output), exist_ok=True)
     emit("started")
     emit("progress", progress=0.05, phase="opening")
     converter = Converter(request.input, request.password or "")
     try:
         kwargs: dict[str, Any] = {"multi_processing": False}
-        if request.start_page is not None or request.end_page is not None:
-            start = max(0, int(request.start_page or 1) - 1)
-            end = int(request.end_page) if request.end_page is not None else None
-            emit("progress", progress=0.15, phase="parsing")
-            converter.convert(request.output, start=start, end=end, **kwargs)
-        else:
-            emit("progress", progress=0.15, phase="parsing")
-            converter.convert(request.output, **kwargs)
+        emit("progress", progress=0.15, phase="parsing")
+        converter.convert(request.output, pages=list(request.pages), **kwargs)
     finally:
         converter.close()
     if not os.path.isfile(request.output) or os.path.getsize(request.output) == 0:
