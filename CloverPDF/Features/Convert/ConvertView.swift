@@ -1,12 +1,15 @@
 import AppKit
 import SwiftUI
-import UniformTypeIdentifiers
 
 struct ConvertView: View {
     @EnvironmentObject private var model: AppModel
     @State private var pageNavigationRequest: PDFPageNavigationRequest?
     @State private var draggedConversionItemID: UUID?
     @State private var conversionSelectionAnchor: UUID?
+    @State private var itemFrames: [UUID: CGRect] = [:]
+    @State private var dragStartFrame: CGRect?
+    @State private var dragOffsetY: CGFloat = 0
+    @State private var previousDragTranslationY: CGFloat = 0
 
     var body: some View {
         Group {
@@ -32,8 +35,9 @@ struct ConvertView: View {
                     model.importPDFs(FilePanel.openPDFs(), destination: .convert)
                 }
             } else {
-                List {
-                    ForEach($model.conversionItems) { $item in
+                ZStack {
+                    List {
+                        ForEach($model.conversionItems) { $item in
                         VStack(spacing: 0) {
                             PDFFileRow(
                                 item: $item,
@@ -51,14 +55,9 @@ struct ConvertView: View {
                                     }
                                 )
                             )
+                            .highPriorityGesture(reorderGesture(for: item))
                             .itemSelectionTap {
                                 updateConversionSelection(item.id)
-                            }
-                            .onDrag {
-                                draggedConversionItemID = item.id
-                                return NSItemProvider(object: item.id.uuidString as NSString)
-                            } preview: {
-                                ConversionItemDragPreview(item: item)
                             }
                             PDFPageSelectionStrip(item: $item) { pageIndex in
                                 pageNavigationRequest = PDFPageNavigationRequest(pageIndex: pageIndex)
@@ -67,18 +66,25 @@ struct ConvertView: View {
                                 updateConversionSelection(item.id)
                             }
                         }
-                        .onDrop(
-                            of: [UTType.utf8PlainText],
-                            delegate: ConversionItemDropDelegate(
-                                targetID: item.id,
-                                items: $model.conversionItems,
-                                draggedItemID: $draggedConversionItemID
-                            )
-                        )
+                        .contentShape(Rectangle())
+                        .background {
+                            GeometryReader { proxy in
+                                Color.clear
+                                    .preference(
+                                        key: WorkspaceItemFramePreferenceKey.self,
+                                        value: [item.id: proxy.frame(in: .global)]
+                                    )
+                            }
+                        }
                         .itemSelectionOutline(isSelected: model.selectedConversionItemIDs.contains(item.id))
+                        .opacity(draggedConversionItemID == item.id ? 0 : 1)
+                        }
                     }
+                    .listStyle(.inset)
+
+                    dragPreview
                 }
-                .listStyle(.inset)
+                .onPreferenceChange(WorkspaceItemFramePreferenceKey.self) { itemFrames = $0 }
             }
             Divider()
             options
@@ -100,7 +106,7 @@ struct ConvertView: View {
             Button {
                 model.enqueueConversions()
             } label: {
-                Label("Convert", systemImage: "doc.text")
+                Label("Convert", systemImage: "arrow.triangle.2.circlepath")
             }
             .buttonStyle(.borderedProminent)
             .disabled(model.conversionItems.allSatisfy { $0.selectedPageIndices.isEmpty })
@@ -135,60 +141,81 @@ struct ConvertView: View {
         model.selectedConversionItemIDs = update.selection
         conversionSelectionAnchor = update.anchor
     }
-}
 
-private struct ConversionItemDragPreview: View {
-    let item: WorkspacePDF
-
-    var body: some View {
-        PDFFileRow(
-            item: .constant(item),
-            actions: PDFFileRowActions(
-                canMoveUp: false,
-                canMoveDown: false,
-                moveUp: {},
-                moveDown: {},
-                remove: {},
-                revealInFinder: {}
-            )
-        )
-        .frame(width: 360, height: PDFFileRow.baseHeight)
-        .background(
-            Color(nsColor: .controlBackgroundColor),
-            in: RoundedRectangle(cornerRadius: 6)
-        )
-        .overlay {
-            RoundedRectangle(cornerRadius: 6)
-                .stroke(Color(nsColor: .separatorColor), lineWidth: 0.5)
+    private var dragPreview: some View {
+        GeometryReader { proxy in
+            if let draggedConversionItemID,
+               let item = model.conversionItems.first(where: { $0.id == draggedConversionItemID }),
+               let startFrame = dragStartFrame {
+                let overlayFrame = proxy.frame(in: .global)
+                WorkspaceItemDragPreview(
+                    item: item,
+                    size: startFrame.size,
+                    showsPageSelection: true
+                )
+                .position(
+                    x: startFrame.midX - overlayFrame.minX,
+                    y: startFrame.midY + dragOffsetY - overlayFrame.minY
+                )
+            }
         }
-        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .allowsHitTesting(false)
+        .zIndex(10)
     }
-}
 
-private struct ConversionItemDropDelegate: DropDelegate {
-    let targetID: UUID
-    @Binding var items: [WorkspacePDF]
-    @Binding var draggedItemID: UUID?
+    private func reorderGesture(for item: WorkspacePDF) -> some Gesture {
+        DragGesture(minimumDistance: 4, coordinateSpace: .global)
+            .onChanged { value in
+                if draggedConversionItemID == nil {
+                    guard let frame = itemFrames[item.id] else { return }
+                    model.selectedConversionItemIDs = [item.id]
+                    conversionSelectionAnchor = item.id
+                    draggedConversionItemID = item.id
+                    dragStartFrame = frame
+                }
+                guard draggedConversionItemID == item.id, let startFrame = dragStartFrame else { return }
+                let movementY = value.translation.height - previousDragTranslationY
+                previousDragTranslationY = value.translation.height
+                dragOffsetY = value.translation.height
+                moveConversionItemIfNeeded(
+                    item.id,
+                    previewY: startFrame.midY + dragOffsetY,
+                    movementY: movementY
+                )
+            }
+            .onEnded { _ in settleConversionDrag(item.id) }
+    }
 
-    func dropEntered(info: DropInfo) {
-        guard let draggedItemID,
-              draggedItemID != targetID,
-              let sourceIndex = items.firstIndex(where: { $0.id == draggedItemID }),
-              let targetIndex = items.firstIndex(where: { $0.id == targetID }) else { return }
-        withAnimation {
-            items.move(
+    private func moveConversionItemIfNeeded(_ id: UUID, previewY: CGFloat, movementY: CGFloat) {
+        guard abs(movementY) > 0.1,
+              let sourceIndex = model.conversionItems.firstIndex(where: { $0.id == id }) else { return }
+        let targetIndex = movementY > 0 ? sourceIndex + 1 : sourceIndex - 1
+        guard model.conversionItems.indices.contains(targetIndex),
+              let targetFrame = itemFrames[model.conversionItems[targetIndex].id] else { return }
+        let crossedTarget = movementY > 0 ? previewY > targetFrame.midY : previewY < targetFrame.midY
+        guard crossedTarget else { return }
+        withAnimation(.easeInOut(duration: 0.15)) {
+            model.conversionItems.move(
                 fromOffsets: IndexSet(integer: sourceIndex),
                 toOffset: targetIndex > sourceIndex ? targetIndex + 1 : targetIndex
             )
         }
     }
 
-    func dropUpdated(info: DropInfo) -> DropProposal? {
-        DropProposal(operation: .move)
-    }
-
-    func performDrop(info: DropInfo) -> Bool {
-        draggedItemID = nil
-        return true
+    private func settleConversionDrag(_ id: UUID) {
+        guard let startFrame = dragStartFrame else { return }
+        DispatchQueue.main.async {
+            let finalFrame = itemFrames[id] ?? startFrame
+            withAnimation(.easeOut(duration: 0.2)) {
+                dragOffsetY = finalFrame.midY - startFrame.midY
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                guard draggedConversionItemID == id else { return }
+                draggedConversionItemID = nil
+                dragStartFrame = nil
+                dragOffsetY = 0
+                previousDragTranslationY = 0
+            }
+        }
     }
 }

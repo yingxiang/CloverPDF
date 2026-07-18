@@ -29,9 +29,9 @@ struct PDFPreviewSheet: View {
             Divider()
             HStack {
                 if item.source.appearsScanned {
-                    Label("Scanned PDF: OCR is not included", systemImage: "exclamationmark.triangle")
+                    Label("Scanned PDF: OCR will be used", systemImage: "text.viewfinder")
                         .font(.caption)
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(.secondary)
                 }
                 Spacer()
                 Button {

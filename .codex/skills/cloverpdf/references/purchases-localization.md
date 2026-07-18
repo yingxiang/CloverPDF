@@ -2,10 +2,10 @@
 
 ## Products
 
-- `com.lingchen.cloverpdf.subscription.3months`
-- `com.lingchen.cloverpdf.subscription.6months`
-- `com.lingchen.cloverpdf.subscription.12months`
-- `com.lingchen.cloverpdf.lifetime`
+- `pdf_buy_three_month`
+- `pdf_buy_six_month`
+- `pdf_buy_one_year`
+- `com.lingchen.pdf.unlockall`
 
 The first three products are auto-renewable subscriptions in one App Store Connect subscription group. The lifetime product is non-consumable. Do not add a local StoreKit configuration unless the user requests it.
 

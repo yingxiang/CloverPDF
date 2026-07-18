@@ -15,6 +15,7 @@ struct PDFFileRow: View {
             PDFThumbnail(source: item.source)
                 .frame(width: 48, height: 60)
                 .clipped()
+                .allowsHitTesting(false)
             PDFItemDetails(
                 title: item.source.displayName,
                 pageCount: item.source.pageCount,
@@ -26,9 +27,9 @@ struct PDFFileRow: View {
                         .textFieldStyle(.roundedBorder)
                         .frame(maxWidth: 260)
                 } else if item.source.appearsScanned {
-                    Label("Scanned PDF: OCR is not included", systemImage: "exclamationmark.triangle")
+                    Label("Scanned PDF: OCR will be used", systemImage: "text.viewfinder")
                         .font(.caption)
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(.secondary)
                 }
             }
         }
@@ -51,6 +52,42 @@ struct PDFFileRow: View {
 
     private var directoryPath: String {
         URL(fileURLWithPath: item.source.path).deletingLastPathComponent().path
+    }
+}
+
+struct WorkspaceItemDragPreview: View {
+    let item: WorkspacePDF
+    let size: CGSize
+    let showsPageSelection: Bool
+
+    var body: some View {
+        VStack(spacing: 0) {
+            PDFFileRow(
+                item: .constant(item),
+                actions: PDFFileRowActions(
+                    canMoveUp: false,
+                    canMoveDown: false,
+                    moveUp: {},
+                    moveDown: {},
+                    remove: {},
+                    revealInFinder: {}
+                )
+            )
+            if showsPageSelection {
+                PDFPageSelectionStrip(item: .constant(item), onNavigate: { _ in })
+            }
+        }
+        .frame(width: size.width, height: size.height, alignment: .topLeading)
+        .clipped()
+        .itemSelectionOutline(isSelected: true)
+    }
+}
+
+struct WorkspaceItemFramePreferenceKey: PreferenceKey {
+    static let defaultValue: [UUID: CGRect] = [:]
+
+    static func reduce(value: inout [UUID: CGRect], nextValue: () -> [UUID: CGRect]) {
+        value.merge(nextValue(), uniquingKeysWith: { _, next in next })
     }
 }
 
@@ -264,6 +301,7 @@ struct PDFItemDetails<Footer: View>: View {
     let titleIsUnavailable: Bool
     let pageCount: Int?
     let fileSize: Int64?
+    let metadataOverride: String?
     let path: String
     let footer: Footer
 
@@ -272,6 +310,7 @@ struct PDFItemDetails<Footer: View>: View {
         titleIsUnavailable: Bool = false,
         pageCount: Int?,
         fileSize: Int64?,
+        metadataOverride: String? = nil,
         path: String,
         @ViewBuilder footer: () -> Footer
     ) {
@@ -279,6 +318,7 @@ struct PDFItemDetails<Footer: View>: View {
         self.titleIsUnavailable = titleIsUnavailable
         self.pageCount = pageCount
         self.fileSize = fileSize
+        self.metadataOverride = metadataOverride
         self.path = path
         self.footer = footer()
     }
@@ -308,6 +348,7 @@ struct PDFItemDetails<Footer: View>: View {
     }
 
     private var metadata: String? {
+        if let metadataOverride { return metadataOverride }
         guard let pageCount, let fileSize else { return nil }
         let pages = String(localized: "\(pageCount) pages")
         let size = ByteCountFormatStyle(style: .file).format(fileSize)
@@ -362,11 +403,11 @@ enum ItemSelectionController {
 }
 
 extension View {
-    func itemSelectionOutline(isSelected: Bool) -> some View {
+    func itemSelectionOutline(isSelected: Bool, color: Color = .accentColor) -> some View {
         overlay {
             if isSelected {
                 RoundedRectangle(cornerRadius: 10)
-                    .strokeBorder(Color.accentColor, lineWidth: 2)
+                    .strokeBorder(color, lineWidth: 2)
                     .allowsHitTesting(false)
             }
         }
@@ -376,9 +417,13 @@ extension View {
         simultaneousGesture(TapGesture().onEnded(action))
     }
 
-    func selectableItem(isSelected: Bool, action: @escaping () -> Void) -> some View {
+    func selectableItem(
+        isSelected: Bool,
+        outlineColor: Color = .accentColor,
+        action: @escaping () -> Void
+    ) -> some View {
         itemSelectionTap(action)
-            .itemSelectionOutline(isSelected: isSelected)
+            .itemSelectionOutline(isSelected: isSelected, color: outlineColor)
     }
 }
 
@@ -405,7 +450,7 @@ struct PDFThumbnail: NSViewRepresentable {
         guard context.coordinator.key != key else { return }
         context.coordinator.key = key
         context.coordinator.task?.cancel()
-        view.image = nil
+        view.image = PDFThumbnailLoader.cached(source: source, fileURL: fileURL)
         context.coordinator.task = Task { @MainActor in
             let thumbnail: NSImage?
             if let source {
@@ -470,15 +515,35 @@ final class PDFThumbnailContainerView: NSView {
     }
 }
 
+@MainActor
 private enum PDFThumbnailLoader {
+    private static let cache = NSCache<NSString, NSImage>()
+
+    @MainActor
+    static func cached(source: PDFSource?, fileURL: URL?) -> NSImage? {
+        guard let key = cacheKey(source: source, fileURL: fileURL) else { return nil }
+        return cache.object(forKey: key as NSString)
+    }
+
     @MainActor
     static func load(source: PDFSource) async -> NSImage? {
         guard !Task.isCancelled, let url = try? BookmarkService.resolve(source) else { return nil }
-        return await load(fileURL: url)
+        if let cached = cached(source: source, fileURL: nil) { return cached }
+        let image = await loadUncached(fileURL: url)
+        store(image, source: source, fileURL: nil)
+        return image
     }
 
     @MainActor
     static func load(fileURL: URL) async -> NSImage? {
+        if let cached = cached(source: nil, fileURL: fileURL) { return cached }
+        let image = await loadUncached(fileURL: fileURL)
+        store(image, source: nil, fileURL: fileURL)
+        return image
+    }
+
+    @MainActor
+    private static func loadUncached(fileURL: URL) async -> NSImage? {
         guard !Task.isCancelled else { return nil }
         if isRasterImage(fileURL), let image = await RasterThumbnailLoader.load(fileURL: fileURL) {
             return image
@@ -501,6 +566,16 @@ private enum PDFThumbnailLoader {
             }
         }
         return thumbnail ?? NSWorkspace.shared.icon(forFile: url.path)
+    }
+
+    @MainActor
+    private static func store(_ image: NSImage?, source: PDFSource?, fileURL: URL?) {
+        guard let image, let key = cacheKey(source: source, fileURL: fileURL) else { return }
+        cache.setObject(image, forKey: key as NSString)
+    }
+
+    private static func cacheKey(source: PDFSource?, fileURL: URL?) -> String? {
+        source.map { "source:\($0.id.uuidString)" } ?? fileURL.map { "file:\($0.path)" }
     }
 
     private static func isRasterImage(_ url: URL) -> Bool {

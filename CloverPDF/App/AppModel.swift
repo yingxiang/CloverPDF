@@ -33,6 +33,7 @@ final class AppModel: ObservableObject {
     @Published var selectedTaskIDs: Set<UUID> = []
     @Published var previewItem: WorkspacePDF?
     @Published var taskPreviewItem: WorkspacePDF?
+    @Published private(set) var taskPreviewPath: String?
     @Published var tasks: [ProcessingTaskRecord] = []
     @Published var outputDirectory: URL
     @Published var alertMessage: String?
@@ -46,7 +47,6 @@ final class AppModel: ObservableObject {
     private var refreshTask: Task<Void, Never>?
     private var taskPreviewLoadTask: Task<Void, Never>?
     private var taskPreviewTaskID: UUID?
-    private var taskPreviewPath: String?
     private var mergeInputsByTask: [UUID: Set<UUID>] = [:]
 
     init() {
@@ -130,22 +130,55 @@ final class AppModel: ObservableObject {
         }
     }
 
-    func enqueueBatchImages() {
-        guard !mergeItems.isEmpty else { return }
-        guard let destination = FilePanel.chooseBatchImageDestination() else { return }
-        let request = BatchImageRequest(
-            inputs: mergeItems.map { PDFInput(source: $0.source, password: $0.password.nilIfEmpty) },
-            outputDirectory: destination.directoryURL,
-            imageFormat: destination.format
-        )
-        Task {
-            await queue.enqueueBatchImages(request)
-            selection = .tasks
+    func enqueueConversions() {
+        let eligibleItems = conversionItems.filter { !$0.selectedPageIndices.isEmpty }
+        guard !eligibleItems.isEmpty else { return }
+        guard let destination = FilePanel.chooseConversionDestination() else { return }
+        if eligibleItems.count > 1 && !purchaseService.isPremiumUnlocked {
+            paywallCoordinator.show(sourceView: NSApp.keyWindow?.contentView)
+            return
+        }
+        switch destination.format {
+        case .pdf:
+            let requests = eligibleItems.map { item in
+                let outputURL = OutputURLResolver.availableURL(
+                    directory: destination.directoryURL,
+                    baseName: URL(fileURLWithPath: item.source.displayName)
+                        .deletingPathExtension()
+                        .lastPathComponent,
+                    extension: "pdf"
+                )
+                return MergeRequest(
+                    inputs: [PDFInput(source: item.source, password: item.password.nilIfEmpty)],
+                    outputURL: outputURL,
+                    outputFormat: .pdf,
+                    pageIndicesBySource: [item.id: item.selectedPageIndices.sorted()]
+                )
+            }
+            Task {
+                await queue.enqueuePDFConversions(requests)
+                selection = .tasks
+            }
+        case .word:
+            enqueueWordConversions(eligibleItems, outputDirectory: destination.directoryURL)
+        case .image(let format):
+            let request = BatchImageRequest(
+                inputs: eligibleItems.map { PDFInput(source: $0.source, password: $0.password.nilIfEmpty) },
+                outputDirectory: destination.directoryURL,
+                imageFormat: format,
+                pageIndicesBySource: Dictionary(
+                    uniqueKeysWithValues: eligibleItems.map { ($0.id, $0.selectedPageIndices.sorted()) }
+                )
+            )
+            Task {
+                await queue.enqueueBatchImages(request)
+                selection = .tasks
+            }
         }
     }
 
-    func enqueueConversions() {
-        let requests = conversionItems.compactMap { item -> ConversionRequest? in
+    private func enqueueWordConversions(_ items: [WorkspacePDF], outputDirectory: URL) {
+        let requests = items.compactMap { item -> ConversionRequest? in
             let selectedPages = item.selectedPageIndices.sorted()
             guard !selectedPages.isEmpty else { return nil }
             return ConversionRequest(
@@ -185,7 +218,7 @@ final class AppModel: ObservableObject {
 
     func updateTaskPreview() {
         guard let task = tasks.first(where: { selectedTaskIDs.contains($0.id) }),
-              let path = task.previewPDFPath else {
+              let path = task.representativePath else {
             clearTaskPreview()
             return
         }
@@ -193,15 +226,8 @@ final class AppModel: ObservableObject {
         taskPreviewLoadTask?.cancel()
         taskPreviewTaskID = task.id
         taskPreviewPath = path
+        taskPreviewPath = path
         taskPreviewItem = nil
-        taskPreviewLoadTask = Task { [weak self] in
-            guard let self else { return }
-            let item = await self.inspect([URL(fileURLWithPath: path)]).first
-            guard !Task.isCancelled,
-                  self.selectedTaskIDs.contains(task.id),
-                  self.taskPreviewPath == path else { return }
-            self.taskPreviewItem = item
-        }
     }
 
     func clearMergeItems() {
@@ -243,8 +269,13 @@ final class AppModel: ObservableObject {
             }
             if inspected.contains(where: \.source.isLocked) {
                 if task.kind == .merge || task.kind == .batchImage {
-                    appendUnique(inspected, to: &mergeItems)
-                    selection = .merge
+                    if task.kind == .batchImage {
+                        appendUnique(inspected, to: &conversionItems)
+                        selection = .convert
+                    } else {
+                        appendUnique(inspected, to: &mergeItems)
+                        selection = .merge
+                    }
                 } else {
                     appendUnique(inspected, to: &conversionItems)
                     selection = .convert
@@ -262,11 +293,13 @@ final class AppModel: ObservableObject {
                 let taskID = await queue.enqueueMerge(request)
                 mergeInputsByTask[taskID] = Set(inspected.map(\.id))
             } else if task.kind == .batchImage {
-                guard let destination = FilePanel.chooseBatchImageDestination() else { return }
+                guard let destination = FilePanel.chooseConversionDestination(),
+                      case .image(let format) = destination.format else { return }
                 let request = BatchImageRequest(
                     inputs: inspected.map { PDFInput(source: $0.source, password: nil) },
                     outputDirectory: destination.directoryURL,
-                    imageFormat: destination.format
+                    imageFormat: format,
+                    pageIndicesBySource: [:]
                 )
                 await queue.enqueueBatchImages(request)
             } else {
@@ -405,11 +438,4 @@ private extension ProcessingTaskRecord {
         outputPaths?.first ?? outputPath ?? inputPaths.first
     }
 
-    var previewPDFPath: String? {
-        let output = outputPaths?.first ?? outputPath
-        if let output, URL(fileURLWithPath: output).pathExtension.lowercased() == "pdf" {
-            return output
-        }
-        return inputPaths.first { URL(fileURLWithPath: $0).pathExtension.lowercased() == "pdf" }
-    }
 }

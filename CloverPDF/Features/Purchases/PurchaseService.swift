@@ -4,10 +4,10 @@ import StoreKit
 
 @MainActor
 final class PurchaseService: ObservableObject {
-    static let product3Months = "com.lingchen.cloverpdf.subscription.3months"
-    static let product6Months = "com.lingchen.cloverpdf.subscription.6months"
-    static let product12Months = "com.lingchen.cloverpdf.subscription.12months"
-    static let lifetimeProduct = "com.lingchen.cloverpdf.lifetime"
+    static let product3Months = "pdf_buy_three_month"
+    static let product6Months = "pdf_buy_six_month"
+    static let product12Months = "pdf_buy_one_year"
+    static let lifetimeProduct = "com.lingchen.pdf.unlockall"
 
     let manager: MacPurchaseManager
     private var cancellable: AnyCancellable?
@@ -20,7 +20,24 @@ final class PurchaseService: ObservableObject {
                 Self.product6Months,
                 Self.product3Months,
             ],
-            lifetimeProductID: Self.lifetimeProduct
+            lifetimeProductID: Self.lifetimeProduct,
+            plans: [
+                MacPurchasePlan(
+                    productID: Self.product12Months,
+                    durationMonths: 12,
+                    originalPriceMultiplier: 2
+                ),
+                MacPurchasePlan(
+                    productID: Self.product6Months,
+                    durationMonths: 6,
+                    originalPriceMultiplier: 2
+                ),
+                MacPurchasePlan(
+                    productID: Self.product3Months,
+                    durationMonths: 3,
+                    originalPriceMultiplier: 3
+                ),
+            ]
         ))
         cancellable = manager.objectWillChange.sink { [weak self] _ in
             self?.objectWillChange.send()
@@ -62,16 +79,7 @@ final class CloverPaywallCoordinator {
             ),
             productsProvider: {
                 await manager.loadProducts()
-                return manager.products.map { product in
-                    MacPaywallProduct(
-                        productID: product.id,
-                        title: Self.title(for: product.id),
-                        subtitle: Self.subtitle(for: product.id),
-                        currentPrice: product.displayPrice,
-                        badge: product.id == PurchaseService.lifetimeProduct ? String(localized: "Best value") : nil,
-                        isEnabled: !manager.activeProductIDs.contains(product.id)
-                    )
-                }
+                return Self.purchaseProducts(from: manager)
             },
             isUnlocked: { manager.isUnlocked },
             purchaseHandler: { productID, window in
@@ -84,7 +92,10 @@ final class CloverPaywallCoordinator {
             }
         )
         self.presenter = presenter
-        presenter.show(sourceWindowToHide: sourceView?.window)
+        // Keep CloverPDF visible behind the purchase sheet. The shared presenter
+        // hides this window when it is supplied, which makes sandbox checkout
+        // appear to close the app when the payment sheet changes focus.
+        presenter.show(sourceWindowToHide: nil)
     }
 
     private static func title(for productID: String) -> String {
@@ -101,5 +112,74 @@ final class CloverPaywallCoordinator {
         productID == PurchaseService.lifetimeProduct
             ? String(localized: "One purchase, permanent access")
             : String(localized: "Auto-renewable subscription")
+    }
+
+    private static func purchaseProducts(from manager: MacPurchaseManager) -> [MacPaywallProduct] {
+        var products: [MacPaywallProduct] = []
+        if let lifetime = manager.products.first(where: { $0.id == PurchaseService.lifetimeProduct }) {
+            products.append(MacPaywallProduct(
+                productID: lifetime.id,
+                title: title(for: lifetime.id),
+                subtitle: subtitle(for: lifetime.id),
+                originalPrice: manager.originalDisplayPrice(for: lifetime.id, multiplier: 2),
+                currentPrice: lifetime.displayPrice,
+                badge: String(localized: "Best value"),
+                isEnabled: !manager.activeProductIDs.contains(lifetime.id)
+            ))
+        }
+        for productID in [
+            PurchaseService.product12Months,
+            PurchaseService.product6Months,
+            PurchaseService.product3Months,
+        ] {
+            guard let product = manager.products.first(where: { $0.id == productID }) else { continue }
+            let plan = manager.configuration.plans.first { $0.productID == productID }
+            let multiplier = originalPriceMultiplier(
+                for: product,
+                manager: manager,
+                plan: plan
+            )
+            products.append(MacPaywallProduct(
+                productID: product.id,
+                title: title(for: product.id),
+                subtitle: subtitle(for: product.id),
+                originalPrice: plan.flatMap { _ in
+                    manager.originalDisplayPrice(for: product.id, multiplier: multiplier)
+                },
+                currentPrice: product.displayPrice,
+                badge: badge(for: product.id),
+                isEnabled: !manager.activeProductIDs.contains(product.id)
+            ))
+        }
+        return products
+    }
+
+    private static func badge(for productID: String) -> String {
+        switch productID {
+        case PurchaseService.product12Months:
+            String(localized: "Economical")
+        case PurchaseService.product6Months, PurchaseService.product3Months:
+            String(localized: "Limited-time discount")
+        default:
+            ""
+        }
+    }
+
+    private static func originalPriceMultiplier(
+        for product: Product,
+        manager: MacPurchaseManager,
+        plan: MacPurchasePlan?
+    ) -> Decimal {
+        guard product.id == PurchaseService.product3Months,
+              let sixMonthProduct = manager.products.first(where: {
+                  $0.id == PurchaseService.product6Months
+              }) else {
+            return plan?.originalPriceMultiplier ?? 1
+        }
+        let threeMonthAtThree = (product.price as NSDecimalNumber)
+            .multiplying(by: 3)
+        let sixMonthAtTwo = (sixMonthProduct.price as NSDecimalNumber)
+            .multiplying(by: 2)
+        return threeMonthAtThree.compare(sixMonthAtTwo) == .orderedDescending ? 2 : 3
     }
 }

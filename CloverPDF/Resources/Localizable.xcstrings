@@ -698,6 +698,47 @@
         }
       }
     },
+    "Choose Conversion Output Folder" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgabeordner für Konvertierung wählen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose Conversion Output Folder"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "変換出力フォルダを選択"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "변환 출력 폴더 선택"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите папку для результатов преобразования"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择转换输出文件夹"
+          }
+        }
+      }
+    },
     "Clear" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -861,6 +902,47 @@
         }
       }
     },
+    "Combine multiple files into one file. Export as PNG, JPG, PDF, or Word." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehrere Dateien zu einer Datei zusammenführen. Export als PNG, JPG, PDF oder Word."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Combine multiple files into one file. Export as PNG, JPG, PDF, or Word."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "複数のファイルを1つに結合します。PNG、JPG、PDF、Wordに書き出せます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "여러 파일을 하나로 병합합니다. PNG, JPG, PDF, Word로 내보낼 수 있습니다."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Объединяйте несколько файлов в один. Экспорт в PNG, JPG, PDF или Word."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将多个文件合并成一个文件，支持导出 PNG、JPG、PDF、Word。"
+          }
+        }
+      }
+    },
     "Completed" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -984,6 +1066,47 @@
         }
       }
     },
+    "Convert files to other formats. Export as PNG, JPG, PDF, or Word." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateien in andere Formate konvertieren. Export als PNG, JPG, PDF oder Word."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Convert files to other formats. Export as PNG, JPG, PDF, or Word."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ファイルを別の形式に変換します。PNG、JPG、PDF、Wordに書き出せます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "파일을 다른 형식으로 변환합니다. PNG, JPG, PDF, Word로 내보낼 수 있습니다."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Преобразуйте файлы в другие форматы. Экспорт в PNG, JPG, PDF или Word."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将文件转换成其他格式，支持导出 PNG、JPG、PDF、Word。"
+          }
+        }
+      }
+    },
     "Convert to Word" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1021,6 +1144,47 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "转为 Word"
+          }
+        }
+      }
+    },
+    "Converting" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird konvertiert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Converting"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "変換中"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "변환 중"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Конвертация"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "转换中"
           }
         }
       }
@@ -1188,6 +1352,47 @@
         }
       }
     },
+    "Economical" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preiswert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Economical"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "お得"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "경제적"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выгодно"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "经济实惠"
+          }
+        }
+      }
+    },
     "End: %lld" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1266,6 +1471,47 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "请先输入 PDF 密码再重试。"
+          }
+        }
+      }
+    },
+    "Export PNG, JPG, PDF, or Word files" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PNG-, JPG-, PDF- oder Word-Dateien exportieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export PNG, JPG, PDF, or Word files"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PNG、JPG、PDF、Wordファイルを書き出す"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PNG, JPG, PDF 또는 Word 파일로 내보내기"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Экспорт файлов PNG, JPG, PDF или Word"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导出PNG、JPG、PDF、Word文件"
           }
         }
       }
@@ -1638,6 +1884,47 @@
         }
       }
     },
+    "JPG Merge" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JPG-Zusammenführung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JPG Merge"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JPG結合"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JPG 병합"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Объединение JPG"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JPG合并"
+          }
+        }
+      }
+    },
     "Lifetime Unlock" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1679,6 +1966,47 @@
         }
       }
     },
+    "Limited-time discount" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeitlich begrenzter Rabatt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limited-time discount"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "期間限定割引"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기간 한정 할인"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скидка на ограниченный период"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "限时折扣"
+          }
+        }
+      }
+    },
     "Merge" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1716,6 +2044,47 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "合并"
+          }
+        }
+      }
+    },
+    "Merge as PNG, JPG, PDF, or Word files" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als PNG-, JPG-, PDF- oder Word-Datei zusammenführen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merge as PNG, JPG, PDF, or Word files"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PNG、JPG、PDF、Wordファイルに結合"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PNG, JPG, PDF 또는 Word 파일로 병합"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Объединить в файл PNG, JPG, PDF или Word"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "合并为PNG、JPG、PDF、Word文件"
           }
         }
       }
@@ -2294,6 +2663,129 @@
         }
       }
     },
+    "PDF to JPG" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF in JPG"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF to JPG"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDFをJPGに変換"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF를 JPG로"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF в JPG"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF转JPG"
+          }
+        }
+      }
+    },
+    "PDF to PDF" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF in PDF"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF to PDF"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDFをPDFに変換"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF를 PDF로"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF в PDF"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF转PDF"
+          }
+        }
+      }
+    },
+    "PDF to PNG" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF in PNG"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF to PNG"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDFをPNGに変換"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF를 PNG로"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF в PNG"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF转PNG"
+          }
+        }
+      }
+    },
     "PDF to Word" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2330,7 +2822,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "PDF 转 Word"
+            "value" : "PDF转Word"
           }
         }
       }
@@ -2494,6 +2986,47 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "PNG 图片"
+          }
+        }
+      }
+    },
+    "PNG Merge" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PNG-Zusammenführung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PNG Merge"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PNG結合"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PNG 병합"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Объединение PNG"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PNG合并"
           }
         }
       }
@@ -2949,43 +3482,43 @@
         }
       }
     },
-    "Scanned PDF: OCR is not included" : {
+    "Scanned PDF: OCR will be used" : {
       "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gescanntes PDF: OCR ist nicht enthalten"
+            "value" : "Gescanntes PDF: OCR wird verwendet"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scanned PDF: OCR is not included"
+            "value" : "Scanned PDF: OCR will be used"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "スキャンPDF：OCRは含まれません"
+            "value" : "スキャンPDF：OCRを使用します"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "스캔 PDF: OCR은 포함되지 않음"
+            "value" : "스캔 PDF: OCR 사용"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Сканированный PDF: OCR не поддерживается"
+            "value" : "Сканированный PDF: будет использовано OCR"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "扫描版 PDF：当前不含 OCR"
+            "value" : "扫描版 PDF：将使用 OCR"
           }
         }
       }
@@ -3806,6 +4339,47 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "等待中"
+          }
+        }
+      }
+    },
+    "Word Merge" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Word-Zusammenführung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Word Merge"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Word結合"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Word 병합"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Объединение Word"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Word合并"
           }
         }
       }

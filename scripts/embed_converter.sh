@@ -2,32 +2,20 @@
 set -euo pipefail
 
 SOURCE="$SRCROOT/converter/dist/cloverpdf-converter"
-HELPERS_DIR="$TARGET_BUILD_DIR/$CONTENTS_FOLDER_PATH/Helpers"
+HELPERS_DIR="$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/Converter"
 DESTINATION="$HELPERS_DIR/cloverpdf-converter"
 SCRIPT_RESOURCE="$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/cloverpdf_converter.py"
 
 if [[ ! -x "$SOURCE" ]]; then
-  if [[ "$CONFIGURATION" == "Release" ]]; then
-    echo "error: Build the converter with scripts/build_converter.sh before a Release build" >&2
-    exit 1
-  fi
-  echo "warning: converter helper is missing; Debug will use the bundled Python script"
-  exit 0
+  echo "error: Build the converter with scripts/build_converter.sh before building CloverPDF" >&2
+  exit 1
 fi
 
 mkdir -p "$HELPERS_DIR"
+rm -rf "$DESTINATION"
+rm -rf "$TARGET_BUILD_DIR/$CONTENTS_FOLDER_PATH/Helpers/cloverpdf-converter"
 ditto "$SOURCE" "$DESTINATION"
-chmod 755 "$DESTINATION"
+find "$DESTINATION" -type d -name _CodeSignature -prune -exec rm -rf {} +
+chmod 755 "$DESTINATION/cloverpdf-converter"
 
-if [[ "$CONFIGURATION" == "Release" ]]; then
-  rm -f "$SCRIPT_RESOURCE"
-fi
-
-if [[ "${CODE_SIGNING_ALLOWED:-NO}" == "YES" && -n "${EXPANDED_CODE_SIGN_IDENTITY:-}" ]]; then
-  /usr/bin/codesign \
-    --force \
-    --options runtime \
-    --entitlements "$SRCROOT/converter/CloverPDFConverter.entitlements" \
-    --sign "$EXPANDED_CODE_SIGN_IDENTITY" \
-    "$DESTINATION"
-fi
+rm -f "$SCRIPT_RESOURCE"

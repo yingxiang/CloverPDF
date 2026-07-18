@@ -8,7 +8,7 @@ struct ContentView: View {
         HStack(spacing: 0) {
             if isSidebarVisible {
                 List(AppSection.allCases, selection: $model.selection) { section in
-                    Label(section.localizedTitle, systemImage: section.icon)
+                    sidebarLabel(for: section)
                         .tag(section)
                 }
                 .listStyle(.sidebar)
@@ -50,8 +50,7 @@ struct ContentView: View {
             ToolbarItemGroup(placement: .primaryAction) {
                 if model.selection == .merge || model.selection == .convert {
                     Button {
-                        let destination: AppSection = model.selection == .convert ? .convert : .merge
-                        model.importPDFs(FilePanel.openPDFs(), destination: destination)
+                        model.importPDFs(FilePanel.openPDFs(), destination: model.selection)
                     } label: {
                         Label("Add PDF", systemImage: "doc.badge.plus")
                     }
@@ -98,7 +97,21 @@ struct ContentView: View {
     }
 
     private var currentPDFItemsAreEmpty: Bool {
-        model.selection == .merge ? model.mergeItems.isEmpty : model.conversionItems.isEmpty
+        switch model.selection {
+        case .merge: model.mergeItems.isEmpty
+        case .convert: model.conversionItems.isEmpty
+        case .tasks, .settings: true
+        }
+    }
+
+    @ViewBuilder
+    private func sidebarLabel(for section: AppSection) -> some View {
+        if let tip = section.localizedTip {
+            Label(section.localizedTitle, systemImage: section.icon)
+                .help(tip)
+        } else {
+            Label(section.localizedTitle, systemImage: section.icon)
+        }
     }
 
     private var terminalTaskStates: Set<ProcessingTaskState> {
@@ -118,10 +131,21 @@ struct ContentView: View {
 private extension AppSection {
     var localizedTitle: String {
         switch self {
-        case .merge: String(localized: "Merge PDFs")
-        case .convert: String(localized: "PDF to Word")
+        case .merge: String(localized: "Merge")
+        case .convert: String(localized: "Convert")
         case .tasks: String(localized: "Tasks")
         case .settings: String(localized: "Settings")
+        }
+    }
+
+    var localizedTip: String? {
+        switch self {
+        case .merge:
+            String(localized: "Merge as PNG, JPG, PDF, or Word files")
+        case .convert:
+            String(localized: "Export PNG, JPG, PDF, or Word files")
+        case .tasks, .settings:
+            nil
         }
     }
 

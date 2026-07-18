@@ -4,6 +4,21 @@ import XCTest
 @testable import CloverPDF
 
 final class PDFKitMergerTests: XCTestCase {
+    func testSecurityScopedBookmarkPreservesChineseDirectoryPath() throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("请款单", isDirectory: true)
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory.deletingLastPathComponent()) }
+        let sourceURL = try makePDF(pageCount: 1, name: "20250210", directory: directory)
+
+        let source = try PDFInspector().inspect(url: sourceURL)
+        let resolvedURL = try BookmarkService.resolve(source)
+
+        XCTAssertEqual(source.path, sourceURL.standardizedFileURL.path(percentEncoded: false))
+        XCTAssertEqual(resolvedURL.path(percentEncoded: false), source.path)
+    }
+
     @MainActor
     func testThumbnailContainerDoesNotExpandToLoadedImageSize() {
         let view = PDFThumbnailContainerView()
@@ -90,7 +105,8 @@ final class PDFKitMergerTests: XCTestCase {
         let request = BatchImageRequest(
             inputs: [PDFInput(source: source, password: nil)],
             outputDirectory: outputDirectory,
-            imageFormat: .jpeg
+            imageFormat: .jpeg,
+            pageIndicesBySource: [:]
         )
 
         let files = try await PDFImageExporter().export(request)
@@ -118,7 +134,8 @@ final class PDFKitMergerTests: XCTestCase {
         let request = BatchImageRequest(
             inputs: inputs,
             outputDirectory: outputDirectory,
-            imageFormat: .png
+            imageFormat: .png,
+            pageIndicesBySource: [:]
         )
 
         let outputs = try await PDFImageExporter().export(request)
@@ -322,7 +339,8 @@ final class TaskQueueActorTests: XCTestCase {
         let request = BatchImageRequest(
             inputs: inputs,
             outputDirectory: URL(fileURLWithPath: "/tmp/output"),
-            imageFormat: .png
+            imageFormat: .png,
+            pageIndicesBySource: [:]
         )
 
         let taskIDs = await queue.enqueueBatchImages(request)

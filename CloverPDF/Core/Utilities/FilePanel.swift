@@ -8,9 +8,15 @@ enum FilePanel {
         let format: MergeOutputFormat
     }
 
-    struct BatchImageDestination {
+    enum ConversionFormat {
+        case pdf
+        case word
+        case image(RasterImageFormat)
+    }
+
+    struct ConversionDestination {
         let directoryURL: URL
-        let format: RasterImageFormat
+        let format: ConversionFormat
     }
 
     static func openPDFs() -> [URL] {
@@ -32,7 +38,7 @@ enum FilePanel {
 
     static func saveMergedOutput(suggestedName: String = MergeFilenameGenerator.filename()) -> MergeDestination? {
         let panel = FileSavePanel()
-        panel.allowedContentTypes = [.pdf, .png, .jpeg]
+        panel.allowedContentTypes = [.pdf, .png, .jpeg, wordContentType]
         panel.canCreateDirectories = true
         panel.directoryURL = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first
         panel.nameFieldStringValue = URL(fileURLWithPath: suggestedName)
@@ -47,26 +53,32 @@ enum FilePanel {
         )
     }
 
-    static func chooseBatchImageDestination() -> BatchImageDestination? {
+    static func chooseConversionDestination() -> ConversionDestination? {
         let panel = FileDirectoryPanel()
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
         panel.canCreateDirectories = true
         panel.allowsMultipleSelection = false
-        panel.allowedContentTypes = [.png, .jpeg]
+        panel.allowedContentTypes = [wordContentType, .pdf, .png, .jpeg]
         panel.directoryURL = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first
         panel.prompt = String(localized: "Choose")
-        panel.title = String(localized: "Choose Batch Output Folder")
+        panel.title = String(localized: "Choose Conversion Output Folder")
         guard panel.runModalWithVisibleFormat() == .OK, let url = panel.url else { return nil }
-        return BatchImageDestination(
+        let format: ConversionFormat = switch panel.selectedContentType {
+        case .pdf: .pdf
+        case .png: .image(.png)
+        case .jpeg: .image(.jpeg)
+        default: .word
+        }
+        return ConversionDestination(
             directoryURL: url,
-            format: panel.selectedContentType == .jpeg ? .jpeg : .png
+            format: format
         )
     }
 
     private static func outputURL(_ url: URL, contentType: UTType) -> URL {
         guard let fileExtension = contentType.preferredFilenameExtension else { return url }
-        let knownExtensions = Set(["pdf", "png", "jpg", "jpeg"])
+        let knownExtensions = Set(["pdf", "png", "jpg", "jpeg", "docx"])
         let baseURL = knownExtensions.contains(url.pathExtension.lowercased())
             ? url.deletingPathExtension()
             : url
@@ -74,7 +86,14 @@ enum FilePanel {
     }
 
     private static func mergeOutputFormat(for contentType: UTType) -> MergeOutputFormat {
-        contentType == .png ? .image(.png) : (contentType == .jpeg ? .image(.jpeg) : .pdf)
+        if contentType == .png { return .image(.png) }
+        if contentType == .jpeg { return .image(.jpeg) }
+        if contentType == wordContentType { return .word }
+        return .pdf
+    }
+
+    private static var wordContentType: UTType {
+        UTType(filenameExtension: "docx") ?? .data
     }
 
 }
@@ -102,7 +121,7 @@ private final class FileSavePanel: NSSavePanel {
 
 @MainActor
 private final class FileDirectoryPanel: NSOpenPanel {
-    private(set) var selectedContentType: UTType = .png
+    private(set) var selectedContentType: UTType = .data
     private var formatAccessory: FileFormatAccessory?
 
     override var allowedContentTypes: [UTType] {
@@ -216,8 +235,6 @@ private final class FileFormatAccessory: NSObject {
     }
 
     private static func displayName(for contentType: UTType) -> String {
-        contentType.localizedDescription
-            ?? contentType.preferredFilenameExtension?.uppercased()
-            ?? contentType.identifier
+        contentType.preferredFilenameExtension?.uppercased() ?? contentType.identifier
     }
 }

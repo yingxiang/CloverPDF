@@ -7,11 +7,19 @@ final class PDFKitMerger: PDFMerging, @unchecked Sendable {
         try await Task.detached(priority: .userInitiated) {
             switch request.outputFormat {
             case .pdf:
-                let pages = try PDFPagePipeline.loadPages(from: request.inputs)
+                let pages = try PDFPagePipeline.loadPages(
+                    from: request.inputs,
+                    pageIndicesBySource: request.pageIndicesBySource
+                )
                 try PDFPagePipeline.writePDF(pages, to: request.outputURL)
             case .image(let format):
-                let pages = try PDFPagePipeline.loadNamedPages(from: request.inputs)
+                let pages = try PDFPagePipeline.loadNamedPages(
+                    from: request.inputs,
+                    pageIndicesBySource: request.pageIndicesBySource
+                )
                 try PDFPageImageRenderer.writeLongImage(pages, format: format, to: request.outputURL)
+            case .word:
+                throw CloverPDFError.converterProtocol
             }
             return request.outputURL
         }.value
@@ -21,7 +29,10 @@ final class PDFKitMerger: PDFMerging, @unchecked Sendable {
 final class PDFImageExporter: PDFImageExporting, @unchecked Sendable {
     func export(_ request: BatchImageRequest) async throws -> [URL] {
         try await Task.detached(priority: .userInitiated) {
-            let pages = try PDFPagePipeline.loadNamedPages(from: request.inputs)
+            let pages = try PDFPagePipeline.loadNamedPages(
+                from: request.inputs,
+                pageIndicesBySource: request.pageIndicesBySource
+            )
             return try PDFPageImageRenderer.writeDocumentImages(
                 pages,
                 format: request.imageFormat,
@@ -39,11 +50,18 @@ enum PDFPagePipeline {
         let document: PDFDocument
     }
 
-    static func loadPages(from inputs: [PDFInput]) throws -> [PDFPage] {
-        try loadNamedPages(from: inputs).compactMap { $0.page.copy() as? PDFPage }
+    static func loadPages(
+        from inputs: [PDFInput],
+        pageIndicesBySource: [UUID: [Int]] = [:]
+    ) throws -> [PDFPage] {
+        try loadNamedPages(from: inputs, pageIndicesBySource: pageIndicesBySource)
+            .compactMap { $0.page.copy() as? PDFPage }
     }
 
-    static func loadNamedPages(from inputs: [PDFInput]) throws -> [NamedPage] {
+    static func loadNamedPages(
+        from inputs: [PDFInput],
+        pageIndicesBySource: [UUID: [Int]] = [:]
+    ) throws -> [NamedPage] {
         guard !inputs.isEmpty else { throw CloverPDFError.noPages }
         var pages: [NamedPage] = []
         for (sourceIndex, input) in inputs.enumerated() {
@@ -51,7 +69,8 @@ enum PDFPagePipeline {
             let url = try BookmarkService.resolve(input.source)
             try BookmarkService.withAccess(to: url) {
                 let document = try openDocument(at: url, password: input.password)
-                for pageIndex in 0..<document.pageCount {
+                let requestedPages = pageIndicesBySource[input.source.id] ?? Array(0..<document.pageCount)
+                for pageIndex in requestedPages where pageIndex >= 0 && pageIndex < document.pageCount {
                     try Task.checkCancellation()
                     guard let page = document.page(at: pageIndex) else { continue }
                     pages.append(NamedPage(

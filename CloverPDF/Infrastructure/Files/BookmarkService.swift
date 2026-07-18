@@ -1,8 +1,12 @@
 import Foundation
 
 enum BookmarkService {
-    static func create(for url: URL) -> Data? {
-        try? url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
+    static func create(for url: URL) throws -> Data {
+        try url.standardizedFileURL.bookmarkData(
+            options: [.withSecurityScope, .securityScopeAllowOnlyReadAccess],
+            includingResourceValuesForKeys: nil,
+            relativeTo: nil
+        )
     }
 
     static func resolve(_ source: PDFSource) throws -> URL {
@@ -14,7 +18,7 @@ enum BookmarkService {
             relativeTo: nil,
             bookmarkDataIsStale: &stale
         )
-        return url
+        return url.standardizedFileURL
     }
 
     static func withAccess<T>(to url: URL, operation: () throws -> T) rethrows -> T {

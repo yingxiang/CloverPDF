@@ -2,6 +2,7 @@ import Foundation
 
 private enum PendingOperation: Sendable {
     case merge(MergeRequest)
+    case exportPDF(MergeRequest)
     case batchImage(BatchImageRequest)
     case convert(ConversionRequest, consumesTrial: Bool)
 }
@@ -77,14 +78,15 @@ actor TaskQueueActor {
             let itemRequest = BatchImageRequest(
                 inputs: [input],
                 outputDirectory: request.outputDirectory,
-                imageFormat: request.imageFormat
+                imageFormat: request.imageFormat,
+                pageIndicesBySource: request.pageIndicesBySource
             )
             tasks.append(ProcessingTaskRecord(
                 id: id,
                 kind: .batchImage,
                 title: Self.batchOutputName(input: input, format: request.imageFormat),
                 inputPaths: [input.source.path],
-                inputPageCount: input.source.pageCount,
+                inputPageCount: request.pageIndicesBySource[input.source.id]?.count ?? input.source.pageCount,
                 inputFileSize: input.source.fileSize,
                 targetDirectoryPath: request.outputDirectory.path,
                 state: .pending,
@@ -92,6 +94,32 @@ actor TaskQueueActor {
                 createdAt: createdAt
             ))
             operations[id] = .batchImage(itemRequest)
+            return id
+        }
+        persistAndRun()
+        return taskIDs
+    }
+
+    func enqueuePDFConversions(_ requests: [MergeRequest]) -> [UUID] {
+        let createdAt = Date()
+        let taskIDs = requests.map { request -> UUID in
+            let id = UUID()
+            let input = request.inputs[0]
+            let pageCount = request.pageIndicesBySource[input.source.id]?.count ?? input.source.pageCount
+            tasks.append(ProcessingTaskRecord(
+                id: id,
+                kind: .convert,
+                title: request.outputURL.lastPathComponent,
+                inputPaths: [input.source.path],
+                inputPageCount: pageCount,
+                inputFileSize: input.source.fileSize,
+                targetDirectoryPath: request.outputURL.deletingLastPathComponent().path,
+                conversionPageIndices: request.pageIndicesBySource[input.source.id],
+                state: .pending,
+                progress: 0,
+                createdAt: createdAt
+            ))
+            operations[id] = .exportPDF(request)
             return id
         }
         persistAndRun()
@@ -231,6 +259,8 @@ actor TaskQueueActor {
     private func execute(_ operation: PendingOperation, id: UUID) async throws -> [URL] {
         switch operation {
         case .merge(let request):
+            return try await executeMerge(request, id: id)
+        case .exportPDF(let request):
             return [try await merger.merge(request)]
         case .batchImage(let request):
             return try await imageExporter.export(request)
@@ -239,6 +269,35 @@ actor TaskQueueActor {
                 Task { await self?.updateProgress(id: id, fraction: update.fraction) }
             }]
         }
+    }
+
+    private func executeMerge(_ request: MergeRequest, id: UUID) async throws -> [URL] {
+        guard case .word = request.outputFormat else {
+            return [try await merger.merge(request)]
+        }
+        let temporaryPDF = try OutputURLResolver.temporaryURL(extension: "pdf")
+        defer { try? FileManager.default.removeItem(at: temporaryPDF) }
+        let pdfRequest = MergeRequest(inputs: request.inputs, outputURL: temporaryPDF, outputFormat: .pdf)
+        _ = try await merger.merge(pdfRequest)
+        let source = PDFSource(
+            displayName: request.outputURL.deletingPathExtension().appendingPathExtension("pdf").lastPathComponent,
+            path: temporaryPDF.path,
+            bookmark: nil,
+            pageCount: request.inputs.reduce(0) { $0 + $1.source.pageCount },
+            fileSize: Int64((try? temporaryPDF.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0),
+            isLocked: false,
+            appearsScanned: request.inputs.contains { $0.source.appearsScanned }
+        )
+        let conversion = ConversionRequest(
+            input: PDFInput(source: source, password: nil),
+            outputDirectory: request.outputURL.deletingLastPathComponent(),
+            pageIndices: Array(0..<source.pageCount),
+            outputURL: request.outputURL
+        )
+        let output = try await converter.convert(conversion) { [weak self] update in
+            Task { await self?.updateProgress(id: id, fraction: update.fraction) }
+        }
+        return [output]
     }
 
     private func updateProgress(id: UUID, fraction: Double) {

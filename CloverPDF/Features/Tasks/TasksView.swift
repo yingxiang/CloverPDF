@@ -1,19 +1,23 @@
 import AppKit
+import QuickLookUI
 import SwiftUI
 import UniformTypeIdentifiers
 
 struct TasksView: View {
     @EnvironmentObject private var model: AppModel
-    @State private var collapsedSectionIDs: Set<Date> = []
+    @State private var collapsedSectionIDs: Set<String> = []
     @State private var sectionPendingDeletion: TaskSectionModel?
     @State private var selectionAnchor: UUID?
 
     var body: some View {
         Group {
-            if let previewItem = model.taskPreviewItem {
+            if let previewPath = model.taskPreviewPath {
                 HSplitView {
                     taskList
-                    PDFWorkspacePreview(item: previewItem)
+                        .frame(minWidth: 420, idealWidth: 500, maxWidth: .infinity)
+                        .layoutPriority(1)
+                    TaskOutputPreview(path: previewPath)
+                        .frame(minWidth: 360, maxWidth: .infinity, maxHeight: .infinity)
                 }
             } else {
                 taskList
@@ -56,9 +60,14 @@ struct TasksView: View {
                             ForEach(section.tasks) { task in
                                 TaskRow(task: task)
                                     .environmentObject(model)
-                                    .selectableItem(isSelected: model.selectedTaskIDs.contains(task.id)) {
+                                    .listRowInsets(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 8))
+                                    .selectableItem(
+                                        isSelected: model.selectedTaskIDs.contains(task.id),
+                                        outlineColor: Color(nsColor: .controlAccentColor)
+                                    ) {
                                         updateSelection(task.id)
                                     }
+                                    .tint(.primary)
                             }
                         }
                     }
@@ -104,21 +113,47 @@ struct TasksView: View {
     }
 }
 
+private struct TaskOutputPreview: NSViewRepresentable {
+    let path: String
+
+    func makeNSView(context: Context) -> QLPreviewView {
+        let view = ResizableQuickLookView(frame: .zero, style: .normal)!
+        view.autostarts = true
+        view.autoresizingMask = [.width, .height]
+        view.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        view.setContentHuggingPriority(.defaultLow, for: .vertical)
+        view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        view.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        return view
+    }
+
+    func updateNSView(_ view: QLPreviewView, context: Context) {
+        view.previewItem = URL(fileURLWithPath: path) as NSURL
+    }
+}
+
+private final class ResizableQuickLookView: QLPreviewView {
+    override var intrinsicContentSize: NSSize {
+        NSSize(width: NSView.noIntrinsicMetric, height: NSView.noIntrinsicMetric)
+    }
+}
+
 struct TaskSectionModel: Identifiable {
     let date: Date
-    let kind: ProcessingTaskKind
+    let type: TaskDisplayType
     var tasks: [ProcessingTaskRecord]
-    var id: Date { date }
+    var id: String { "\(date.timeIntervalSince1970):\(type.rawValue)" }
     var taskIDs: Set<UUID> { Set(tasks.map(\.id)) }
 
     static func group(_ tasks: [ProcessingTaskRecord]) -> [TaskSectionModel] {
         var sections: [TaskSectionModel] = []
         for task in tasks {
             let sectionDate = Date(timeIntervalSince1970: floor(task.createdAt.timeIntervalSince1970))
-            if let index = sections.firstIndex(where: { $0.date == sectionDate }) {
+            let type = TaskDisplayType(task: task)
+            if let index = sections.firstIndex(where: { $0.date == sectionDate && $0.type == type }) {
                 sections[index].tasks.append(task)
             } else {
-                sections.append(TaskSectionModel(date: sectionDate, kind: task.kind, tasks: [task]))
+                sections.append(TaskSectionModel(date: sectionDate, type: type, tasks: [task]))
             }
         }
         return sections
@@ -140,14 +175,14 @@ private struct TaskSectionHeader: View {
                     Image(systemName: isCollapsed ? "chevron.right" : "chevron.down")
                         .font(.caption2)
                         .frame(width: 10)
-                    Text(section.kind.taskSectionTitle)
+                    Text(section.type.title)
                         .font(.caption)
                         .lineLimit(1)
                         .foregroundStyle(Color.black.opacity(0.75))
                         .padding(.horizontal, 7)
                         .frame(height: 18)
                         .background {
-                            Capsule().fill(section.kind.taskSectionColor)
+                            Capsule().fill(section.type.color)
                         }
                     Text(TaskTimestampFormatter.string(from: section.date))
                         .monospacedDigit()
@@ -188,6 +223,7 @@ enum TaskTimestampFormatter {
 private struct TaskRow: View {
     @EnvironmentObject private var model: AppModel
     @State private var outputAvailability = TaskOutputAvailability.unknown
+    @State private var outputFileSize: Int64?
     let task: ProcessingTaskRecord
 
     var body: some View {
@@ -197,7 +233,8 @@ private struct TaskRow: View {
                 title: displayTitle,
                 titleIsUnavailable: outputAvailability == .missing,
                 pageCount: task.inputPageCount,
-                fileSize: task.inputFileSize,
+                fileSize: displayedFileSize,
+                metadataOverride: metadataOverride,
                 path: directoryPath
             ) {
                 if task.state == .running {
@@ -250,7 +287,7 @@ private struct TaskRow: View {
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 7)
-        .contentShape(Rectangle())
+        .contentShape(RoundedRectangle(cornerRadius: 10).inset(by: 2))
         .contextMenu {
             if outputAvailability == .available {
                 Button("Show in Finder") {
@@ -265,14 +302,42 @@ private struct TaskRow: View {
         .task(id: representativeOutputPath) {
             guard let path = representativeOutputPath else {
                 outputAvailability = .unknown
+                outputFileSize = nil
                 return
             }
             outputAvailability = .unknown
-            let exists = await Task.detached(priority: .utility) {
-                FileManager.default.fileExists(atPath: path)
+            outputFileSize = nil
+            let outputInfo = await Task.detached(priority: .utility) {
+                let url = URL(fileURLWithPath: path)
+                guard FileManager.default.fileExists(atPath: path) else {
+                    return TaskOutputInfo(exists: false, fileSize: nil)
+                }
+                let values = try? url.resourceValues(forKeys: [.fileSizeKey])
+                return TaskOutputInfo(
+                    exists: true,
+                    fileSize: values?.fileSize.map(Int64.init)
+                )
             }.value
             guard !Task.isCancelled else { return }
-            outputAvailability = exists ? .available : .missing
+            outputAvailability = outputInfo.exists ? .available : .missing
+            outputFileSize = outputInfo.fileSize
+        }
+    }
+
+    private var displayedFileSize: Int64? {
+        if task.kind == .convert, task.state == .succeeded {
+            return outputFileSize
+        }
+        return task.inputFileSize
+    }
+
+    private var metadataOverride: String? {
+        guard task.kind == .convert else { return nil }
+        switch task.state {
+        case .pending, .validating, .running:
+            return String(localized: "Converting")
+        case .succeeded, .failed, .cancelled, .interrupted:
+            return nil
         }
     }
 
@@ -323,23 +388,68 @@ private enum TaskOutputAvailability: Equatable {
     case missing
 }
 
+private struct TaskOutputInfo: Sendable {
+    let exists: Bool
+    let fileSize: Int64?
+}
+
+enum TaskDisplayType: String, Hashable {
+    case pdfMerge
+    case pngMerge
+    case jpgMerge
+    case wordMerge
+    case pdfToPDF
+    case pdfToPNG
+    case pdfToJPG
+    case pdfToWord
+
+    init(task: ProcessingTaskRecord) {
+        let path = task.outputPaths?.first ?? task.outputPath ?? task.title
+        let fileExtension = URL(fileURLWithPath: path).pathExtension.lowercased()
+        if task.kind == .merge {
+            self = switch fileExtension {
+            case "png": .pngMerge
+            case "jpg", "jpeg": .jpgMerge
+            case "docx": .wordMerge
+            default: .pdfMerge
+            }
+        } else {
+            self = switch fileExtension {
+            case "png": .pdfToPNG
+            case "jpg", "jpeg": .pdfToJPG
+            case "docx": .pdfToWord
+            default: .pdfToPDF
+            }
+        }
+    }
+
+    var title: String {
+        switch self {
+        case .pdfMerge: String(localized: "PDF Merge")
+        case .pngMerge: String(localized: "PNG Merge")
+        case .jpgMerge: String(localized: "JPG Merge")
+        case .wordMerge: String(localized: "Word Merge")
+        case .pdfToPDF: String(localized: "PDF to PDF")
+        case .pdfToPNG: String(localized: "PDF to PNG")
+        case .pdfToJPG: String(localized: "PDF to JPG")
+        case .pdfToWord: String(localized: "PDF to Word")
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .pdfMerge: Color(red: 251 / 255, green: 192 / 255, blue: 58 / 255)
+        case .pdfToPNG: Color(red: 98 / 255, green: 180 / 255, blue: 232 / 255)
+        case .pdfToWord: Color(red: 159 / 255, green: 212 / 255, blue: 70 / 255)
+        case .pdfToJPG, .pdfToPDF: Color(red: 189 / 255, green: 205 / 255, blue: 214 / 255)
+        case .pngMerge: Color(red: 184 / 255, green: 184 / 255, blue: 176 / 255)
+        case .jpgMerge: Color(red: 224 / 255, green: 200 / 255, blue: 192 / 255)
+        case .wordMerge: Color(red: 163 / 255, green: 181 / 255, blue: 166 / 255)
+        }
+    }
+}
+
 private extension ProcessingTaskKind {
-    var taskSectionTitle: String {
-        switch self {
-        case .merge: String(localized: "PDF Merge")
-        case .batchImage: String(localized: "PDF Batch Conversion")
-        case .convert: String(localized: "PDF to Word Task")
-        }
-    }
-
-    var taskSectionColor: Color {
-        switch self {
-        case .merge: Color(red: 251.0 / 255.0, green: 192.0 / 255.0, blue: 58.0 / 255.0)
-        case .batchImage: Color(red: 98.0 / 255.0, green: 180.0 / 255.0, blue: 232.0 / 255.0)
-        case .convert: Color(red: 159.0 / 255.0, green: 212.0 / 255.0, blue: 70.0 / 255.0)
-        }
-    }
-
     var icon: String {
         switch self {
         case .merge: "square.stack.3d.up"

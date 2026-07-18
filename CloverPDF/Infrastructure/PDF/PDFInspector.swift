@@ -3,11 +3,12 @@ import PDFKit
 
 struct PDFInspector: Sendable {
     func inspect(url: URL) throws -> PDFSource {
-        try BookmarkService.withAccess(to: url) {
-            guard url.pathExtension.lowercased() == "pdf", let document = PDFDocument(url: url) else {
+        let fileURL = url.standardizedFileURL
+        return try BookmarkService.withAccess(to: fileURL) {
+            guard fileURL.pathExtension.lowercased() == "pdf", let document = PDFDocument(url: fileURL) else {
                 throw CloverPDFError.invalidPDF
             }
-            let resourceValues = try? url.resourceValues(forKeys: [.fileSizeKey])
+            let resourceValues = try? fileURL.resourceValues(forKeys: [.fileSizeKey])
             let locked = document.isLocked
             let pageCount = document.pageCount
             let sampleCount = min(pageCount, 3)
@@ -16,9 +17,9 @@ struct PDFInspector: Sendable {
                 return !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             }
             return PDFSource(
-                displayName: url.lastPathComponent,
-                path: url.path,
-                bookmark: BookmarkService.create(for: url),
+                displayName: fileURL.lastPathComponent,
+                path: fileURL.path(percentEncoded: false),
+                bookmark: try BookmarkService.create(for: fileURL),
                 pageCount: pageCount,
                 fileSize: Int64(resourceValues?.fileSize ?? 0),
                 isLocked: locked,

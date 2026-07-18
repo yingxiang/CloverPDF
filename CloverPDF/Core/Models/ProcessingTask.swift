@@ -72,6 +72,19 @@ struct MergeRequest: Sendable {
     let inputs: [PDFInput]
     let outputURL: URL
     let outputFormat: MergeOutputFormat
+    let pageIndicesBySource: [UUID: [Int]]
+
+    init(
+        inputs: [PDFInput],
+        outputURL: URL,
+        outputFormat: MergeOutputFormat,
+        pageIndicesBySource: [UUID: [Int]] = [:]
+    ) {
+        self.inputs = inputs
+        self.outputURL = outputURL
+        self.outputFormat = outputFormat
+        self.pageIndicesBySource = pageIndicesBySource
+    }
 }
 
 enum RasterImageFormat: String, Sendable {
@@ -84,18 +97,28 @@ enum RasterImageFormat: String, Sendable {
 enum MergeOutputFormat: Sendable {
     case pdf
     case image(RasterImageFormat)
+    case word
 }
 
 struct BatchImageRequest: Sendable {
     let inputs: [PDFInput]
     let outputDirectory: URL
     let imageFormat: RasterImageFormat
+    let pageIndicesBySource: [UUID: [Int]]
 }
 
 struct ConversionRequest: Sendable {
     let input: PDFInput
     let outputDirectory: URL
     let pageIndices: [Int]
+    let outputURL: URL?
+
+    init(input: PDFInput, outputDirectory: URL, pageIndices: [Int], outputURL: URL? = nil) {
+        self.input = input
+        self.outputDirectory = outputDirectory
+        self.pageIndices = pageIndices
+        self.outputURL = outputURL
+    }
 }
 
 struct ConversionProgress: Sendable {
