@@ -12,6 +12,36 @@ from converter import cloverpdf_converter
 
 
 class ConverterWorkerTests(unittest.TestCase):
+    def test_table_font_size_scales_with_block_height_and_cell_width(self) -> None:
+        small = cloverpdf_converter.table_font_size(
+            {"text": "short", "height": 8}, 200, 1.0, 12
+        )
+        large = cloverpdf_converter.table_font_size(
+            {"text": "short", "height": 20}, 200, 1.0, 12
+        )
+        constrained = cloverpdf_converter.table_font_size(
+            {"text": "long table cell content", "height": 20}, 60, 1.0, 12
+        )
+
+        self.assertGreater(large, small)
+        self.assertLess(constrained, large)
+
+    def test_regular_table_detection_uses_repeated_geometry_not_text(self) -> None:
+        blocks = []
+        for row in range(6):
+            y = 100 + row * 20
+            blocks.extend([
+                {"text": f"left-{row}", "x": 10, "y": y, "width": 20, "height": 10},
+                {"text": f"middle-{row}", "x": 60, "y": y, "width": 80, "height": 10},
+                {"text": f"right-{row}", "x": 170, "y": y, "width": 30, "height": 10},
+            ])
+
+        table = cloverpdf_converter.detect_regular_table(blocks)
+
+        self.assertIsNotNone(table)
+        self.assertEqual(len(table["rows"]), 6)
+        self.assertEqual(len(table["rows"][0]), 3)
+
     def test_ocr_conversion_does_not_require_input_file_after_recognition(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             output = os.path.join(directory, "output.docx")
@@ -56,6 +86,7 @@ class ConverterWorkerTests(unittest.TestCase):
         self.assertEqual(section_break.paragraph_format.line_spacing.pt, 1)
         body_paragraphs = [paragraph for paragraph in document.paragraphs if paragraph.text]
         self.assertEqual(body_paragraphs[0].runs[0].font.size, body_paragraphs[1].runs[0].font.size)
+        self.assertTrue(body_paragraphs[1].paragraph_format.page_break_before)
 
     def test_footer_requires_bottom_position_and_vertical_isolation(self) -> None:
         page = {"width": 612, "height": 792, "blocks": [

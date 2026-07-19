@@ -13,8 +13,14 @@ struct SettingsView: View {
                     LabeledContent("Free Conversions") {
                         Text(model.remainingTrialConversions.formatted())
                     }
-                    Button("Unlock Premium") {
+                }
+                if !model.purchaseService.isLifetimeUnlocked {
+                    Button {
                         model.paywallCoordinator.show(sourceView: NSApp.keyWindow?.contentView)
+                    } label: {
+                        Text(model.purchaseService.isPremiumUnlocked
+                            ? String(localized: "Premium Purchased")
+                            : String(localized: "Unlock Premium"))
                     }
                     .buttonStyle(.borderedProminent)
                 }

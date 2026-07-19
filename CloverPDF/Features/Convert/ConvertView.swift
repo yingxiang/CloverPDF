@@ -94,9 +94,11 @@ struct ConvertView: View {
 
     private var options: some View {
         HStack(spacing: 12) {
-            Text(String(localized: "\(model.remainingTrialConversions) free conversions remaining"))
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            if !model.purchaseService.isPremiumUnlocked {
+                Text(String(localized: "\(model.remainingTrialConversions) free conversions remaining"))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
             Spacer()
             if !model.purchaseService.isPremiumUnlocked && selectedConversionCount > 1 {
                 Label("Premium required for batch conversion", systemImage: "lock.fill")

@@ -3,6 +3,7 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject private var model: AppModel
     @State private var isSidebarVisible = true
+    @State private var confirmsClearFinishedTasks = false
 
     var body: some View {
         HStack(spacing: 0) {
@@ -69,7 +70,7 @@ struct ContentView: View {
                     .disabled(currentPDFItemsAreEmpty)
                 } else if model.selection == .tasks {
                     Button {
-                        model.clearFinishedTasks()
+                        confirmsClearFinishedTasks = true
                     } label: {
                         Label("Clear Finished", systemImage: "trash")
                     }
@@ -79,6 +80,14 @@ struct ContentView: View {
         }
         .onAppear { updateWindowTitle() }
         .onChange(of: model.selection) { _ in updateWindowTitle() }
+        .alert("Delete Finished Tasks", isPresented: $confirmsClearFinishedTasks) {
+            Button("Cancel", role: .cancel) {}
+            Button("Delete", role: .destructive) {
+                model.clearFinishedTasks()
+            }
+        } message: {
+            Text("Delete all finished tasks?")
+        }
         .sheet(item: $model.previewItem) { item in
             PDFPreviewSheet(item: item)
                 .environmentObject(model)

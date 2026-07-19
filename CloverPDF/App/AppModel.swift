@@ -133,7 +133,11 @@ final class AppModel: ObservableObject {
     func enqueueConversions() {
         let eligibleItems = conversionItems.filter { !$0.selectedPageIndices.isEmpty }
         guard !eligibleItems.isEmpty else { return }
-        guard let destination = FilePanel.chooseConversionDestination() else { return }
+        let suggestedName = eligibleItems[0].source.displayName
+        guard let destination = FilePanel.chooseConversionDestination(
+            suggestedName: suggestedName,
+            isBatch: eligibleItems.count > 1
+        ) else { return }
         if eligibleItems.count > 1 && !purchaseService.isPremiumUnlocked {
             paywallCoordinator.show(sourceView: NSApp.keyWindow?.contentView)
             return
@@ -141,11 +145,9 @@ final class AppModel: ObservableObject {
         switch destination.format {
         case .pdf:
             let requests = eligibleItems.map { item in
-                let outputURL = OutputURLResolver.availableURL(
+                let outputURL = destination.outputURL ?? OutputURLResolver.availableURL(
                     directory: destination.directoryURL,
-                    baseName: URL(fileURLWithPath: item.source.displayName)
-                        .deletingPathExtension()
-                        .lastPathComponent,
+                    baseName: URL(fileURLWithPath: item.source.displayName).deletingPathExtension().lastPathComponent,
                     extension: "pdf"
                 )
                 return MergeRequest(
@@ -160,8 +162,25 @@ final class AppModel: ObservableObject {
                 selection = .tasks
             }
         case .word:
-            enqueueWordConversions(eligibleItems, outputDirectory: destination.directoryURL)
+            enqueueWordConversions(
+                eligibleItems,
+                outputDirectory: destination.directoryURL,
+                outputURL: destination.outputURL
+            )
         case .image(let format):
+            if eligibleItems.count == 1, let item = eligibleItems.first, let outputURL = destination.outputURL {
+                let request = MergeRequest(
+                    inputs: [PDFInput(source: item.source, password: item.password.nilIfEmpty)],
+                    outputURL: outputURL,
+                    outputFormat: .image(format),
+                    pageIndicesBySource: [item.id: item.selectedPageIndices.sorted()]
+                )
+                Task {
+                    await queue.enqueuePDFConversions([request])
+                    selection = .tasks
+                }
+                return
+            }
             let request = BatchImageRequest(
                 inputs: eligibleItems.map { PDFInput(source: $0.source, password: $0.password.nilIfEmpty) },
                 outputDirectory: destination.directoryURL,
@@ -177,14 +196,15 @@ final class AppModel: ObservableObject {
         }
     }
 
-    private func enqueueWordConversions(_ items: [WorkspacePDF], outputDirectory: URL) {
+    private func enqueueWordConversions(_ items: [WorkspacePDF], outputDirectory: URL, outputURL: URL?) {
         let requests = items.compactMap { item -> ConversionRequest? in
             let selectedPages = item.selectedPageIndices.sorted()
             guard !selectedPages.isEmpty else { return nil }
             return ConversionRequest(
                 input: PDFInput(source: item.source, password: item.password.nilIfEmpty),
                 outputDirectory: outputDirectory,
-                pageIndices: selectedPages
+                pageIndices: selectedPages,
+                outputURL: outputURL
             )
         }
         guard !requests.isEmpty else { return }
@@ -293,8 +313,21 @@ final class AppModel: ObservableObject {
                 let taskID = await queue.enqueueMerge(request)
                 mergeInputsByTask[taskID] = Set(inspected.map(\.id))
             } else if task.kind == .batchImage {
-                guard let destination = FilePanel.chooseConversionDestination(),
+                let suggestedName = inspected.first?.source.displayName ?? task.title
+                guard let destination = FilePanel.chooseConversionDestination(
+                    suggestedName: suggestedName,
+                    isBatch: inspected.count > 1
+                ),
                       case .image(let format) = destination.format else { return }
+                if inspected.count == 1, let item = inspected.first, let outputURL = destination.outputURL {
+                    let request = MergeRequest(
+                        inputs: [PDFInput(source: item.source, password: nil)],
+                        outputURL: outputURL,
+                        outputFormat: .image(format)
+                    )
+                    await queue.enqueuePDFConversions([request])
+                    return
+                }
                 let request = BatchImageRequest(
                     inputs: inspected.map { PDFInput(source: $0.source, password: nil) },
                     outputDirectory: destination.directoryURL,

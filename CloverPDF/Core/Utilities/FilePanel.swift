@@ -16,6 +16,7 @@ enum FilePanel {
 
     struct ConversionDestination {
         let directoryURL: URL
+        let outputURL: URL?
         let format: ConversionFormat
     }
 
@@ -53,7 +54,10 @@ enum FilePanel {
         )
     }
 
-    static func chooseConversionDestination() -> ConversionDestination? {
+    static func chooseConversionDestination(suggestedName: String, isBatch: Bool) -> ConversionDestination? {
+        if !isBatch {
+            return saveConvertedOutput(suggestedName: suggestedName)
+        }
         let panel = FileDirectoryPanel()
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
@@ -72,6 +76,32 @@ enum FilePanel {
         }
         return ConversionDestination(
             directoryURL: url,
+            outputURL: nil,
+            format: format
+        )
+    }
+
+    private static func saveConvertedOutput(suggestedName: String) -> ConversionDestination? {
+        let panel = FileSavePanel()
+        panel.allowedContentTypes = [wordContentType, .pdf, .png, .jpeg]
+        panel.canCreateDirectories = true
+        panel.directoryURL = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first
+        panel.nameFieldStringValue = URL(fileURLWithPath: suggestedName)
+            .deletingPathExtension()
+            .lastPathComponent
+        panel.title = String(localized: "Save Converted File")
+        guard panel.runModal() == .OK, let selectedURL = panel.url else { return nil }
+        let contentType = panel.selectedContentType
+        let format: ConversionFormat = switch contentType {
+        case .pdf: .pdf
+        case .png: .image(.png)
+        case .jpeg: .image(.jpeg)
+        default: .word
+        }
+        let outputURL = outputURL(selectedURL, contentType: contentType)
+        return ConversionDestination(
+            directoryURL: outputURL.deletingLastPathComponent(),
+            outputURL: outputURL,
             format: format
         )
     }

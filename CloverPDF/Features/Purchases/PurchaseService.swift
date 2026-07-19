@@ -45,6 +45,7 @@ final class PurchaseService: ObservableObject {
     }
 
     var isPremiumUnlocked: Bool { manager.isUnlocked }
+    var isLifetimeUnlocked: Bool { manager.activeProductIDs.contains(Self.lifetimeProduct) }
 
     func start() {
         manager.start()

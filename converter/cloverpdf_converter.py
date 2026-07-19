@@ -119,10 +119,16 @@ def build_ocr_document(pages: tuple[dict[str, Any], ...], output: str) -> None:
         if page_offset == 0:
             section = document.sections[0]
         else:
-            section = document.add_section(WD_SECTION.NEW_PAGE)
+            section = document.add_section(WD_SECTION.CONTINUOUS)
             minimize_section_break_paragraph(document.paragraphs[-1])
         configure_ocr_section(section, page)
-        add_ocr_page(document, body_page, document_scale, document_font_height)
+        add_ocr_page(
+            document,
+            body_page,
+            document_scale,
+            document_font_height,
+            starts_new_page=page_offset > 0,
+        )
         footer_payloads.append((footer_blocks, page))
     for section, (footer_blocks, page) in zip(document.sections, footer_payloads):
         set_section_footer(section, footer_blocks, page)
@@ -259,21 +265,33 @@ def typical_document_font_height(pages: list[dict[str, Any]]) -> float:
     return ordered[len(ordered) // 2]
 
 
-def add_ocr_page(document: Any, page: dict[str, Any], text_scale: float, typical_font_height: float) -> None:
+def add_ocr_page(
+    document: Any,
+    page: dict[str, Any],
+    text_scale: float,
+    typical_font_height: float,
+    starts_new_page: bool = False,
+) -> None:
     from docx.enum.text import WD_ALIGN_PARAGRAPH
     from docx.oxml.ns import qn
     from docx.shared import Pt
 
-    blocks = select_body_blocks(page.get("blocks", []))
+    table = detect_regular_table(page.get("blocks", []))
+    table_block_ids = table["block_ids"] if table else set()
+    blocks = select_body_blocks([
+        block for block in page.get("blocks", []) if id(block) not in table_block_ids
+    ])
     lines = group_ocr_lines(blocks)
     if not lines:
         return
     left_edge, right_edge = dominant_body_bounds(lines)
     paragraphs = group_ocr_paragraphs(lines, left_edge, right_edge)
     previous_bottom = min(line["y"] for line in lines)
-    for paragraph_lines in paragraphs:
+    for paragraph_index, paragraph_lines in enumerate(paragraphs):
         first = paragraph_lines[0]
         paragraph = document.add_paragraph()
+        if starts_new_page and paragraph_index == 0:
+            paragraph.paragraph_format.page_break_before = True
         paragraph.paragraph_format.space_after = Pt(0)
         paragraph.paragraph_format.space_before = Pt(min(18.0, max(0.0, first["y"] - previous_bottom) * text_scale))
         paragraph.paragraph_format.first_line_indent = Pt(max(0.0, first["x"] - left_edge) * text_scale)
@@ -282,8 +300,10 @@ def add_ocr_page(document: Any, page: dict[str, Any], text_scale: float, typical
         run.font.name = "Arial"
         run._element.get_or_add_rPr().get_or_add_rFonts().set(qn("w:eastAsia"), "PingFang SC")
         run.font.bold = False
-        recognized_height = max(float(line["height"]) for line in paragraph_lines)
-        if typical_font_height * 0.8 <= recognized_height <= typical_font_height * 1.25:
+        heights = sorted(float(line["height"]) for line in paragraph_lines)
+        middle = len(heights) // 2
+        recognized_height = heights[middle] if len(heights) % 2 else (heights[middle - 1] + heights[middle]) / 2
+        if typical_font_height * 0.75 <= recognized_height <= typical_font_height * 1.4:
             recognized_height = typical_font_height
         font_size = max(7.0, min(48.0, recognized_height * 1.25 * text_scale))
         run.font.size = Pt(font_size)
@@ -298,6 +318,159 @@ def add_ocr_page(document: Any, page: dict[str, Any], text_scale: float, typical
             paragraph.alignment = WD_ALIGN_PARAGRAPH.LEFT
         paragraph.paragraph_format.line_spacing = Pt(line_pitch(paragraph_lines) * text_scale)
         previous_bottom = max(line["y"] + line["height"] for line in paragraph_lines)
+    if table:
+        add_regular_table(
+            document,
+            table,
+            float(page["width"]) - 72.0,
+            text_scale,
+            typical_font_height,
+        )
+
+
+def detect_regular_table(blocks: list[dict[str, Any]]) -> dict[str, Any] | None:
+    rows = group_blocks_by_visual_row(blocks)
+    candidates = [row for row in rows if len(row) >= 2]
+    if len(candidates) < 5:
+        return None
+    runs: list[list[list[dict[str, Any]]]] = []
+    for row in candidates:
+        if not runs or len(row) != len(runs[-1][-1]) or not rows_share_columns(runs[-1][-1], row):
+            runs.append([row])
+            continue
+        previous_y = block_center(runs[-1][-1][0])
+        current_y = block_center(row[0])
+        typical_height = max(float(block.get("height", 1)) for block in row)
+        if current_y - previous_y > typical_height * 2.5:
+            runs.append([row])
+        else:
+            runs[-1].append(row)
+    run = max(runs, key=len)
+    if len(run) < 5 or not stable_table_columns(run) or not stable_table_row_gaps(run):
+        return None
+    used_ids = {id(block) for row in run for block in row}
+    return {"rows": run, "block_ids": used_ids}
+
+
+def rows_share_columns(first: list[dict[str, Any]], second: list[dict[str, Any]]) -> bool:
+    heights = [float(block.get("height", 1)) for block in [*first, *second]]
+    tolerance = max(10.0, sorted(heights)[len(heights) // 2] * 1.5)
+    return all(
+        abs(float(left.get("x", 0)) - float(right.get("x", 0))) <= tolerance
+        for left, right in zip(first, second)
+    )
+
+
+def group_blocks_by_visual_row(blocks: list[dict[str, Any]]) -> list[list[dict[str, Any]]]:
+    rows: list[list[dict[str, Any]]] = []
+    for block in sorted(blocks, key=lambda item: (block_center(item), float(item.get("x", 0)))):
+        matching = next((
+            row for row in rows
+            if abs(block_center(block) - sum(block_center(item) for item in row) / len(row))
+            <= max(float(block.get("height", 1)), max(float(item.get("height", 1)) for item in row)) * 0.45
+        ), None)
+        if matching is None:
+            rows.append([block])
+        else:
+            matching.append(block)
+    for row in rows:
+        row.sort(key=lambda item: float(item.get("x", 0)))
+    return rows
+
+
+def stable_table_columns(rows: list[list[dict[str, Any]]]) -> bool:
+    column_count = len(rows[0])
+    heights = sorted(float(block.get("height", 1)) for row in rows for block in row)
+    tolerance = max(10.0, heights[len(heights) // 2] * 1.5)
+    for column in range(column_count):
+        starts = [float(row[column].get("x", 0)) for row in rows]
+        if max(starts) - min(starts) > tolerance:
+            return False
+    return all(
+        min(float(row[column + 1].get("x", 0)) - (float(row[column].get("x", 0)) + float(row[column].get("width", 1))) for row in rows) > -tolerance
+        for column in range(column_count - 1)
+    )
+
+
+def stable_table_row_gaps(rows: list[list[dict[str, Any]]]) -> bool:
+    centers = [sum(block_center(block) for block in row) / len(row) for row in rows]
+    gaps = [current - previous for previous, current in zip(centers, centers[1:])]
+    median = sorted(gaps)[len(gaps) // 2]
+    return median > 0 and max(abs(gap - median) for gap in gaps) <= median * 0.35
+
+
+def block_center(block: dict[str, Any]) -> float:
+    return float(block.get("y", 0)) + float(block.get("height", 1)) / 2
+
+
+def add_regular_table(
+    document: Any,
+    table_data: dict[str, Any],
+    content_width: float,
+    text_scale: float,
+    typical_font_height: float,
+) -> None:
+    from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
+    from docx.enum.text import WD_ALIGN_PARAGRAPH
+    from docx.oxml.ns import qn
+    from docx.shared import Pt
+
+    rows = table_data["rows"]
+    table = document.add_table(rows=len(rows), cols=3)
+    table.style = "Table Grid"
+    table.autofit = False
+    widths = [content_width * 0.12, content_width * 0.73, content_width * 0.15]
+    row_font_limit = table_row_font_limit(rows, text_scale)
+    for row_index, source_row in enumerate(rows):
+        for column_index, block in enumerate(source_row):
+            cell = table.cell(row_index, column_index)
+            cell.width = Pt(widths[column_index])
+            cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+            paragraph = cell.paragraphs[0]
+            paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER if column_index != 1 else WD_ALIGN_PARAGRAPH.LEFT
+            paragraph.paragraph_format.space_before = Pt(0)
+            paragraph.paragraph_format.space_after = Pt(0)
+            paragraph.paragraph_format.line_spacing = 1.0
+            run = paragraph.add_run(str(block.get("text", "")).strip())
+            run.font.name = "Arial"
+            run._element.get_or_add_rPr().get_or_add_rFonts().set(qn("w:eastAsia"), "PingFang SC")
+            run.font.size = Pt(table_font_size(
+                block,
+                widths[column_index],
+                text_scale,
+                typical_font_height,
+                row_font_limit,
+            ))
+
+
+def table_font_size(
+    block: dict[str, Any],
+    cell_width: float,
+    text_scale: float,
+    typical_font_height: float,
+    row_font_limit: float = 16.0,
+) -> float:
+    recognized_height = float(block.get("height", 1))
+    if typical_font_height * 0.75 <= recognized_height <= typical_font_height * 1.4:
+        recognized_height = typical_font_height
+    size = recognized_height * 1.25 * text_scale
+    text = str(block.get("text", "")).strip()
+    width_units = sum(
+        1.0 if ord(character) > 127 else 0.35 if character.isspace() else 0.58
+        for character in text
+    )
+    estimated_width = max(1.0, width_units * size)
+    size *= min(1.0, max(0.55, (cell_width - 8.0) / estimated_width))
+    return max(7.0, min(16.0, row_font_limit, size))
+
+
+def table_row_font_limit(rows: list[list[dict[str, Any]]], text_scale: float) -> float:
+    if len(rows) < 2:
+        return 16.0
+    centers = [sum(block_center(block) for block in row) / len(row) for row in rows]
+    gaps = sorted(current - previous for previous, current in zip(centers, centers[1:]))
+    median_gap = gaps[len(gaps) // 2]
+    return max(8.0, min(16.0, median_gap * text_scale * 0.52))
 
 
 def group_ocr_lines(blocks: list[dict[str, Any]]) -> list[dict[str, Any]]:
