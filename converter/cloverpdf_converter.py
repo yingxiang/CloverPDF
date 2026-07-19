@@ -116,9 +116,7 @@ def build_ocr_document(pages: tuple[dict[str, Any], ...], output: str) -> None:
         section.left_margin = Pt(36)
         section.right_margin = Pt(36)
     for page_offset, page in enumerate(normalized_pages):
-        add_ocr_page(document, page)
-        if page_offset < len(normalized_pages) - 1:
-            document.add_page_break()
+        add_ocr_page(document, page, starts_new_page=page_offset > 0)
     document.save(output)
 
 
@@ -143,7 +141,7 @@ def normalize_ocr_page(page: dict[str, Any]) -> dict[str, Any]:
     return normalized
 
 
-def add_ocr_page(document: Any, page: dict[str, Any]) -> None:
+def add_ocr_page(document: Any, page: dict[str, Any], starts_new_page: bool = False) -> None:
     from docx.enum.text import WD_ALIGN_PARAGRAPH
     from docx.oxml.ns import qn
     from docx.shared import Pt
@@ -154,8 +152,7 @@ def add_ocr_page(document: Any, page: dict[str, Any]) -> None:
         return
     content_width = max(72.0, float(page["width"]) - 72.0)
     content_height = max(72.0, float(page["height"]) - 72.0)
-    left_edge = min(line["x"] for line in lines)
-    right_edge = max(line["x"] + line["width"] for line in lines)
+    left_edge, right_edge = dominant_body_bounds(lines)
     top_edge = min(line["y"] for line in lines)
     bottom_edge = max(line["y"] + line["height"] for line in lines)
     content_span = right_edge - left_edge
@@ -164,9 +161,11 @@ def add_ocr_page(document: Any, page: dict[str, Any]) -> None:
     text_scale = min(2.5, horizontal_scale, vertical_scale)
     paragraphs = group_ocr_paragraphs(lines, left_edge, right_edge)
     previous_bottom = min(line["y"] for line in lines)
-    for paragraph_lines in paragraphs:
+    for paragraph_index, paragraph_lines in enumerate(paragraphs):
         first = paragraph_lines[0]
         paragraph = document.add_paragraph()
+        if starts_new_page and paragraph_index == 0:
+            paragraph.paragraph_format.page_break_before = True
         paragraph.paragraph_format.space_after = Pt(0)
         paragraph.paragraph_format.space_before = Pt(min(18.0, max(0.0, first["y"] - previous_bottom) * text_scale))
         paragraph.paragraph_format.first_line_indent = Pt(max(0.0, first["x"] - left_edge) * text_scale)
@@ -175,7 +174,7 @@ def add_ocr_page(document: Any, page: dict[str, Any]) -> None:
         run.font.name = "Arial"
         run._element.get_or_add_rPr().get_or_add_rFonts().set(qn("w:eastAsia"), "PingFang SC")
         run.font.bold = False
-        font_size = max(7.0, min(48.0, max(line["height"] for line in paragraph_lines) * 0.52 * text_scale))
+        font_size = max(7.0, min(48.0, max(line["height"] for line in paragraph_lines) * 1.25 * text_scale))
         run.font.size = Pt(font_size)
         alignment = paragraph_alignment(paragraph_lines, left_edge, right_edge)
         if alignment == "center":
@@ -204,26 +203,96 @@ def group_ocr_lines(blocks: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 def select_body_blocks(blocks: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    blocks = remove_overlapping_duplicates(blocks)
     if len(blocks) < 5:
         return blocks
     ordered_left = sorted(float(block.get("x", 0)) for block in blocks)
     ordered_right = sorted(float(block.get("x", 0)) + float(block.get("width", 1)) for block in blocks)
-    ordered_width = sorted(float(block.get("width", 1)) for block in blocks)
     ordered_height = sorted(float(block.get("height", 1)) for block in blocks)
     middle = len(blocks) // 2
     body_left = ordered_left[middle]
     body_right = ordered_right[middle]
-    typical_width = max(1.0, ordered_width[middle])
     separation = max(12.0, ordered_height[middle] * 2.0)
     selected = []
     for block in blocks:
         left = float(block.get("x", 0))
         right = left + float(block.get("width", 1))
         gap = body_left - right if right < body_left else left - body_right if left > body_right else 0.0
-        if gap > separation and float(block.get("width", 1)) < typical_width * 0.8:
+        if gap > separation or detached_from_same_row_body(block, blocks, body_left, separation):
             continue
         selected.append(block)
     return selected or blocks
+
+
+def remove_overlapping_duplicates(blocks: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    selected = []
+    for block in blocks:
+        text = str(block.get("text", "")).strip()
+        left = float(block.get("x", 0))
+        right = left + float(block.get("width", 1))
+        center = float(block.get("y", 0)) + float(block.get("height", 1)) / 2
+        duplicate = False
+        for peer in blocks:
+            if peer is block or float(peer.get("width", 1)) <= float(block.get("width", 1)) * 1.8:
+                continue
+            peer_text = str(peer.get("text", "")).strip()
+            peer_center = float(peer.get("y", 0)) + float(peer.get("height", 1)) / 2
+            block_top = float(block.get("y", 0))
+            block_bottom = block_top + float(block.get("height", 1))
+            peer_top = float(peer.get("y", 0))
+            peer_bottom = peer_top + float(peer.get("height", 1))
+            vertical_overlap = max(0.0, min(block_bottom, peer_bottom) - max(block_top, peer_top))
+            if vertical_overlap == 0 and abs(center - peer_center) > max(float(block.get("height", 1)), float(peer.get("height", 1))):
+                continue
+            peer_left = float(peer.get("x", 0))
+            peer_right = peer_left + float(peer.get("width", 1))
+            overlap = max(0.0, min(right, peer_right) - max(left, peer_left))
+            if overlap >= float(block.get("width", 1)) * 0.6 and text and text in peer_text:
+                duplicate = True
+                break
+        if not duplicate:
+            selected.append(block)
+    return selected
+
+
+def detached_from_same_row_body(
+    block: dict[str, Any],
+    blocks: list[dict[str, Any]],
+    body_left: float,
+    separation: float,
+) -> bool:
+    block_left = float(block.get("x", 0))
+    if abs(block_left - body_left) <= separation:
+        return False
+    block_center = float(block.get("y", 0)) + float(block.get("height", 1)) / 2
+    for peer in blocks:
+        if peer is block or abs(float(peer.get("x", 0)) - body_left) > separation:
+            continue
+        peer_center = float(peer.get("y", 0)) + float(peer.get("height", 1)) / 2
+        if abs(block_center - peer_center) > max(float(block.get("height", 1)), float(peer.get("height", 1))) * 0.45:
+            continue
+        peer_right = float(peer.get("x", 0)) + float(peer.get("width", 1))
+        if block_left - peer_right > separation:
+            return True
+    return False
+
+
+def dominant_body_bounds(lines: list[dict[str, Any]]) -> tuple[float, float]:
+    starts = sorted(float(line["x"]) for line in lines)
+    widths = sorted(float(line["width"]) for line in lines)
+    heights = sorted(float(line["height"]) for line in lines)
+    middle = len(lines) // 2
+    dominant_left = starts[middle]
+    tolerance = max(10.0, heights[middle] * 1.5)
+    typical_width = max(1.0, widths[middle])
+    body_lines = [
+        line for line in lines
+        if abs(float(line["x"]) - dominant_left) <= tolerance
+        or float(line["width"]) >= typical_width * 0.85
+    ]
+    left = min(float(line["x"]) for line in body_lines)
+    right = max(float(line["x"]) + float(line["width"]) for line in body_lines)
+    return left, right
 
 
 def merge_line_blocks(blocks: list[dict[str, Any]]) -> dict[str, Any]:
@@ -250,6 +319,7 @@ def group_ocr_paragraphs(
     left_edge = content_left if content_left is not None else min(float(line["x"]) for line in lines)
     right_edge = content_right if content_right is not None else max(float(line["x"]) + float(line["width"]) for line in lines)
     typical_height = sorted(float(line["height"]) for line in lines)[len(lines) // 2]
+    content_span = max(1.0, right_edge - left_edge)
     for line in lines:
         if not paragraphs:
             paragraphs.append([line])
@@ -261,7 +331,10 @@ def group_ocr_paragraphs(
         previous_alignment = line_alignment(previous, left_edge, right_edge)
         current_alignment = line_alignment(line, left_edge, right_edge)
         alignment_changed = previous_alignment != current_alignment and (previous_alignment != "left" or current_alignment != "left")
-        if not starts_indented_paragraph and not has_paragraph_gap and not alignment_changed:
+        starts_at_body_left = abs(float(line["x"]) - left_edge) <= typical_height * 0.75
+        previous_right_gap = right_edge - (float(previous["x"]) + float(previous["width"]))
+        geometric_boundary = starts_at_body_left and previous_right_gap > content_span * 0.1
+        if not starts_indented_paragraph and not has_paragraph_gap and not alignment_changed and not geometric_boundary:
             paragraphs[-1].append(line)
         else:
             paragraphs.append([line])

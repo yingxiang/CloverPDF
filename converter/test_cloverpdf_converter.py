@@ -12,12 +12,66 @@ from converter import cloverpdf_converter
 
 
 class ConverterWorkerTests(unittest.TestCase):
+    def test_multi_page_ocr_uses_page_break_before_without_empty_paragraph(self) -> None:
+        from docx import Document
+
+        pages = (
+            {"page": 0, "width": 612, "height": 792, "blocks": [{"text": "Page one", "x": 10, "y": 10, "width": 100, "height": 12}]},
+            {"page": 1, "width": 612, "height": 792, "blocks": [{"text": "Page two", "x": 10, "y": 10, "width": 100, "height": 12}]},
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            output = os.path.join(directory, "output.docx")
+            cloverpdf_converter.build_ocr_document(pages, output)
+            document = Document(output)
+
+        self.assertEqual([paragraph.text for paragraph in document.paragraphs], ["Page one", "Page two"])
+        self.assertTrue(document.paragraphs[1].paragraph_format.page_break_before)
+
+    def test_geometry_breaks_lines_that_return_to_body_left(self) -> None:
+        lines = [
+            {"text": "long wrapped line", "x": 10, "y": 0, "width": 79, "height": 10},
+            {"text": "continuation", "x": 10, "y": 14, "width": 78, "height": 10},
+            {"text": "short line", "x": 10, "y": 28, "width": 45, "height": 10},
+            {"text": "new line", "x": 10, "y": 42, "width": 75, "height": 10},
+        ]
+
+        paragraphs = cloverpdf_converter.group_ocr_paragraphs(lines, 10, 90)
+
+        self.assertEqual([[line["text"] for line in paragraph] for paragraph in paragraphs], [
+            ["long wrapped line", "continuation", "short line"],
+            ["new line"],
+        ])
+
+    def test_overlapping_stamp_text_is_removed_when_body_already_contains_it(self) -> None:
+        blocks = [
+            {"text": "上海进馨网路科技有限公司", "x": 100, "y": 100, "width": 200, "height": 20},
+            {"text": "馨", "x": 150, "y": 105, "width": 30, "height": 18},
+        ]
+
+        selected = cloverpdf_converter.remove_overlapping_duplicates(blocks)
+
+        self.assertEqual([block["text"] for block in selected], ["上海进馨网路科技有限公司"])
+
+    def test_detached_block_on_body_row_is_removed_before_line_merge(self) -> None:
+        blocks = [
+            {"text": f"body-{index}", "x": 20, "y": index * 15, "width": 70, "height": 10}
+            for index in range(6)
+        ]
+        blocks.append({"text": "stamp", "x": 130, "y": 30, "width": 80, "height": 10})
+
+        selected = cloverpdf_converter.select_body_blocks(blocks)
+        lines = cloverpdf_converter.group_ocr_lines(selected)
+        left, right = cloverpdf_converter.dominant_body_bounds(lines)
+
+        self.assertEqual((left, right), (20, 90))
+        self.assertNotIn("stamp", " ".join(line["text"] for line in lines))
+
     def test_detached_edge_block_does_not_expand_body_bounds(self) -> None:
         blocks = [
             {"text": f"body-{index}", "x": 20, "y": index * 15, "width": 70, "height": 10}
             for index in range(6)
         ]
-        blocks.append({"text": "stamp", "x": 130, "y": 40, "width": 15, "height": 10})
+        blocks.append({"text": "stamp", "x": 130, "y": 40, "width": 65, "height": 10})
 
         selected = cloverpdf_converter.select_body_blocks(blocks)
 
