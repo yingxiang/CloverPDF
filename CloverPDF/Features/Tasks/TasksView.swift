@@ -369,7 +369,10 @@ private struct TaskRow: View {
 
     @ViewBuilder
     private var taskIcon: some View {
-        if let path = representativeOutputPath ?? task.inputPaths.first {
+        if (task.state == .pending || task.state == .running), outputAvailability != .available {
+            TaskOutputFileIcon(path: outputIconPath)
+                .frame(width: 48, height: 60)
+        } else if let path = representativeOutputPath ?? task.inputPaths.first {
             PDFThumbnail(fileURL: URL(fileURLWithPath: path))
                 .frame(width: 48, height: 60)
                 .clipped()
@@ -377,8 +380,26 @@ private struct TaskRow: View {
             Image(systemName: task.kind.icon)
                 .font(.system(size: 22))
                 .foregroundStyle(.secondary)
-                .frame(width: 48, height: 60)
+            .frame(width: 48, height: 60)
         }
+    }
+
+    private var outputIconPath: String {
+        representativeOutputPath
+            ?? task.outputPath
+            ?? task.inputPaths.first
+            ?? task.title
+    }
+}
+
+private struct TaskOutputFileIcon: View {
+    let path: String
+
+    var body: some View {
+        Image(nsImage: NSWorkspace.shared.icon(forFile: path))
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .padding(5)
     }
 }
 

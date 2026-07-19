@@ -3,9 +3,19 @@ import Foundation
 import PDFKit
 import Vision
 
+private struct OCRBlockPayload: Encodable, Sendable {
+    let text: String
+    let x: Double
+    let y: Double
+    let width: Double
+    let height: Double
+}
+
 private struct OCRPagePayload: Encodable, Sendable {
     let page: Int
-    let lines: [String]
+    let width: Double
+    let height: Double
+    let blocks: [OCRBlockPayload]
 }
 
 private struct ConverterRequestPayload: Encodable {
@@ -182,11 +192,33 @@ private enum SystemPDFOCR {
                 request.automaticallyDetectsLanguage = true
                 try VNImageRequestHandler(cgImage: image).perform([request])
                 let observations = request.results ?? []
-                let lines = observations
+                let bounds = page.bounds(for: .mediaBox)
+                let rotation = ((page.rotation % 360) + 360) % 360
+                let isQuarterTurn = rotation == 90 || rotation == 270
+                let pageWidth = isQuarterTurn ? bounds.height : bounds.width
+                let pageHeight = isQuarterTurn ? bounds.width : bounds.height
+                let blocks = observations
                     .sorted(by: readingOrder)
-                    .compactMap { $0.topCandidates(1).first?.string }
-                    .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
-                results.append(OCRPagePayload(page: pageIndex, lines: lines))
+                    .compactMap { observation -> OCRBlockPayload? in
+                        guard let text = observation.topCandidates(1).first?.string,
+                              !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                            return nil
+                        }
+                        let box = observation.boundingBox
+                        return OCRBlockPayload(
+                            text: text,
+                            x: box.minX * pageWidth,
+                            y: (1 - box.maxY) * pageHeight,
+                            width: box.width * pageWidth,
+                            height: box.height * pageHeight
+                        )
+                    }
+                results.append(OCRPagePayload(
+                    page: pageIndex,
+                    width: pageWidth,
+                    height: pageHeight,
+                    blocks: blocks
+                ))
                 progress(offset + 1, pageIndices.count)
             }
             return results
@@ -197,8 +229,12 @@ private enum SystemPDFOCR {
         let bounds = page.bounds(for: .mediaBox)
         guard bounds.width > 0, bounds.height > 0 else { return nil }
         let scale = min(3, 2400 / max(bounds.width, bounds.height))
-        let width = max(1, Int((bounds.width * scale).rounded(.up)))
-        let height = max(1, Int((bounds.height * scale).rounded(.up)))
+        let rotation = ((page.rotation % 360) + 360) % 360
+        let isQuarterTurn = rotation == 90 || rotation == 270
+        let displayWidth = isQuarterTurn ? bounds.height : bounds.width
+        let displayHeight = isQuarterTurn ? bounds.width : bounds.height
+        let width = max(1, Int((displayWidth * scale).rounded(.up)))
+        let height = max(1, Int((displayHeight * scale).rounded(.up)))
         guard let context = CGContext(
             data: nil,
             width: width,
@@ -211,6 +247,16 @@ private enum SystemPDFOCR {
         context.setFillColor(NSColor.white.cgColor)
         context.fill(CGRect(x: 0, y: 0, width: width, height: height))
         context.scaleBy(x: scale, y: scale)
+        if rotation == 90 {
+            context.translateBy(x: bounds.height, y: 0)
+            context.rotate(by: .pi / 2)
+        } else if rotation == 270 {
+            context.translateBy(x: 0, y: bounds.width)
+            context.rotate(by: -.pi / 2)
+        } else if rotation == 180 {
+            context.translateBy(x: bounds.width, y: bounds.height)
+            context.rotate(by: .pi)
+        }
         page.draw(with: .mediaBox, to: context)
         return context.makeImage()
     }
