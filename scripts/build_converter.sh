@@ -19,6 +19,7 @@ rm -rf "$VENV_DIR"
   --onedir \
   --name cloverpdf-converter \
   --collect-all pdf2docx \
+  --collect-all docx \
   --collect-all fitz \
   --collect-all cv2 \
   --distpath "$DIST_DIR" \

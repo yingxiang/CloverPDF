@@ -12,20 +12,61 @@ from converter import cloverpdf_converter
 
 
 class ConverterWorkerTests(unittest.TestCase):
-    def test_multi_page_ocr_uses_page_break_before_without_empty_paragraph(self) -> None:
+    def test_ocr_conversion_does_not_require_input_file_after_recognition(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            output = os.path.join(directory, "output.docx")
+            request = cloverpdf_converter.Request(
+                input=os.path.join(directory, "removed-working-copy.pdf"),
+                output=output,
+                password=None,
+                pages=(0,),
+                ocr_pages=({
+                    "page": 0,
+                    "width": 612,
+                    "height": 792,
+                    "blocks": [{"text": "OCR text", "x": 20, "y": 20, "width": 100, "height": 12}],
+                },),
+            )
+
+            cloverpdf_converter.convert(request)
+
+            self.assertTrue(os.path.isfile(output))
+
+    def test_multi_page_ocr_uses_sections_and_page_specific_footers(self) -> None:
         from docx import Document
 
         pages = (
-            {"page": 0, "width": 612, "height": 792, "blocks": [{"text": "Page one", "x": 10, "y": 10, "width": 100, "height": 12}]},
-            {"page": 1, "width": 612, "height": 792, "blocks": [{"text": "Page two", "x": 10, "y": 10, "width": 100, "height": 12}]},
+            {"page": 0, "width": 612, "height": 792, "blocks": [
+                {"text": "Page one", "x": 10, "y": 10, "width": 100, "height": 12},
+                {"text": "1", "x": 300, "y": 750, "width": 12, "height": 10},
+            ]},
+            {"page": 1, "width": 612, "height": 792, "blocks": [
+                {"text": "Page two", "x": 10, "y": 10, "width": 100, "height": 12},
+                {"text": "2", "x": 300, "y": 750, "width": 12, "height": 10},
+            ]},
         )
         with tempfile.TemporaryDirectory() as directory:
             output = os.path.join(directory, "output.docx")
             cloverpdf_converter.build_ocr_document(pages, output)
             document = Document(output)
 
-        self.assertEqual([paragraph.text for paragraph in document.paragraphs], ["Page one", "Page two"])
-        self.assertTrue(document.paragraphs[1].paragraph_format.page_break_before)
+        self.assertEqual(len(document.sections), 2)
+        self.assertEqual([section.footer.paragraphs[0].text for section in document.sections], ["1", "2"])
+        section_break = next(paragraph for paragraph in document.paragraphs if not paragraph.text)
+        self.assertEqual(section_break.paragraph_format.line_spacing.pt, 1)
+        body_paragraphs = [paragraph for paragraph in document.paragraphs if paragraph.text]
+        self.assertEqual(body_paragraphs[0].runs[0].font.size, body_paragraphs[1].runs[0].font.size)
+
+    def test_footer_requires_bottom_position_and_vertical_isolation(self) -> None:
+        page = {"width": 612, "height": 792, "blocks": [
+            {"text": "Body", "x": 20, "y": 100, "width": 500, "height": 14},
+            {"text": "Page footer", "x": 260, "y": 750, "width": 90, "height": 10},
+        ]}
+
+        body, footer = cloverpdf_converter.split_footer_blocks(page)
+
+        self.assertEqual([block["text"] for block in body], ["Body"])
+        self.assertEqual([block["text"] for block in footer], ["Page footer"])
 
     def test_geometry_breaks_lines_that_return_to_body_left(self) -> None:
         lines = [

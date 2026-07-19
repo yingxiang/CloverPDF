@@ -20,6 +20,10 @@ class Request:
     ocr_pages: tuple[dict[str, Any], ...] | None
 
 
+class InputNotFoundError(FileNotFoundError):
+    pass
+
+
 def emit(event_type: str, **values: Any) -> None:
     payload = {"type": event_type, **values}
     sys.stdout.write(json.dumps(payload, ensure_ascii=True) + "\n")
@@ -52,14 +56,12 @@ def error_code(error: Exception) -> str:
         return "incorrect_password"
     if "no parsed pages" in message or "no_pages" in message:
         return "no_pages"
-    if isinstance(error, FileNotFoundError):
+    if isinstance(error, InputNotFoundError):
         return "input_not_found"
     return "conversion_failed"
 
 
 def convert(request: Request) -> None:
-    if not os.path.isfile(request.input):
-        raise FileNotFoundError(request.input)
     if not request.pages or any(page < 0 for page in request.pages):
         raise ValueError("no_pages")
     os.makedirs(os.path.dirname(request.output), exist_ok=True)
@@ -67,6 +69,8 @@ def convert(request: Request) -> None:
     if request.ocr_pages is not None:
         convert_ocr(request)
         return
+    if not os.path.isfile(request.input):
+        raise InputNotFoundError(request.input)
     from pdf2docx import Converter
 
     emit("progress", progress=0.05, phase="opening")
@@ -99,25 +103,112 @@ def convert_ocr(request: Request) -> None:
 
 def build_ocr_document(pages: tuple[dict[str, Any], ...], output: str) -> None:
     from docx import Document
-    from docx.enum.section import WD_ORIENT
-    from docx.shared import Pt
+    from docx.enum.section import WD_SECTION
 
     normalized_pages = tuple(normalize_ocr_page(page) for page in pages)
     document = Document()
-    if normalized_pages:
-        section = document.sections[0]
-        first_width = float(normalized_pages[0]["width"])
-        first_height = float(normalized_pages[0]["height"])
-        section.orientation = WD_ORIENT.LANDSCAPE if first_width > first_height else WD_ORIENT.PORTRAIT
-        section.page_width = Pt(first_width)
-        section.page_height = Pt(first_height)
-        section.top_margin = Pt(36)
-        section.bottom_margin = Pt(36)
-        section.left_margin = Pt(36)
-        section.right_margin = Pt(36)
-    for page_offset, page in enumerate(normalized_pages):
-        add_ocr_page(document, page, starts_new_page=page_offset > 0)
+    prepared_pages = []
+    for page in normalized_pages:
+        body_blocks, footer_blocks = split_footer_blocks(page)
+        prepared_pages.append(({**page, "blocks": body_blocks}, footer_blocks, page))
+    page_scales = [calculate_page_text_scale(body_page) for body_page, _, _ in prepared_pages]
+    document_scale = min(page_scales, default=1.0) * 0.92
+    document_font_height = typical_document_font_height([body_page for body_page, _, _ in prepared_pages])
+    footer_payloads: list[tuple[list[dict[str, Any]], dict[str, Any]]] = []
+    for page_offset, (body_page, footer_blocks, page) in enumerate(prepared_pages):
+        if page_offset == 0:
+            section = document.sections[0]
+        else:
+            section = document.add_section(WD_SECTION.NEW_PAGE)
+            minimize_section_break_paragraph(document.paragraphs[-1])
+        configure_ocr_section(section, page)
+        add_ocr_page(document, body_page, document_scale, document_font_height)
+        footer_payloads.append((footer_blocks, page))
+    for section, (footer_blocks, page) in zip(document.sections, footer_payloads):
+        set_section_footer(section, footer_blocks, page)
     document.save(output)
+
+
+def minimize_section_break_paragraph(paragraph: Any) -> None:
+    from docx.shared import Pt
+
+    paragraph.paragraph_format.space_before = Pt(0)
+    paragraph.paragraph_format.space_after = Pt(0)
+    paragraph.paragraph_format.line_spacing = Pt(1)
+    paragraph.add_run().font.size = Pt(1)
+
+
+def configure_ocr_section(section: Any, page: dict[str, Any]) -> None:
+    from docx.enum.section import WD_ORIENT
+    from docx.shared import Pt
+
+    width = float(page["width"])
+    height = float(page["height"])
+    section.orientation = WD_ORIENT.LANDSCAPE if width > height else WD_ORIENT.PORTRAIT
+    section.page_width = Pt(width)
+    section.page_height = Pt(height)
+    section.top_margin = Pt(36)
+    section.bottom_margin = Pt(36)
+    section.left_margin = Pt(36)
+    section.right_margin = Pt(36)
+    section.footer_distance = Pt(18)
+
+
+def split_footer_blocks(page: dict[str, Any]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    blocks = list(page.get("blocks", []))
+    if not blocks:
+        return [], []
+    page_height = float(page["height"])
+    page_width = float(page["width"])
+    heights = sorted(float(block.get("height", 1)) for block in blocks)
+    typical_height = heights[len(heights) // 2]
+    candidates = [
+        block for block in blocks
+        if float(block.get("y", 0)) + float(block.get("height", 1)) >= page_height * 0.9
+        and float(block.get("width", 1)) <= page_width * 0.35
+    ]
+    if not candidates:
+        return blocks, []
+    candidate_ids = {id(block) for block in candidates}
+    body_bottom = max(
+        (float(block.get("y", 0)) + float(block.get("height", 1)) for block in blocks if id(block) not in candidate_ids),
+        default=0.0,
+    )
+    footer_top = min(float(block.get("y", 0)) for block in candidates)
+    strong_footer = all(
+        float(block.get("y", 0)) >= page_height * 0.92
+        and float(block.get("width", 1)) <= page_width * 0.12
+        for block in candidates
+    )
+    if not strong_footer and footer_top - body_bottom < typical_height * 2.5:
+        return blocks, []
+    return [block for block in blocks if id(block) not in candidate_ids], candidates
+
+
+def set_section_footer(section: Any, blocks: list[dict[str, Any]], page: dict[str, Any]) -> None:
+    from docx.enum.text import WD_ALIGN_PARAGRAPH
+    from docx.oxml.ns import qn
+    from docx.shared import Pt
+
+    section.footer.is_linked_to_previous = False
+    paragraph = section.footer.paragraphs[0]
+    paragraph.clear()
+    if not blocks:
+        return
+    lines = group_ocr_lines(blocks)
+    paragraph.text = "\t".join(str(line["text"]).strip() for line in lines)
+    center = sum(float(line["x"]) + float(line["width"]) / 2 for line in lines) / len(lines)
+    page_width = float(page["width"])
+    if abs(center - page_width / 2) <= page_width * 0.12:
+        paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    elif center > page_width * 0.68:
+        paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    else:
+        paragraph.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    for run in paragraph.runs:
+        run.font.name = "Arial"
+        run._element.get_or_add_rPr().get_or_add_rFonts().set(qn("w:eastAsia"), "PingFang SC")
+        run.font.size = Pt(max(7.0, min(12.0, max(float(line["height"]) for line in lines) * 1.1)))
 
 
 def normalize_ocr_page(page: dict[str, Any]) -> dict[str, Any]:
@@ -141,7 +232,34 @@ def normalize_ocr_page(page: dict[str, Any]) -> dict[str, Any]:
     return normalized
 
 
-def add_ocr_page(document: Any, page: dict[str, Any], starts_new_page: bool = False) -> None:
+def calculate_page_text_scale(page: dict[str, Any]) -> float:
+    blocks = select_body_blocks(page.get("blocks", []))
+    lines = group_ocr_lines(blocks)
+    if not lines:
+        return 1.0
+    content_width = max(72.0, float(page["width"]) - 72.0)
+    content_height = max(72.0, float(page["height"]) - 72.0)
+    left_edge, right_edge = dominant_body_bounds(lines)
+    top_edge = min(line["y"] for line in lines)
+    bottom_edge = max(line["y"] + line["height"] for line in lines)
+    horizontal_scale = content_width / max(1.0, right_edge - left_edge)
+    vertical_scale = content_height / max(1.0, bottom_edge - top_edge) * 0.85
+    return min(2.5, horizontal_scale, vertical_scale)
+
+
+def typical_document_font_height(pages: list[dict[str, Any]]) -> float:
+    heights = [
+        float(line["height"])
+        for page in pages
+        for line in group_ocr_lines(select_body_blocks(page.get("blocks", [])))
+    ]
+    if not heights:
+        return 12.0
+    ordered = sorted(heights)
+    return ordered[len(ordered) // 2]
+
+
+def add_ocr_page(document: Any, page: dict[str, Any], text_scale: float, typical_font_height: float) -> None:
     from docx.enum.text import WD_ALIGN_PARAGRAPH
     from docx.oxml.ns import qn
     from docx.shared import Pt
@@ -150,22 +268,12 @@ def add_ocr_page(document: Any, page: dict[str, Any], starts_new_page: bool = Fa
     lines = group_ocr_lines(blocks)
     if not lines:
         return
-    content_width = max(72.0, float(page["width"]) - 72.0)
-    content_height = max(72.0, float(page["height"]) - 72.0)
     left_edge, right_edge = dominant_body_bounds(lines)
-    top_edge = min(line["y"] for line in lines)
-    bottom_edge = max(line["y"] + line["height"] for line in lines)
-    content_span = right_edge - left_edge
-    horizontal_scale = content_width / max(1.0, content_span)
-    vertical_scale = content_height / max(1.0, bottom_edge - top_edge) * 0.85
-    text_scale = min(2.5, horizontal_scale, vertical_scale)
     paragraphs = group_ocr_paragraphs(lines, left_edge, right_edge)
     previous_bottom = min(line["y"] for line in lines)
-    for paragraph_index, paragraph_lines in enumerate(paragraphs):
+    for paragraph_lines in paragraphs:
         first = paragraph_lines[0]
         paragraph = document.add_paragraph()
-        if starts_new_page and paragraph_index == 0:
-            paragraph.paragraph_format.page_break_before = True
         paragraph.paragraph_format.space_after = Pt(0)
         paragraph.paragraph_format.space_before = Pt(min(18.0, max(0.0, first["y"] - previous_bottom) * text_scale))
         paragraph.paragraph_format.first_line_indent = Pt(max(0.0, first["x"] - left_edge) * text_scale)
@@ -174,7 +282,10 @@ def add_ocr_page(document: Any, page: dict[str, Any], starts_new_page: bool = Fa
         run.font.name = "Arial"
         run._element.get_or_add_rPr().get_or_add_rFonts().set(qn("w:eastAsia"), "PingFang SC")
         run.font.bold = False
-        font_size = max(7.0, min(48.0, max(line["height"] for line in paragraph_lines) * 1.25 * text_scale))
+        recognized_height = max(float(line["height"]) for line in paragraph_lines)
+        if typical_font_height * 0.8 <= recognized_height <= typical_font_height * 1.25:
+            recognized_height = typical_font_height
+        font_size = max(7.0, min(48.0, recognized_height * 1.25 * text_scale))
         run.font.size = Pt(font_size)
         alignment = paragraph_alignment(paragraph_lines, left_edge, right_edge)
         if alignment == "center":
