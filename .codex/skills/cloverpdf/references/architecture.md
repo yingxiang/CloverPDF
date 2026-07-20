@@ -7,6 +7,7 @@
 - `CloverPDF/Features`: merge, convert, tasks, preview, settings, and purchases.
 - `CloverPDF/Infrastructure`: PDFKit services, Python process adapter, bookmarks, Keychain, and task storage.
 - `converter`: fixed Python entry point and packaging files for `pdf2docx`.
+- `pages`: public, dependency-free GitHub Pages content for CloverPDF support and privacy, including a copied app-icon asset.
 
 ## Ownership
 

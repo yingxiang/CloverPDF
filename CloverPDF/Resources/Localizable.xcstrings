@@ -984,6 +984,47 @@
         }
       }
     },
+    "Conversion" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konvertierung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conversion"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "変換"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "변환"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Преобразование"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "转换"
+          }
+        }
+      }
+    },
     "Conversion failed: %@" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2416,6 +2457,47 @@
         }
       }
     },
+    "OCR scanned documents" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OCR für gescannte Dokumente"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OCR scanned documents"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スキャン文書をOCR処理"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스캔 문서 OCR 처리"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OCR для сканированных документов"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OCR处理扫描件"
+          }
+        }
+      }
+    },
     "OK" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2991,6 +3073,7 @@
       }
     },
     "pdf2docx" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3241,37 +3324,37 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Premium wurde gekauft."
+            "value" : "Premium wurde gekauft"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Premium purchased."
+            "value" : "Premium purchased"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "プレミアムを購入済みです。"
+            "value" : "プレミアムを購入済みです"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "프리미엄을 구매했습니다."
+            "value" : "프리미엄을 구매했습니다"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Premium приобретён."
+            "value" : "Premium приобретён"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "已购买高级版。"
+            "value" : "已购买高级版"
           }
         }
       }
@@ -4461,6 +4544,47 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在校验"
+          }
+        }
+      }
+    },
+    "Version" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バージョン"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "버전"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Версия"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "版本"
           }
         }
       }

@@ -27,7 +27,9 @@ struct MergeView: View {
         VStack(spacing: 0) {
             if model.mergeItems.isEmpty {
                 EmptyPDFState(title: "No PDFs selected", icon: "square.stack.3d.up.slash") {
-                    model.importPDFs(FilePanel.openPDFs(), destination: .merge)
+                    Task {
+                        model.importPDFs(await FilePanel.openPDFs(), destination: .merge)
+                    }
                 }
             } else {
                 ZStack {
@@ -76,7 +78,7 @@ struct MergeView: View {
             HStack {
                 Spacer()
                 Button {
-                    model.enqueueMerge()
+                    Task { await model.enqueueMerge() }
                 } label: {
                     Label("Merge", systemImage: "square.stack.3d.up")
                 }

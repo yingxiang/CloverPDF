@@ -15,7 +15,12 @@ struct CloverPDFApp: App {
         .commands {
             CommandGroup(after: .newItem) {
                 Button("Add PDF") {
-                    model.importPDFs(FilePanel.openPDFs(), destination: model.selection == .convert ? .convert : .merge)
+                    Task {
+                        model.importPDFs(
+                            await FilePanel.openPDFs(),
+                            destination: model.selection == .convert ? .convert : .merge
+                        )
+                    }
                 }
                 .keyboardShortcut("o")
             }
