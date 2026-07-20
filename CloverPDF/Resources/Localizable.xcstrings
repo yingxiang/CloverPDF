@@ -821,83 +821,83 @@
         }
       }
     },
-    "CloverPDF" : {
+    "WPDF" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CloverPDF"
+            "value" : "WPDF"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CloverPDF"
+            "value" : "WPDF"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CloverPDF"
+            "value" : "WPDF"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CloverPDF"
+            "value" : "WPDF"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CloverPDF"
+            "value" : "WPDF"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CloverPDF"
+            "value" : "WPDF"
           }
         }
       }
     },
-    "CloverPDF Premium is active" : {
+    "WPDF Premium is active" : {
       "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CloverPDF Premium ist aktiv"
+            "value" : "WPDF Premium ist aktiv"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CloverPDF Premium is active"
+            "value" : "WPDF Premium is active"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CloverPDFプレミアムが有効です"
+            "value" : "WPDFプレミアムが有効です"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CloverPDF 프리미엄이 활성화되었습니다"
+            "value" : "WPDF 프리미엄이 활성화되었습니다"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CloverPDF Premium активирован"
+            "value" : "WPDF Premium активирован"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CloverPDF 高级版已激活"
+            "value" : "WPDF 高级版已激活"
           }
         }
       }
@@ -4425,43 +4425,43 @@
         }
       }
     },
-    "Unlock CloverPDF Premium" : {
+    "Unlock WPDF Premium" : {
       "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CloverPDF Premium freischalten"
+            "value" : "WPDF Premium freischalten"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unlock CloverPDF Premium"
+            "value" : "Unlock WPDF Premium"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CloverPDFプレミアムを解除"
+            "value" : "WPDFプレミアムを解除"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CloverPDF 프리미엄 잠금 해제"
+            "value" : "WPDF 프리미엄 잠금 해제"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Разблокировать CloverPDF Premium"
+            "value" : "Разблокировать WPDF Premium"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "解锁 CloverPDF 高级版"
+            "value" : "解锁 WPDF 高级版"
           }
         }
       }

@@ -95,7 +95,7 @@ struct ContentView: View {
                 .environmentObject(model)
         }
         .alert(
-            String(localized: "CloverPDF"),
+            String(localized: "WPDF"),
             isPresented: Binding(
                 get: { model.alertMessage != nil },
                 set: { if !$0 { model.alertMessage = nil } }

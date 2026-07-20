@@ -3,7 +3,7 @@ import Foundation
 enum OutputURLResolver {
     static func availableURL(directory: URL, baseName: String, extension fileExtension: String) -> URL {
         let sanitized = baseName.trimmingCharacters(in: .whitespacesAndNewlines)
-        let effectiveName = sanitized.isEmpty ? "CloverPDF" : sanitized
+        let effectiveName = sanitized.isEmpty ? "WPDF" : sanitized
         var candidate = directory.appendingPathComponent(effectiveName).appendingPathExtension(fileExtension)
         var index = 1
         while FileManager.default.fileExists(atPath: candidate.path) {

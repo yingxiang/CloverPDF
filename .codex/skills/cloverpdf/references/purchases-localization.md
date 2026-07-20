@@ -12,7 +12,7 @@ The first three products are auto-renewable subscriptions in one App Store Conne
 ## Shared UI
 
 - Reuse `../common/MacAppKit/Purchases/MacPaywallPresenter.swift` and `MacPurchaseManager.swift`.
-- Keep CloverPDF-specific code limited to configuration, product mapping, benefits, policy URLs, and presentation triggers.
+- Keep WPDF-specific code limited to configuration, product mapping, benefits, policy URLs, and presentation triggers.
 - Use sandbox accounts for purchase, renewal, cancellation, expiry, refund, and restore acceptance testing.
 
 ## Free Entitlement
@@ -24,4 +24,4 @@ The first three products are auto-renewable subscriptions in one App Store Conne
 
 ## Locales
 
-Require `zh-Hans`, `en`, `ko`, `ja`, `de`, and `ru` in the app catalogs and common paywall strings used by CloverPDF. English is the source language and fallback.
+Require `zh-Hans`, `en`, `ko`, `ja`, `de`, and `ru` in the app catalogs and common paywall strings used by WPDF. English is the source language and fallback.

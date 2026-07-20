@@ -7,7 +7,8 @@
 - `CloverPDF/Features`: merge, convert, tasks, preview, settings, and purchases.
 - `CloverPDF/Infrastructure`: PDFKit services, Python process adapter, bookmarks, Keychain, and task storage.
 - `converter`: fixed Python entry point and packaging files for `pdf2docx`.
-- `pages`: public, dependency-free GitHub Pages content for CloverPDF support and privacy, including a copied app-icon asset.
+- `pages`: public, dependency-free GitHub Pages content for WPDF support and privacy, including a copied app-icon asset.
+- `.github/workflows/static.yml`: deploys only `pages` through GitHub Actions and enables the Pages site on its first run.
 
 ## Ownership
 
@@ -36,7 +37,7 @@
 
 ## Build
 
-- Treat the checked-in `CloverPDF.xcodeproj` as the active project. Do not run XcodeGen or overwrite the user's signing, team, provisioning, or bundle settings unless explicitly requested.
+- Treat the checked-in `CloverPDF.xcodeproj` as the active project. The target and Swift module retain the internal name `CloverPDF`, while `PRODUCT_NAME` and the packaged application are `WPDF` / `WPDF.app`. Do not run XcodeGen or overwrite the user's signing, team, provisioning, or bundle settings unless explicitly requested.
 - Keep deployment target at macOS 13 unless the product requirement changes.
 - Keep the shared purchase sources as symlinks under `CloverPDF/Features/Purchases/Shared`.
 - Build the pinned Python environment with `scripts/build_converter.sh`; Xcode embeds and signs it through `scripts/embed_converter.sh`.

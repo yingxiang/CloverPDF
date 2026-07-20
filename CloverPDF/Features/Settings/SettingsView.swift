@@ -30,7 +30,7 @@ struct SettingsView: View {
                 Toggle("OCR scanned documents", isOn: $isOCREnabled)
             }
             Section("About") {
-                LabeledContent("Application") { Text("CloverPDF") }
+                LabeledContent("Application") { Text("WPDF") }
                 LabeledContent("Version") { Text(appVersion) }
                 LabeledContent("Privacy") { Text("Files stay on this Mac") }
             }
