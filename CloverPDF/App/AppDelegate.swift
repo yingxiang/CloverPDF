@@ -2,7 +2,19 @@ import AppKit
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
-        true
+        false
+    }
+
+    func applicationShouldHandleReopen(
+        _ sender: NSApplication,
+        hasVisibleWindows flag: Bool
+    ) -> Bool {
+        guard !flag else { return true }
+        guard let window = sender.windows.first(where: { !$0.isVisible && $0.canBecomeMain }) else {
+            return true
+        }
+        window.makeKeyAndOrderFront(nil)
+        return false
     }
 
     func application(_ application: NSApplication, open urls: [URL]) {

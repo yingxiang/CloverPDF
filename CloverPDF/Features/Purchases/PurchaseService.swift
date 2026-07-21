@@ -1,6 +1,172 @@
 import AppKit
 import Combine
+import Security
 import StoreKit
+
+enum WPDFLinks {
+    static let privacyPolicy = URL(string: "https://yingxiang.github.io/CloverPDF/index.html")!
+}
+
+struct WPDFPromotionTrialState {
+    let startDate: Date
+    let expirationDate: Date
+
+    var remainingDays: Int {
+        let remaining = Calendar.current.dateComponents([.day], from: Date(), to: expirationDate).day ?? 0
+        return max(0, remaining + 1)
+    }
+
+    var isActive: Bool { Date() < expirationDate }
+}
+
+enum WPDFPromotionTrialPolicy {
+    static let duration: TimeInterval = 3 * 24 * 60 * 60
+
+    static func startDate(
+        storedStartDate: Date?,
+        isCloverInstalled: Bool,
+        isMapleInstalled: Bool,
+        now: Date
+    ) -> Date? {
+        if let storedStartDate { return storedStartDate }
+        return isCloverInstalled || isMapleInstalled ? now : nil
+    }
+
+    static func state(startDate: Date) -> WPDFPromotionTrialState {
+        WPDFPromotionTrialState(
+            startDate: startDate,
+            expirationDate: startDate.addingTimeInterval(duration)
+        )
+    }
+
+    static func isEntitled(
+        storedStartDate: Date?,
+        hasClaimedInstalledApp: Bool,
+        now: Date
+    ) -> Bool {
+        guard let storedStartDate, hasClaimedInstalledApp else { return false }
+        return now < storedStartDate.addingTimeInterval(duration)
+    }
+}
+
+final class WPDFPromotionTrialService {
+    static let cloverBundleIdentifier = "com.lingchen.clover"
+    static let mapleBundleIdentifier = "com.lingchen.omnicapture"
+    private let service = "com.lingchen.pdf.cross-promotion"
+    private let account = "companion-trial-start"
+    private let claimedAppsAccount = "companion-trial-claimed-apps"
+
+    var isCloverInstalled: Bool {
+        NSWorkspace.shared.urlForApplication(withBundleIdentifier: Self.cloverBundleIdentifier) != nil
+    }
+
+    var isMapleInstalled: Bool {
+        NSWorkspace.shared.urlForApplication(withBundleIdentifier: Self.mapleBundleIdentifier) != nil
+    }
+
+    var trialState: WPDFPromotionTrialState? {
+        guard let startDate = storedStartDate else { return nil }
+        return WPDFPromotionTrialPolicy.state(startDate: startDate)
+    }
+
+    var isTrialActive: Bool {
+        let installedApps = installedBundleIdentifiers
+        let claimedApps = claimedBundleIdentifiers
+        return WPDFPromotionTrialPolicy.isEntitled(
+            storedStartDate: storedStartDate,
+            hasClaimedInstalledApp: !installedApps.isDisjoint(with: claimedApps),
+            now: Date()
+        )
+    }
+
+    func isInstalled(_ bundleIdentifier: String) -> Bool {
+        installedBundleIdentifiers.contains(bundleIdentifier)
+    }
+
+    func isClaimed(_ bundleIdentifier: String) -> Bool {
+        claimedBundleIdentifiers.contains(bundleIdentifier)
+    }
+
+    @discardableResult
+    func claimTrialIfEligible() -> WPDFPromotionTrialState? {
+        let now = Date()
+        let existingStartDate = storedStartDate
+        let installedApps = installedBundleIdentifiers
+        guard let startDate = WPDFPromotionTrialPolicy.startDate(
+            storedStartDate: existingStartDate,
+            isCloverInstalled: installedApps.contains(Self.cloverBundleIdentifier),
+            isMapleInstalled: installedApps.contains(Self.mapleBundleIdentifier),
+            now: now
+        ) else { return nil }
+        if existingStartDate == nil {
+            saveStartDate(startDate)
+        }
+        let existingClaimedApps = claimedBundleIdentifiers
+        let claimedApps = existingClaimedApps.union(installedApps)
+        if claimedApps != existingClaimedApps {
+            saveClaimedBundleIdentifiers(claimedApps)
+        }
+        return WPDFPromotionTrialPolicy.state(startDate: startDate)
+    }
+
+    private var installedBundleIdentifiers: Set<String> {
+        var identifiers = Set<String>()
+        if isCloverInstalled { identifiers.insert(Self.cloverBundleIdentifier) }
+        if isMapleInstalled { identifiers.insert(Self.mapleBundleIdentifier) }
+        return identifiers
+    }
+
+    private var storedStartDate: Date? {
+        var query = baseQuery(account: account)
+        query[kSecReturnData as String] = true
+        query[kSecMatchLimit as String] = kSecMatchLimitOne
+        var item: CFTypeRef?
+        let status = SecItemCopyMatching(query as CFDictionary, &item)
+        guard status == errSecSuccess,
+              let data = item as? Data,
+              let text = String(data: data, encoding: .utf8),
+              let interval = TimeInterval(text) else { return nil }
+        return Date(timeIntervalSince1970: interval)
+    }
+
+    private func saveStartDate(_ date: Date) {
+        let data = String(date.timeIntervalSince1970).data(using: .utf8) ?? Data()
+        SecItemDelete(baseQuery(account: account) as CFDictionary)
+        var item = baseQuery(account: account)
+        item[kSecValueData as String] = data
+        SecItemAdd(item as CFDictionary, nil)
+    }
+
+    private var claimedBundleIdentifiers: Set<String> {
+        var query = baseQuery(account: claimedAppsAccount)
+        query[kSecReturnData as String] = true
+        query[kSecMatchLimit as String] = kSecMatchLimitOne
+        var item: CFTypeRef?
+        guard SecItemCopyMatching(query as CFDictionary, &item) == errSecSuccess,
+              let data = item as? Data,
+              let identifiers = try? JSONDecoder().decode(Set<String>.self, from: data) else {
+            return []
+        }
+        return identifiers
+    }
+
+    private func saveClaimedBundleIdentifiers(_ identifiers: Set<String>) {
+        guard let data = try? JSONEncoder().encode(identifiers) else { return }
+        SecItemDelete(baseQuery(account: claimedAppsAccount) as CFDictionary)
+        var item = baseQuery(account: claimedAppsAccount)
+        item[kSecValueData as String] = data
+        SecItemAdd(item as CFDictionary, nil)
+    }
+
+    private func baseQuery(account: String) -> [String: Any] {
+        [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account,
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock,
+        ]
+    }
+}
 
 @MainActor
 final class PurchaseService: ObservableObject {
@@ -10,7 +176,8 @@ final class PurchaseService: ObservableObject {
     static let lifetimeProduct = "com.lingchen.pdf.unlockall"
 
     let manager: MacPurchaseManager
-    private var cancellable: AnyCancellable?
+    private let promotionTrialService = WPDFPromotionTrialService()
+    private var cancellables = Set<AnyCancellable>()
 
     init() {
         manager = MacPurchaseManager(configuration: MacPurchaseConfiguration(
@@ -39,16 +206,61 @@ final class PurchaseService: ObservableObject {
                 ),
             ]
         ))
-        cancellable = manager.objectWillChange.sink { [weak self] _ in
+        manager.objectWillChange.sink { [weak self] _ in
             self?.objectWillChange.send()
+        }
+        .store(in: &cancellables)
+        NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)
+            .sink { [weak self] _ in
+                if !Self.isRunningTests {
+                    self?.refreshPromotionTrial()
+                }
+            }
+            .store(in: &cancellables)
+    }
+
+    var isPremiumUnlocked: Bool { manager.isUnlocked || promotionTrialService.isTrialActive }
+    var isPurchasedPremiumUnlocked: Bool { manager.isUnlocked }
+    var isLifetimeUnlocked: Bool { manager.activeProductIDs.contains(Self.lifetimeProduct) }
+    var promotionTrialState: WPDFPromotionTrialState? { promotionTrialService.trialState }
+    var promotionTrialRemainingDays: Int? {
+        guard promotionTrialService.isTrialActive,
+              let state = promotionTrialState else { return nil }
+        return state.remainingDays
+    }
+
+    func start() {
+        if !Self.isRunningTests {
+            refreshPromotionTrial()
+        }
+        manager.start()
+    }
+
+    func refreshPromotionTrial() {
+        _ = promotionTrialService.claimTrialIfEligible()
+        objectWillChange.send()
+    }
+
+    func companionApps() -> [MacPaywallCompanionApp] {
+        refreshPromotionTrial()
+        return MacPaywallCompanionCatalog.apps().map { definition in
+            MacPaywallCompanionApp(
+                definition: definition,
+                isInstalled: promotionTrialService.isInstalled(definition.bundleIdentifier),
+                isClaimed: promotionTrialService.isClaimed(definition.bundleIdentifier),
+                trialRemainingDays: promotionTrialRemainingDays,
+                action: { NSWorkspace.shared.open(definition.appStoreURL) }
+            )
         }
     }
 
-    var isPremiumUnlocked: Bool { manager.isUnlocked }
-    var isLifetimeUnlocked: Bool { manager.activeProductIDs.contains(Self.lifetimeProduct) }
-
-    func start() {
-        manager.start()
+    static var isRunningTests: Bool {
+        let environment = ProcessInfo.processInfo.environment
+        return environment["XCTestConfigurationFilePath"] != nil
+            || environment["XCTestBundlePath"] != nil
+            || environment["XCInjectBundleInto"] != nil
+            || Bundle.allBundles.contains { $0.bundlePath.hasSuffix(".xctest") }
+            || NSClassFromString("XCTestCase") != nil
     }
 }
 
@@ -62,6 +274,7 @@ final class CloverPaywallCoordinator {
     }
 
     func show(sourceView: NSView? = nil) {
+        purchaseService.refreshPromotionTrial()
         let manager = purchaseService.manager
         let presenter = MacPaywallPresenter(
             configuration: MacPaywallConfiguration(
@@ -75,7 +288,7 @@ final class CloverPaywallCoordinator {
                     String(localized: "Full task history and retry"),
                     String(localized: "Future premium PDF tools"),
                 ],
-                privacyPolicyURL: URL(string: "https://yingxiang.github.io/cloverpdf/privacy.html")!,
+                privacyPolicyURL: WPDFLinks.privacyPolicy,
                 termsURL: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
             ),
             productsProvider: {
@@ -90,6 +303,9 @@ final class CloverPaywallCoordinator {
                 try await AppStore.sync()
                 await manager.refreshEntitlements(force: true)
                 return manager.isUnlocked
+            },
+            companionAppsProvider: { [purchaseService] in
+                purchaseService.companionApps()
             }
         )
         self.presenter = presenter

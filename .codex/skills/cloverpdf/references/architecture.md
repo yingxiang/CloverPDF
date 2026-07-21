@@ -13,6 +13,7 @@
 ## Ownership
 
 - Keep `AppModel` on `@MainActor` for navigation and presentation state.
+- Keep the application process running after the last window closes. When the Dock icon reopens an app with no visible windows, restore an existing hidden main window when available and otherwise let SwiftUI create a window.
 - Keep queue mutation in `TaskQueueActor`; publish immutable snapshots back to the UI.
 - Keep PDF services stateless where possible and inject them through protocols.
 - Keep workspaces independent so Finder-open events never overwrite an active configuration.
@@ -20,7 +21,7 @@
 ## Workspace UI
 
 - Keep the window title synchronized with the selected sidebar section.
-- Keep the navigation sidebar fixed at 210 points while expanded so narrowing the window cannot clip or partially hide it. Allow it to collapse from a title-bar toggle that remains available for expansion.
+- Keep the navigation sidebar fixed at 210 points while expanded so narrowing the window cannot clip or partially hide it. Allow it to collapse from a title-bar toggle that remains available for expansion. Place the shared-paywall upgrade button below the navigation list, hide it for lifetime purchasers, and show active purchased or companion-trial state in its title.
 - Put the shared `Add PDF` action in the title bar for Merge and Convert; use the same icon and label in both sections.
 - Make the centered empty-state icon in Merge and Convert invoke the same `Add PDF` file-panel flow as the title-bar action.
 - Generate row thumbnails with Quick Look so they match Finder's PDF thumbnail style; use the Finder file icon only as a fallback.

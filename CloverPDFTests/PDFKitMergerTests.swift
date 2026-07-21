@@ -262,6 +262,80 @@ final class PDFKitMergerTests: XCTestCase {
 }
 
 final class TaskQueueActorTests: XCTestCase {
+    @MainActor
+    func testPurchaseServiceRecognizesTestProcess() {
+        let isRunningTests = PurchaseService.isRunningTests
+        XCTAssertTrue(isRunningTests)
+    }
+
+    func testCompanionTrialUsesOneThreeDayPeriodForEitherOrBothApps() throws {
+        let now = Date(timeIntervalSince1970: 1_800_000_000)
+        let mapleStart = try XCTUnwrap(WPDFPromotionTrialPolicy.startDate(
+            storedStartDate: nil,
+            isCloverInstalled: false,
+            isMapleInstalled: true,
+            now: now
+        ))
+        let later = now.addingTimeInterval(24 * 60 * 60)
+        let bothInstalledStart = try XCTUnwrap(WPDFPromotionTrialPolicy.startDate(
+            storedStartDate: mapleStart,
+            isCloverInstalled: true,
+            isMapleInstalled: true,
+            now: later
+        ))
+
+        XCTAssertEqual(bothInstalledStart, mapleStart)
+        XCTAssertEqual(
+            WPDFPromotionTrialPolicy.state(startDate: bothInstalledStart).expirationDate,
+            mapleStart.addingTimeInterval(3 * 24 * 60 * 60)
+        )
+    }
+
+    func testCompanionTrialDoesNotStartWithoutEitherApp() {
+        XCTAssertNil(WPDFPromotionTrialPolicy.startDate(
+            storedStartDate: nil,
+            isCloverInstalled: false,
+            isMapleInstalled: false,
+            now: Date()
+        ))
+    }
+
+    func testCompanionTrialRequiresAClaimedAppToRemainInstalled() {
+        let start = Date(timeIntervalSince1970: 1_800_000_000)
+        let duringTrial = start.addingTimeInterval(24 * 60 * 60)
+
+        XCTAssertTrue(WPDFPromotionTrialPolicy.isEntitled(
+            storedStartDate: start,
+            hasClaimedInstalledApp: true,
+            now: duringTrial
+        ))
+        XCTAssertFalse(WPDFPromotionTrialPolicy.isEntitled(
+            storedStartDate: start,
+            hasClaimedInstalledApp: false,
+            now: duringTrial
+        ))
+        XCTAssertFalse(WPDFPromotionTrialPolicy.isEntitled(
+            storedStartDate: start,
+            hasClaimedInstalledApp: true,
+            now: start.addingTimeInterval(3 * 24 * 60 * 60)
+        ))
+    }
+
+    func testCompanionCatalogExcludesTheHostApplication() {
+        XCTAssertEqual(
+            MacPaywallCompanionCatalog.apps(excluding: "com.lingchen.pdf").map(\.bundleIdentifier),
+            ["com.lingchen.clover", "com.lingchen.omnicapture"]
+        )
+        XCTAssertEqual(
+            MacPaywallCompanionCatalog.apps(excluding: "com.lingchen.clover").map(\.bundleIdentifier),
+            ["com.lingchen.omnicapture"]
+        )
+        XCTAssertEqual(
+            MacPaywallCompanionCatalog.apps(excluding: "com.lingchen.omnicapture").map(\.bundleIdentifier),
+            ["com.lingchen.clover"]
+        )
+    }
+
     func testWorkspacePDFSelectsEveryPageByDefault() {
         let source = PDFSource(
             displayName: "source.pdf",

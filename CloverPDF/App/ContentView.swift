@@ -8,11 +8,28 @@ struct ContentView: View {
     var body: some View {
         HStack(spacing: 0) {
             if isSidebarVisible {
-                List(AppSection.allCases, selection: $model.selection) { section in
-                    sidebarLabel(for: section)
-                        .tag(section)
+                VStack(spacing: 0) {
+                    List(AppSection.allCases, selection: $model.selection) { section in
+                        sidebarLabel(for: section)
+                            .tag(section)
+                    }
+                    .listStyle(.sidebar)
+
+                    if !model.purchaseService.isLifetimeUnlocked {
+                        Button {
+                            model.paywallCoordinator.show(sourceView: NSApp.keyWindow?.contentView)
+                        } label: {
+                            Label(upgradeButtonTitle, systemImage: "crown.fill")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(.large)
+                        .font(.system(size: 13, weight: .semibold))
+                        .tint(.accentColor)
+                        .help(upgradeButtonTitle)
+                        .padding(12)
+                    }
                 }
-                .listStyle(.sidebar)
                 .frame(width: 210)
                 .fixedSize(horizontal: true, vertical: false)
 
@@ -131,6 +148,16 @@ struct ContentView: View {
 
     private var sidebarButtonTitle: LocalizedStringKey {
         isSidebarVisible ? "Hide Sidebar" : "Show Sidebar"
+    }
+
+    private var upgradeButtonTitle: String {
+        if model.purchaseService.isPurchasedPremiumUnlocked {
+            return String(localized: "Premium Active")
+        }
+        if let remainingDays = model.purchaseService.promotionTrialRemainingDays {
+            return MacPaywallStrings.trialInProgress(remainingDays: remainingDays)
+        }
+        return String(localized: "Unlock Premium")
     }
 
     private func updateWindowTitle() {
