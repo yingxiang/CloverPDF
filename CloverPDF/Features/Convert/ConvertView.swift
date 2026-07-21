@@ -32,7 +32,9 @@ struct ConvertView: View {
         VStack(spacing: 0) {
             if model.conversionItems.isEmpty {
                 EmptyPDFState(title: "No PDFs selected", icon: "doc.badge.plus") {
-                    model.importPDFs(FilePanel.openPDFs(), destination: .convert)
+                    Task {
+                        model.importPDFs(await FilePanel.openPDFs(), destination: .convert)
+                    }
                 }
             } else {
                 ZStack {
@@ -106,7 +108,7 @@ struct ConvertView: View {
                     .foregroundStyle(.secondary)
             }
             Button {
-                model.enqueueConversions()
+                Task { await model.enqueueConversions() }
             } label: {
                 Label("Convert", systemImage: "arrow.triangle.2.circlepath")
             }

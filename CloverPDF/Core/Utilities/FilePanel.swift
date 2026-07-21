@@ -20,24 +20,24 @@ enum FilePanel {
         let format: ConversionFormat
     }
 
-    static func openPDFs() -> [URL] {
+    static func openPDFs() async -> [URL] {
         let panel = NSOpenPanel()
         panel.allowedContentTypes = [.pdf]
         panel.allowsMultipleSelection = true
         panel.canChooseDirectories = false
-        return panel.runModal() == .OK ? panel.urls : []
+        return await sheetResponse(for: panel) == .OK ? panel.urls : []
     }
 
-    static func chooseDirectory(current: URL?) -> URL? {
+    static func chooseDirectory(current: URL?) async -> URL? {
         let panel = NSOpenPanel()
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
         panel.allowsMultipleSelection = false
         panel.directoryURL = current
-        return panel.runModal() == .OK ? panel.url : nil
+        return await sheetResponse(for: panel) == .OK ? panel.url : nil
     }
 
-    static func saveMergedOutput(suggestedName: String = MergeFilenameGenerator.filename()) -> MergeDestination? {
+    static func saveMergedOutput(suggestedName: String = MergeFilenameGenerator.filename()) async -> MergeDestination? {
         let panel = FileSavePanel()
         panel.allowedContentTypes = [.pdf, .png, .jpeg, wordContentType]
         panel.canCreateDirectories = true
@@ -46,7 +46,7 @@ enum FilePanel {
             .deletingPathExtension()
             .lastPathComponent
         panel.title = String(localized: "Save Merged File")
-        guard panel.runModal() == .OK, let url = panel.url else { return nil }
+        guard await sheetResponse(for: panel) == .OK, let url = panel.url else { return nil }
         let contentType = panel.selectedContentType
         return MergeDestination(
             url: outputURL(url, contentType: contentType),
@@ -54,9 +54,9 @@ enum FilePanel {
         )
     }
 
-    static func chooseConversionDestination(suggestedName: String, isBatch: Bool) -> ConversionDestination? {
+    static func chooseConversionDestination(suggestedName: String, isBatch: Bool) async -> ConversionDestination? {
         if !isBatch {
-            return saveConvertedOutput(suggestedName: suggestedName)
+            return await saveConvertedOutput(suggestedName: suggestedName)
         }
         let panel = FileDirectoryPanel()
         panel.canChooseDirectories = true
@@ -67,7 +67,7 @@ enum FilePanel {
         panel.directoryURL = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first
         panel.prompt = String(localized: "Choose")
         panel.title = String(localized: "Choose Conversion Output Folder")
-        guard panel.runModalWithVisibleFormat() == .OK, let url = panel.url else { return nil }
+        guard await panel.sheetResponseWithVisibleFormat() == .OK, let url = panel.url else { return nil }
         let format: ConversionFormat = switch panel.selectedContentType {
         case .pdf: .pdf
         case .png: .image(.png)
@@ -81,7 +81,7 @@ enum FilePanel {
         )
     }
 
-    private static func saveConvertedOutput(suggestedName: String) -> ConversionDestination? {
+    private static func saveConvertedOutput(suggestedName: String) async -> ConversionDestination? {
         let panel = FileSavePanel()
         panel.allowedContentTypes = [wordContentType, .pdf, .png, .jpeg]
         panel.canCreateDirectories = true
@@ -90,7 +90,7 @@ enum FilePanel {
             .deletingPathExtension()
             .lastPathComponent
         panel.title = String(localized: "Save Converted File")
-        guard panel.runModal() == .OK, let selectedURL = panel.url else { return nil }
+        guard await sheetResponse(for: panel) == .OK, let selectedURL = panel.url else { return nil }
         let contentType = panel.selectedContentType
         let format: ConversionFormat = switch contentType {
         case .pdf: .pdf
@@ -124,6 +124,15 @@ enum FilePanel {
 
     private static var wordContentType: UTType {
         UTType(filenameExtension: "docx") ?? .data
+    }
+
+    static func sheetResponse(for panel: NSSavePanel) async -> NSApplication.ModalResponse {
+        guard let window = NSApp.keyWindow ?? NSApp.mainWindow else { return .cancel }
+        return await withCheckedContinuation { continuation in
+            panel.beginSheetModal(for: window) { response in
+                continuation.resume(returning: response)
+            }
+        }
     }
 
 }
@@ -169,7 +178,7 @@ private final class FileDirectoryPanel: NSOpenPanel {
         }
     }
 
-    func runModalWithVisibleFormat() -> NSApplication.ModalResponse {
+    func sheetResponseWithVisibleFormat() async -> NSApplication.ModalResponse {
         isAccessoryViewDisclosed = true
         NotificationCenter.default.addObserver(
             self,
@@ -180,7 +189,7 @@ private final class FileDirectoryPanel: NSOpenPanel {
         DispatchQueue.main.async { [weak self] in
             self?.hideAccessoryDisclosureButton()
         }
-        let response = runModal()
+        let response = await FilePanel.sheetResponse(for: self)
         NotificationCenter.default.removeObserver(
             self,
             name: NSWindow.didUpdateNotification,

@@ -113,9 +113,9 @@ final class AppModel: ObservableObject {
         }
     }
 
-    func enqueueMerge() {
+    func enqueueMerge() async {
         guard mergeItems.count >= 2 else { return }
-        guard let destination = FilePanel.saveMergedOutput() else { return }
+        guard let destination = await FilePanel.saveMergedOutput() else { return }
         let submittedItems = mergeItems
         let inputs = submittedItems.map { PDFInput(source: $0.source, password: $0.password.nilIfEmpty) }
         let request = MergeRequest(
@@ -123,18 +123,16 @@ final class AppModel: ObservableObject {
             outputURL: destination.url,
             outputFormat: destination.format
         )
-        Task {
-            let taskID = await queue.enqueueMerge(request)
-            mergeInputsByTask[taskID] = Set(submittedItems.map(\.id))
-            selection = .tasks
-        }
+        let taskID = await queue.enqueueMerge(request)
+        mergeInputsByTask[taskID] = Set(submittedItems.map(\.id))
+        selection = .tasks
     }
 
-    func enqueueConversions() {
+    func enqueueConversions() async {
         let eligibleItems = conversionItems.filter { !$0.selectedPageIndices.isEmpty }
         guard !eligibleItems.isEmpty else { return }
         let suggestedName = eligibleItems[0].source.displayName
-        guard let destination = FilePanel.chooseConversionDestination(
+        guard let destination = await FilePanel.chooseConversionDestination(
             suggestedName: suggestedName,
             isBatch: eligibleItems.count > 1
         ) else { return }
@@ -304,7 +302,7 @@ final class AppModel: ObservableObject {
                 return
             }
             if task.kind == .merge {
-                guard let destination = FilePanel.saveMergedOutput(suggestedName: task.title) else { return }
+                guard let destination = await FilePanel.saveMergedOutput(suggestedName: task.title) else { return }
                 let request = MergeRequest(
                     inputs: inspected.map { PDFInput(source: $0.source, password: nil) },
                     outputURL: destination.url,
@@ -314,7 +312,7 @@ final class AppModel: ObservableObject {
                 mergeInputsByTask[taskID] = Set(inspected.map(\.id))
             } else if task.kind == .batchImage {
                 let suggestedName = inspected.first?.source.displayName ?? task.title
-                guard let destination = FilePanel.chooseConversionDestination(
+                guard let destination = await FilePanel.chooseConversionDestination(
                     suggestedName: suggestedName,
                     isBatch: inspected.count > 1
                 ),

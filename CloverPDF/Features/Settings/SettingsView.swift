@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject private var model: AppModel
+    @AppStorage(OCRSettings.enabledKey) private var isOCREnabled = true
 
     var body: some View {
         Form {
@@ -25,20 +26,20 @@ struct SettingsView: View {
                     .buttonStyle(.borderedProminent)
                 }
             }
-            Section("Output") {
-                LabeledContent("Default Folder") {
-                    Button(model.outputDirectory.path(percentEncoded: false)) {
-                        model.outputDirectory = FilePanel.chooseDirectory(current: model.outputDirectory) ?? model.outputDirectory
-                    }
-                }
+            Section("Conversion") {
+                Toggle("OCR scanned documents", isOn: $isOCREnabled)
             }
             Section("About") {
-                LabeledContent("Application") { Text("CloverPDF") }
+                LabeledContent("Application") { Text("WPDF") }
+                LabeledContent("Version") { Text(appVersion) }
                 LabeledContent("Privacy") { Text("Files stay on this Mac") }
-                LabeledContent("PDF to Word Engine") { Text("pdf2docx") }
             }
         }
         .formStyle(.grouped)
         .padding(20)
+    }
+
+    private var appVersion: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "-"
     }
 }

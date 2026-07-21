@@ -51,7 +51,9 @@ struct ContentView: View {
             ToolbarItemGroup(placement: .primaryAction) {
                 if model.selection == .merge || model.selection == .convert {
                     Button {
-                        model.importPDFs(FilePanel.openPDFs(), destination: model.selection)
+                        Task {
+                            model.importPDFs(await FilePanel.openPDFs(), destination: model.selection)
+                        }
                     } label: {
                         Label("Add PDF", systemImage: "doc.badge.plus")
                     }
@@ -93,7 +95,7 @@ struct ContentView: View {
                 .environmentObject(model)
         }
         .alert(
-            String(localized: "CloverPDF"),
+            String(localized: "WPDF"),
             isPresented: Binding(
                 get: { model.alertMessage != nil },
                 set: { if !$0 { model.alertMessage = nil } }

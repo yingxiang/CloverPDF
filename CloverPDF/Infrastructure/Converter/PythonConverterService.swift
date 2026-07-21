@@ -3,6 +3,14 @@ import Foundation
 import PDFKit
 import Vision
 
+enum OCRSettings {
+    static let enabledKey = "ocrScannedDocumentsEnabled"
+
+    static var isEnabled: Bool {
+        UserDefaults.standard.object(forKey: enabledKey) as? Bool ?? true
+    }
+}
+
 private struct OCRBlockPayload: Encodable, Sendable {
     let text: String
     let x: Double
@@ -155,7 +163,7 @@ final class PythonConverterService: PDFConverting, @unchecked Sendable {
         pdfURL: URL,
         progress: @escaping @Sendable (ConversionProgress) -> Void
     ) async throws -> [OCRPagePayload]? {
-        guard request.input.source.appearsScanned else { return nil }
+        guard request.input.source.appearsScanned, OCRSettings.isEnabled else { return nil }
         return try await SystemPDFOCR.recognize(
             pdfURL: pdfURL,
             password: request.input.password,

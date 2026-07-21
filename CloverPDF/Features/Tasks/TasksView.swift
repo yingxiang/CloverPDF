@@ -1,4 +1,5 @@
 import AppKit
+import QuickLookThumbnailing
 import QuickLookUI
 import SwiftUI
 import UniformTypeIdentifiers
@@ -16,7 +17,7 @@ struct TasksView: View {
                     taskList
                         .frame(minWidth: 420, idealWidth: 500, maxWidth: .infinity)
                         .layoutPriority(1)
-                    TaskOutputPreview(path: previewPath)
+                    taskPreview(path: previewPath)
                         .frame(minWidth: 360, maxWidth: .infinity, maxHeight: .infinity)
                 }
             } else {
@@ -82,6 +83,15 @@ struct TasksView: View {
         TaskSectionModel.group(model.tasks)
     }
 
+    @ViewBuilder
+    private func taskPreview(path: String) -> some View {
+        if ["doc", "docx"].contains(URL(fileURLWithPath: path).pathExtension.lowercased()) {
+            WordOutputThumbnail(path: path)
+        } else {
+            TaskOutputPreview(path: path)
+        }
+    }
+
     private func toggle(_ section: TaskSectionModel) {
         if collapsedSectionIDs.contains(section.id) {
             collapsedSectionIDs.remove(section.id)
@@ -110,6 +120,50 @@ struct TasksView: View {
         )
         model.selectedTaskIDs = update.selection
         selectionAnchor = update.anchor
+    }
+}
+
+private struct WordOutputThumbnail: View {
+    let path: String
+    @State private var image: NSImage?
+
+    var body: some View {
+        Group {
+            if let image {
+                Image(nsImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+            } else {
+                Image(nsImage: NSWorkspace.shared.icon(forFile: path))
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 96, height: 120)
+            }
+        }
+        .frame(maxWidth: 320, maxHeight: 420)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .task(id: path) {
+            image = await loadThumbnail()
+        }
+    }
+
+    private func loadThumbnail() async -> NSImage? {
+        let url = URL(fileURLWithPath: path)
+        let accessed = url.startAccessingSecurityScopedResource()
+        defer {
+            if accessed { url.stopAccessingSecurityScopedResource() }
+        }
+        let request = QLThumbnailGenerator.Request(
+            fileAt: url,
+            size: NSSize(width: 320, height: 420),
+            scale: NSScreen.main?.backingScaleFactor ?? 2,
+            representationTypes: .thumbnail
+        )
+        return await withCheckedContinuation { continuation in
+            QLThumbnailGenerator.shared.generateBestRepresentation(for: request) { representation, _ in
+                continuation.resume(returning: representation?.nsImage)
+            }
+        }
     }
 }
 
@@ -288,6 +342,9 @@ private struct TaskRow: View {
         .padding(.horizontal, 8)
         .padding(.vertical, 7)
         .contentShape(RoundedRectangle(cornerRadius: 10).inset(by: 2))
+        .onTapGesture(count: 2) {
+            openGeneratedFile()
+        }
         .contextMenu {
             if outputAvailability == .available {
                 Button("Show in Finder") {
@@ -365,6 +422,13 @@ private struct TaskRow: View {
 
     private var contextSelection: Set<UUID> {
         model.selectedTaskIDs.contains(task.id) ? model.selectedTaskIDs : [task.id]
+    }
+
+    private func openGeneratedFile() {
+        guard task.state == .succeeded,
+              outputAvailability == .available,
+              let path = representativeOutputPath else { return }
+        NSWorkspace.shared.open(URL(fileURLWithPath: path))
     }
 
     @ViewBuilder

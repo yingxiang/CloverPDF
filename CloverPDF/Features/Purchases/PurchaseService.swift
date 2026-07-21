@@ -65,8 +65,8 @@ final class CloverPaywallCoordinator {
         let manager = purchaseService.manager
         let presenter = MacPaywallPresenter(
             configuration: MacPaywallConfiguration(
-                title: String(localized: "Unlock CloverPDF Premium"),
-                unlockedTitle: String(localized: "CloverPDF Premium is active"),
+                title: String(localized: "Unlock WPDF Premium"),
+                unlockedTitle: String(localized: "WPDF Premium is active"),
                 failureTitle: String(localized: "Purchase Failed"),
                 emptyProductsMessage: String(localized: "Products are temporarily unavailable. Please try again later."),
                 benefits: [
@@ -93,7 +93,7 @@ final class CloverPaywallCoordinator {
             }
         )
         self.presenter = presenter
-        // Keep CloverPDF visible behind the purchase sheet. The shared presenter
+        // Keep WPDF visible behind the purchase sheet. The shared presenter
         // hides this window when it is supplied, which makes sandbox checkout
         // appear to close the app when the payment sheet changes focus.
         presenter.show(sourceWindowToHide: nil)
