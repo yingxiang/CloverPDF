@@ -328,11 +328,17 @@ final class TaskQueueActorTests: XCTestCase {
         )
         XCTAssertEqual(
             MacPaywallCompanionCatalog.apps(excluding: "com.lingchen.clover").map(\.bundleIdentifier),
-            ["com.lingchen.omnicapture"]
+            ["com.lingchen.omnicapture", "com.lingchen.pdf"]
         )
         XCTAssertEqual(
             MacPaywallCompanionCatalog.apps(excluding: "com.lingchen.omnicapture").map(\.bundleIdentifier),
-            ["com.lingchen.clover"]
+            ["com.lingchen.clover", "com.lingchen.pdf"]
+        )
+        XCTAssertEqual(
+            MacPaywallCompanionCatalog.apps(excluding: "com.lingchen.clover")
+                .first { $0.bundleIdentifier == "com.lingchen.pdf" }?
+                .appStoreURL.absoluteString,
+            "macappstore://apps.apple.com/app/id6791101281"
         )
     }
 
