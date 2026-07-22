@@ -23,9 +23,15 @@ Receive external URLs through `NSApplicationDelegate.application(_:open:)`. Open
 ## Converter Distribution
 
 - Package a fixed `cloverpdf-converter` with all Python dependencies.
-- Sign nested libraries and the helper before signing the main application.
+- During the Embed Converter build phase, sign every nested Mach-O dependency first, then sign the helper executable with `converter/CloverPDFConverter.entitlements`. The helper must carry both `com.apple.security.app-sandbox` and `com.apple.security.inherit` in the archived product.
+- During Archive, run `dsymutil` for every embedded Mach-O with an `LC_UUID` and place the matching bundles in `DWARF_DSYM_FOLDER_PATH`; App Store Connect checks UUID coverage for PyInstaller's dylibs and extension modules even when they contain no source-level debug symbols.
 - Do not download Python, wheels, scripts, or executable code at runtime.
 - Resolve PyMuPDF commercial licensing before closed-source App Store distribution.
+
+## App Store Metadata
+
+- Set `LSApplicationCategoryType` to `public.app-category.utilities`, matching the sibling Clover and OmniMAC utility apps.
+- Set `ITSAppUsesNonExemptEncryption` to `false` in the custom Info.plist, matching Clover's export-compliance declaration. WPDF does not implement non-exempt encryption.
 
 ## User-Managed Signing
 
