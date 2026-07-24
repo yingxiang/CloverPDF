@@ -14,7 +14,7 @@ The first three products are auto-renewable subscriptions in one App Store Conne
 - Reuse `../common/MacAppKit/Purchases/MacPaywallPresenter.swift` and `MacPurchaseManager.swift`.
 - Keep WPDF-specific code limited to configuration, product mapping, benefits, policy URLs, and presentation triggers.
 - Use the shared paywall's companion-app provider and catalog; do not fork the paywall to add cross-promotion UI. The paywall shows one Free Trial option that becomes `免费试用，剩X天` while the entitlement is active and expands a right-side list titled `免费下载，获取权益`. Each app row contains its icon, title, subtitle, and a right-aligned localized Download for 3 Days, Claimed, or Restore Benefit action. The shared catalog excludes the host app automatically: WPDF shows Clover and Maple, while Clover and Maple each show the other app plus WPDF. WPDF's App Store URL is `macappstore://apps.apple.com/app/id6791101281`.
-- Use `https://yingxiang.github.io/CloverPDF/index.html` for the Privacy link in both Settings and the paywall.
+- Use `https://yingxiang.github.io/web/wpdf/privacy.html` for the Privacy link in both Settings and the paywall.
 - Use sandbox accounts for purchase, renewal, cancellation, expiry, refund, and restore acceptance testing.
 
 ## Free Entitlement

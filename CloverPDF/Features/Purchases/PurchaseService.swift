@@ -4,7 +4,7 @@ import Security
 import StoreKit
 
 enum WPDFLinks {
-    static let privacyPolicy = URL(string: "https://yingxiang.github.io/CloverPDF/index.html")!
+    static let privacyPolicy = URL(string: "https://yingxiang.github.io/web/wpdf/privacy.html")!
 }
 
 struct WPDFPromotionTrialState {
